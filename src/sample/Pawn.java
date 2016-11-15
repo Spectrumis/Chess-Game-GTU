@@ -7,7 +7,7 @@ import java.util.ListResourceBundle;
 /**
  * Created by Selman Ahatlı on 14.11.2016.
  */
-public class Pawn implements Piece {
+public class Pawn extends Pieces {
     public Pawn(){
 
     }
@@ -62,9 +62,9 @@ public class Pawn implements Piece {
         return moves;
     }
     public void setColor(boolean colors){
-        setColor(colors);
+        super.setColor(colors);
     }
     public boolean getColor(){
-        return color;
+        return super.getColor();
     }
 }

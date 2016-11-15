@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by GozdeDogan on 14.11.2016.
  */
-public class NoPiece implements Piece{
+public class NoPiece extends Pieces{
 
     public NoPiece(){
 
@@ -18,11 +18,11 @@ public class NoPiece implements Piece{
 
     @Override
     public void setColor(boolean colors) {
-        setColor(colors);
+        super.setColor(colors);
     }
 
     @Override
     public boolean getColor() {
-        return getColor();
+        return super.getColor();
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by GozdeDogan on 14.11.2016.
  */
-public class Rook implements Piece {
+public class Rook extends Pieces {
     @Override
     public List<Cell> check(Cell[][] board, int x, int y) {
         return null;
@@ -18,6 +18,6 @@ public class Rook implements Piece {
 
     @Override
     public boolean getColor() {
-        return false;
+        return color;
     }
 }

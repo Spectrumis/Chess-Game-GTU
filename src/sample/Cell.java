@@ -7,13 +7,11 @@ public class Cell {
 
     int x;
     int y;
-    Piece piece;
+    Pieces piece;
 
-    public Cell(){
+    public Cell(){}
 
-    }
-
-    public Cell(int x, int y, Piece piece) {
+    public Cell(int x, int y, Pieces piece) {
         this.x = x;
         this.y = y;
         this.piece=piece;
@@ -27,11 +25,11 @@ public class Cell {
         this.piece.setColor(cell.getPiece().getColor());
     }
 
-    public Piece getPiece(){
+    public Pieces getPiece(){
         return piece;
     }
 
-    public void setPiece(Piece p){
+    public void setPiece(Pieces p){
         this.piece = p;
         this.piece.setColor(p.getColor());
     }

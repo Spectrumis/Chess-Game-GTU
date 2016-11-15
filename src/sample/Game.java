@@ -9,7 +9,7 @@ public class Game {
 
     public Game(){
         this.initBoard();
-        this.printBoard();
+        //this.printBoard();
     }
 
     //Bunu kaydededilmiş hali diye düşündüm
@@ -35,7 +35,7 @@ public class Game {
             for (i = 0; i < 8; i++) {
                 try
                 {
-                    Piece piece = new Pawn();
+                    Pieces piece = new Pawn();
                     board[i][j].setPiece(piece);
                     board[i][j].piece.setColor(color);
 
@@ -48,12 +48,12 @@ public class Game {
         }
 
         //Bos hucreleri olusturdum
-        for(j = 2; j<6; j++) {
+        for(j=2; j<6; j++) {
             for (i=0; i<8; i++){
                 try
                 {
                     //boş hücreler //boş hücrenin color u ne olacak
-                    Piece piece = new NoPiece();
+                    Pieces piece = new NoPiece();
                     board[i][j].setPiece(piece);
                     board[i][j].piece.setColor(true); //şimdilik true atadım
 
@@ -68,7 +68,7 @@ public class Game {
         //Ozel taslar icin renk belirledim, ust beyaz, alt siyah
         color =false;
         for(j=0; j<8; j=j+7) {
-            for (i = 0; i < 8; i++) {
+            for (i=0; i < 8; i++) {
                 try
                 {
                     board[i][j].piece.setColor(color);
@@ -84,7 +84,7 @@ public class Game {
         //özel taşlar
         try
         {
-            Piece piece = new Rook();
+            Pieces piece = new Rook();
             //Siyah, alt, Rook
             board[0][0].setPiece(piece);
             board[0][7].setPiece(piece);
@@ -144,12 +144,14 @@ public class Game {
     public void printBoard(){
         try
         {
+            //System.out.println("PrintBoard, try!!");
             int i, j;
 
-            for(j=0; j<8; j++){
-                for(i=0; i<8; i++){
+            for(j=7; j>=0; j--){
+                for(i=7; i>=0; i--){
                     if(board[i][j].piece.getColor() == false)
                     {
+                        System.out.println("PrintBoard, false, siyah!!");
                         if(board[i][j].getPiece() instanceof Pawn){
                             System.out.print("-1");
                         }
@@ -171,6 +173,7 @@ public class Game {
                     }
                     else if(board[i][j].piece.getColor() == true)
                     {
+                        //System.out.println("PrintBoard, true, beyaz!!");
                         if(board[i][j].getPiece() instanceof Pawn){
                             System.out.print(" 1");
                         }
@@ -198,10 +201,17 @@ public class Game {
 
         }catch(Exception e)
         {
-            //System.out.println("Null Pointer ");
+            //System.out.println("Try a giriyor ama ekrana bi şey yazmıyor ya!");
         }
+    }
 
+    //henüz yazılmadı
+    public int playUser(){
+        return 0;
+    }
 
-
+    //henüz yazılmadı
+    public int playComputer(){
+        return 0;
     }
 }
