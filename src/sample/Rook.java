@@ -5,10 +5,11 @@ import java.util.List;
 
 /**
  * Created by GozdeDogan on 14.11.2016.
+ * Implemented by AliEmreBuyukersoy on 15.11.2016.
  */
 public class Rook extends Pieces {
     @Override
-    public List<Cell> check(Cell[][] board, int x, int y) {
+    public List<Cell> checkMove(Cell[][] board, int x, int y) {
         List<Cell> moves = new LinkedList<>();
 
         //Ilk olarak secili tasin rengini kiyaslama yapmak icin tutuyorum

@@ -7,9 +7,9 @@ import java.util.List;
  */
 public abstract class Pieces implements Piece{
 
-    public static boolean color = false; //taþýn rengi true->beyaz false ->siyah oynayan kim
+    public static boolean color = false; //tasin rengi true->beyaz false ->siyah oynayan kim
 
-    public List<Cell> check(Cell[][] board,int x,int y){
+    public List<Cell> checkMove(Cell[][] board, int x, int y){
         return null;
     }
     public void setColor(boolean colors){

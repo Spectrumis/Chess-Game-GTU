@@ -13,7 +13,7 @@ public class Pawn extends Pieces {
     }
 
     @Override
-    public List<Cell> check(Cell[][] board, int x, int y) {
+    public List<Cell> checkMove(Cell[][] board, int x, int y) {
         List<Cell> moves = new LinkedList<>();
         if (getColor() == false) { //sıraya gore islem yapıyor false = siyah
             //markButton(board[X][Y]);

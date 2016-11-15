@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class King extends Pieces {
     @Override
-    public List<Cell> check(Cell[][] board, int x, int y) {
+    public List<Cell> checkMove(Cell[][] board, int x, int y) {
         return null;
     }
 
