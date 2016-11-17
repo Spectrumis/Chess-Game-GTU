@@ -1,5 +1,6 @@
 package sample;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -64,7 +65,7 @@ public class Queen extends Pieces{
                 break;
         }
         //Ayni islemleri sag alta dogru bakiyorum
-        int j=y-1;
+        j=y-1;
         for(int i=x+1; (i <= 7) && (j >= 0); ++i){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
@@ -78,7 +79,7 @@ public class Queen extends Pieces{
             --j;
         }
         //Asagiya ve
-        boolean curColor = board[x][y].getPiece().getColor() ;
+        curColor = board[x][y].getPiece().getColor() ;
         for(int i=y-1; i >= 0; --i){
             if(board[x][i].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[x][i]));
@@ -91,7 +92,7 @@ public class Queen extends Pieces{
                 break;
         }
         //Sag uste ve
-        int j=y+1;
+        j=y+1;
         for(int i=x+1; (i <= 7) && (j <= 7); ++i){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
@@ -105,7 +106,7 @@ public class Queen extends Pieces{
             ++j;
         }
         //Yukariya dogru da ayni islemler gecerli
-        boolean curColor = board[x][y].getPiece().getColor() ;
+        curColor = board[x][y].getPiece().getColor() ;
         for(int i=y+1; i >= 0; ++i){
             if(board[x][i].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[x][i]));
@@ -118,7 +119,7 @@ public class Queen extends Pieces{
                 break;
         }
         //Sol uste dogru da ayni islemler gecerli
-        int j=y+1;
+        j=y+1;
         for(int i=x-1; (i >= 0) && (j >= 0); --i){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));

@@ -2,6 +2,7 @@ package sample;
 
 /**
  * Created by GozdeDogan on 14.11.2016.
+ * Implemented by GozdeDogan on 14.11.2016.
  */
 public class Game {
 

@@ -1,5 +1,9 @@
 package sample;
 
+/**
+ * Implemented by GozdeDogan on 14.11.2016.
+ */
+
 public class Controller {
     // 0 -> noPiece
     // Beyaz             Siyah

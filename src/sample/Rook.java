@@ -48,7 +48,7 @@ public class Rook extends Pieces {
         }
 
         //Asagiya ve
-        boolean curColor = board[x][y].getPiece().getColor() ;
+        curColor = board[x][y].getPiece().getColor() ;
         for(int i=y-1; i >= 0; --i){
             if(board[x][i].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[x][i]));
@@ -62,7 +62,7 @@ public class Rook extends Pieces {
         }
 
         //Yukariya dogru da ayni islemler gecerli
-        boolean curColor = board[x][y].getPiece().getColor() ;
+        curColor = board[x][y].getPiece().getColor() ;
         for(int i=y+1; i >= 0; ++i){
             if(board[x][i].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[x][i]));

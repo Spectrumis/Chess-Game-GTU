@@ -37,7 +37,7 @@ public class Bishop extends Pieces {
         }
 
         //Ayni islemleri sag alta dogru bakiyorum
-        int j=y-1;
+        j=y-1;
         for(int i=x+1; (i <= 7) && (j >= 0); ++i){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
@@ -52,7 +52,7 @@ public class Bishop extends Pieces {
         }
 
         //Sag uste ve
-        int j=y+1;
+        j=y+1;
         for(int i=x+1; (i <= 7) && (j <= 7); ++i){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
@@ -67,7 +67,7 @@ public class Bishop extends Pieces {
         }
 
         //Sol uste dogru da ayni islemler gecerli
-        int j=y+1;
+        j=y+1;
         for(int i=x-1; (i >= 0) && (j >= 0); --i){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
