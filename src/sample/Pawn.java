@@ -6,60 +6,86 @@ import java.util.ListResourceBundle;
 
 /**
  * Created by Selman Ahatlı on 14.11.2016.
- * Implemented by GozdeDogan on 14.11.2016.
+ * Implemented by Selman Ahatlı on 14.11.2016.
  */
 public class Pawn extends Pieces {
-    public Pawn(){
 
-    }
+    public boolean firstMove = true;
 
     @Override
     public List<Cell> checkMove(Cell[][] board, int x, int y) {
+
         List<Cell> moves = new LinkedList<>();
-        if (getColor() == false) { //sıraya gore islem yapıyor false = siyah
-            //markButton(board[X][Y]);
-            System.out.printf("X: %d, Y: %d\n", x, y);
-            if (y > 0 && !Controller.isEnemyOfBlack(board[x][y - 1])
-                    && y - 1 >= 0 && y - 1 < 8) {
-                moves.add(new Cell(board[x][y - 1]));
-                //Main.markMove(board[X][Y - 1]);
-            }
-            if (x > 0 && y > 0 && Controller.isEnemyOfBlack(board[x - 1][y - 1])) {
-                moves.add(new Cell(board[x - 1][y - 1]));
-                //Main.markMove(board[X - 1][Y - 1]);
-            }
-            if (x < 7 && y > 0 && Controller.isEnemyOfBlack(board[x + 1][y - 1])) {
-                moves.add(new Cell(board[x + 1][y - 1]));
-                //Main.markMove(board[X + 1][Y - 1]);
-            }
-            if (y < 7 && y > 0 && !Controller.isEnemyOfBlack(board[x][y - 1])
-                    && y - 2 >= 0 && y - 2 < 8 && y == 6) {
-                moves.add(new Cell(board[x][y - 1]));
-                //Main.markMove(board[X][Y - 2]);
-            }
-        } else if (getColor() == true) { //true =beyaz
-            //markButton(board[X][Y]);
-            System.out.printf("X: %d, Y: %d\n", x, y);
-            if (y > 0 && !Controller.isEnemyOfWhite(board[x][y + 1])
-                    && y + 1 >= 0 && y + 1 < 8) {
-                moves.add(new Cell(board[x][y + 1]));
-                //Main.markMove(board[X][Y - 1]);
-            }
-            if (x > 0 && y > 0 && Controller.isEnemyOfWhite(board[x - 1][y + 1])) {
-                moves.add(new Cell(board[x - 1][y + 1]));
-                //Main.markMove(board[X - 1][Y - 1]);
-            }
-            if (x < 7 && y > 0 && Controller.isEnemyOfWhite(board[x + 1][y + 1])) {
-                moves.add(new Cell(board[x + 1][y + 1]));
-                //Main.markMove(board[X + 1][Y - 1]);
-            }
-            if (y < 7 && y > 0 && !Controller.isEnemyOfWhite(board[x][y + 1])
-                    && y - 2 >= 0 && y - 2 < 8 && y == 2) {
-                moves.add(new Cell(board[x][y + 1]));
-                //Main.markMove(board[X][Y - 2]);
+
+        if (getColor() == true)
+        {
+            if (firstMove == true)
+            {
+                if (board[x+2][y].getPiece() instanceof NoPiece)
+                {
+                    moves.add(new Cell(board[x+2][y]));
+                }
             }
 
+            //yukarı
+            if (x+1 < 8 && board[x+1][y].getPiece() instanceof NoPiece)
+            {
+                moves.add(new Cell(board[x+1][y]));
+            }
+
+            //sag capraz
+            if (x+1 < 8 && y+1 < 8 && board[x+1][y+1].getPiece().getColor() == false)
+            {
+                if (board[x+1][y+1].getPiece() instanceof NoPiece == false)
+                {
+                    moves.add(new Cell(board[x+1][y+1]));
+                }
+            }
+
+            //sol capraz
+            if (x+1 < 8 && y-1 >= 0 && board[x+1][y-1].getPiece().getColor() == false)
+            {
+                if (board[x+1][y-1].getPiece() instanceof NoPiece == false)
+                {
+                    moves.add(new Cell(board[x+1][y-1]));
+                }
+            }
         }
+        else if (getColor() == false)
+        {
+            if (firstMove == true)
+            {
+                if (board[x-2][y].getPiece() instanceof NoPiece)
+                {
+                    moves.add(new Cell(board[x-2][y]));
+                }
+            }
+
+            //yukarı
+            if (x-1 >= 0 && board[x-1][y].getPiece() instanceof NoPiece)
+            {
+                moves.add(new Cell(board[x-1][y]));
+            }
+
+            //sag capraz
+            if (x-1 >= 0 && y-1 >= 0 && board[x-1][y-1].getPiece().getColor() == true)
+            {
+                if (board[x-1][y-1].getPiece() instanceof NoPiece == false)
+                {
+                    moves.add(new Cell(board[x-1][y-1]));
+                }
+            }
+
+            //sol capraz
+            if (x-1 >= 0 && y+1 < 8 && board[x-1][y+1].getPiece().getColor() == true)
+            {
+                if (board[x-1][y+1].getPiece() instanceof NoPiece == false)
+                {
+                    moves.add(new Cell(board[x-1][y+1]));
+                }
+            }
+        }
+
         return moves;
     }
     public void setColor(boolean colors){
