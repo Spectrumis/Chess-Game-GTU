@@ -6,15 +6,19 @@ package sample;
  */
 public class Game {
 
-    Cell[][] board;
+    private Cell[][] board;
+    //private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
+    //private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
     public Game(){
+        //removesss = new Cell[][2];
         this.initBoard();
         //this.printBoard();
     }
 
     //Bunu kaydededilmiş hali diye düşündüm
     public Game(Game game){
+        //removesss = new Cell[][2];
         int i, j;
 
         Cell temp = null;
@@ -25,6 +29,100 @@ public class Game {
             }
         }
 
+    }
+
+    /**
+     * Oyunun oynandigi fonksiyon
+     */
+    public void playGame(){
+        //Help'e bu komutlar düzenlenerek yazilabilir!!!!!!!!!!!
+        // 1. computer-user mi user-user mi seçildi diye sor
+        // 2. eger computer ile oynama secildiyse
+            // 1. kolay-orta-zor levellerinden hangisinin secildigini sor
+                //kolaysa 1 hamle ilerisine bak (Bakilacak hamle sayilari degisebilir)
+                //ortaysa 2 hamle ilerisine bak
+                //zorsa 3 hamle ilerisine bak
+            // ilk computer baslar (Beyaz), rastgele bir tas acar
+            // Computer in oynamasi icin ilk basta start dugmesine basilmali
+        // 3. eger user-user secildiyse
+            //zaten direkt insanların sectigi hamleyi oynayacaksin
+
+        //Surekli kapatma dugmesine basilip basilmadigini kontrol et
+        // basildiysa
+            // save edilmek istendiyse
+                //Sifreli bir sekilde kaydet
+            //istenmediyse
+                //cik, ekrani kapat
+        //
+
+        //Restart yapildi mi diye bak
+            //yapildiysa oyunu sifirla
+
+        //ONEMLI: Her hamlenin kaydedilmesi gerekir, bir arraye.
+        //Bu sekilde geri al butonuna basildiginda hamleleri burdan bakarak geri alabiliriz
+        //Geri alinan her hamle de bu arrayden silinmeli
+        // Cell[][] removesss = new Cell[][2]();
+        // her satirda source ve target bulunacak
+    }
+
+
+    /**
+     * User-User secildiginde bu fonksiyon cagrilacak
+     * Bu fonksiyon sadece user dan gelen hamle dogru ise hareket ettirir, degilse hatali
+     * secim yaptigini soyler ve tekrar secim yapmasini ister
+     * Bu fonksiyon computer-user secildiginde de kullanilacak, böylelikle user hamleleri kontrol edilecek
+     * @return
+     */
+    public int playUser(){
+        return 0;
+    }
+
+    /**
+     * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
+     * @return
+     */
+    public int playComputerEasy(){
+        return 0;
+    }
+
+    /**
+     * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
+     * @return
+     */
+    public int playComputerMedium(){
+        return 0;
+    }
+
+    /**
+     * Computer icin , hard mod secildiginde bu fonksiyon cagrilacak
+     * @return
+     */
+    public int playComputerHard(){
+        return 0;
+    }
+
+    /**
+     * kapatma dugmesine basildiginda oyunu kaydetmek icin yazilacak fonksiyon
+     */
+    public void saveGame(){
+        //Belirlenen bir dosyaya sifreli sekilde tahtanın son durumu kaydedilir
+    }
+
+    /**
+     * oyuna tekrar baslanmak istendiginde yazilacak kod
+     */
+    public void restartGame(){
+        //tahtayi ilk haline geri getirip, ekranda gosterir
+    }
+
+    /**
+     * Geri alma islemine basildiginda geri alacak
+     */
+    public void recallMove(){
+        //counterRemovess <= 5 ise
+            //removess arrayine bakilir ve son hamleyi geri alir
+            //geri alma islemi max 5 defa olacagi icinde bir counterRemovesss arttirilir.
+        // degilse hicbir sey yaapilmaz
     }
 
     public void initBoard(){
@@ -206,13 +304,4 @@ public class Game {
         }
     }
 
-    //henüz yazılmadı
-    public int playUser(){
-        return 0;
-    }
-
-    //henüz yazılmadı
-    public int playComputer(){
-        return 0;
-    }
 }
