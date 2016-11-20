@@ -1,5 +1,6 @@
 package sample;
 
+
 import java.util.List;
 
 /**
@@ -8,6 +9,7 @@ import java.util.List;
  */
 public class Game {
 
+    private Cell tempCell; //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private Cell[][] board;
     //private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     //private static int counterRemovess = 0; //Geri alma islemi icin sayac
@@ -36,7 +38,13 @@ public class Game {
     /**
      * Oyunun oynandigi fonksiyon
      */
-    public void playGame(){
+    public int playGame(Cell CurrentCell, List<Cell> TempMovesList){
+
+
+
+
+
+
         //Help'e bu komutlar düzenlenerek yazilabilir!!!!!!!!!!!
         // 1. computer-user mi user-user mi seçildi diye sor
         // 2. eger computer ile oynama secildiyse
@@ -73,9 +81,10 @@ public class Game {
      * Bu fonksiyon sadece user dan gelen hamle dogru ise hareket ettirir, degilse hatali
      * secim yaptigini soyler ve tekrar secim yapmasini ister
      * Bu fonksiyon computer-user secildiginde de kullanilacak, böylelikle user hamleleri kontrol edilecek
+     * Eger secim dogruysa 1 yanlissa 0 return eder
      * @return
      */
-    public int playUser(List<Cell> cellList, Cell cell ){
+    public int playUser(List<Cell> cellList, Cell cell ) {
 
         for (Cell searched : cellList) {
             if (searched == cell)
@@ -85,26 +94,27 @@ public class Game {
     }
 
     /**
-     * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
-     * @return
-     */
-    public int playComputerEasy(){
-        return 0;
-    }
+         * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
+         * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
+         * @return
+         */
+    public List<Cell> playComputerEasy() { return 0; }
 
     /**
      * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
+     * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
      * @return
      */
-    public int playComputerMedium(){
+    public List<Cell> playComputerMedium(){
         return 0;
     }
 
     /**
      * Computer icin , hard mod secildiginde bu fonksiyon cagrilacak
+     * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
      * @return
      */
-    public int playComputerHard(){
+    public List<Cell> playComputerHard(){
         return 0;
     }
 

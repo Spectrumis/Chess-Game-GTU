@@ -6,7 +6,7 @@ import java.util.List;
  * Created by GozdeDogan on 15.11.2016.
  * Implemented by GozdeDogan on 14.11.2016.
  */
-public abstract class Pieces implements Piece{
+public abstract class Pieces{
 
     public static boolean color = false; //tasin rengi true->beyaz false ->siyah oynayan kim
 
