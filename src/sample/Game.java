@@ -1,5 +1,7 @@
 package sample;
 
+import java.util.List;
+
 /**
  * Created by GozdeDogan on 14.11.2016.
  * Implemented by GozdeDogan on 14.11.2016.
@@ -73,7 +75,12 @@ public class Game {
      * Bu fonksiyon computer-user secildiginde de kullanilacak, böylelikle user hamleleri kontrol edilecek
      * @return
      */
-    public int playUser(){
+    public int playUser(List<Cell> cellList, Cell cell ){
+
+        for (Cell searched : cellList) {
+            if (searched == cell)
+                return 1;
+        }
         return 0;
     }
 

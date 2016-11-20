@@ -12,13 +12,14 @@ public class King extends Pieces {
     @Override
     public List<Cell> checkMove(Cell[][] board, int x, int y) {
         List<Cell> moves = new LinkedList<>();
-
+        int i, j;
         //Ilk olarak secili tasin rengini kiyaslama yapmak icin tutuyorum
         boolean curColor = board[x][y].getPiece().getColor() ;
 
         //Sol tarafina dogru hareket edebilirligine bakarak gidiyorum. Ilk bakacagim
         //yer olarak i ye x-1 atadim. Yani tasin hemen soluna bakicam ilk
-        if(x-1 >= 0){
+        i = x-1;
+        if(i >= 0){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
             if(board[i][y].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
@@ -29,8 +30,8 @@ public class King extends Pieces {
                 moves.add(new Cell(board[i][y]));
             }
         }
-
-        if((x-1>= 0) && (y-1 >= 0)){
+        j = y-1;
+        if((i>= 0) && (j >= 0)){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
@@ -42,7 +43,8 @@ public class King extends Pieces {
             }
         }
         //Ayni islemleri saga dogru bakiyorum
-        if(x+1 <= 7){
+        i = x+1;
+        if(i <= 7){
             if(board[i][y].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
             }
@@ -51,7 +53,8 @@ public class King extends Pieces {
             }
         }
         //Ayni islemleri sag alta dogru bakiyorum
-        if((x+1 <= 7) && (y-1 >= 0)){
+        j = y-1;
+        if((i <= 7) && (j >= 0)){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
             }
@@ -60,8 +63,7 @@ public class King extends Pieces {
             }
         }
         //Asagiya ve
-        boolean curColor = board[x][y].getPiece().getColor() ;
-        if(y-1 >= 0){
+        if(j >= 0){
             if(board[x][i].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[x][i]));
             }
@@ -71,7 +73,8 @@ public class King extends Pieces {
         }
 
         //Sag uste ve
-        if((x+1 <= 7) && (y+1 <= 7)){
+        j = y+1;
+        if((i <= 7) && (j <= 7)){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
             }
@@ -80,8 +83,7 @@ public class King extends Pieces {
             }
         }
         //Yukariya dogru da ayni islemler gecerli
-        boolean curColor = board[x][y].getPiece().getColor() ;
-        if(y+1 <= 0){
+        if(j <= 0){
             if(board[x][i].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[x][i]));
             }
@@ -90,7 +92,8 @@ public class King extends Pieces {
             }
         }
         //Sol uste dogru da ayni islemler gecerli
-        if((x-1 >= 0) && (y+1 >= 0)){
+        i = x-1;
+        if((i >= 0) && (j >= 0)){
             if(board[i][j].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
             }
