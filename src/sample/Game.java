@@ -1,6 +1,8 @@
 package sample;
 
 
+import com.sun.deploy.util.ArrayUtil;
+
 import java.util.List;
 
 /**
@@ -23,7 +25,8 @@ public class Game {
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
     public Game(){
-        //removesss = new Cell[][2];
+        board = new Cell[8][];
+        removesss = new Cell[64][2];
         this.initBoard();
         //this.printBoard();
         this.tempCell = new Cell();
@@ -31,7 +34,8 @@ public class Game {
 
     //Bunu kaydededilmiş hali diye düşündüm
     public Game(Game game){
-        //removesss = new Cell[][2];
+        board = new Cell[8][];
+        removesss = new Cell[64][2];
         int i, j;
 
         Cell temp = null;
@@ -201,7 +205,16 @@ public class Game {
      * oyuna tekrar baslanmak istendiginde yazilacak kod
      */
     public void restartGame(){
-        //tahtayi ilk haline geri getirip, ekranda gosterir
+        int i,j;
+        //tahta ilk haline getirildi
+        this.initBoard();
+
+        //hamlelerin tutuldugu array silindi, tekrar oluşturuldu.
+        removesss = null;
+        removesss = new Cell[64][2];
+
+        //geri alinan hamle sayisi da sifirlandi
+        counterRemovess=0;
     }
 
     /**
@@ -211,6 +224,7 @@ public class Game {
         if(counterRemovess <= 5){
             int index = removesss.length;
             board[removesss[index][0].getX()][removesss[index][1].getY()]=board[removesss[index][1].getX()][removesss[index][1].getY()];
+            board[removesss[index][0].getX()][removesss[index][1].getY()].setPiece(board[removesss[index][1].getX()][removesss[index][1].getY()].getPiece());
             counterRemovess++;
         }
         else
@@ -224,16 +238,9 @@ public class Game {
         boolean color = false;
         for(j=1; j<7; j=j+5) {
             for (i = 0; i < 8; i++) {
-                try
-                {
-                    Pieces piece = new Pawn();
-                    board[i][j].setPiece(piece);
-                    board[i][j].piece.setColor(color);
-
-                }catch(Exception e)
-                {
-                    //System.out.println("Null Pointer ");
-                }
+                Pieces piece = new Pawn();
+                board[i][j].setPiece(piece);
+                board[i][j].piece.setColor(color);
             }
             color =true;
         }

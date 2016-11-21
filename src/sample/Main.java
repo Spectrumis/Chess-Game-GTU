@@ -59,7 +59,7 @@ public class Main extends Application {
 
          */
         /*------------------------------------Algorithm Part Begins---------------------------------------------------*/
-        if(startingStatusHandler || !game.getIsComputerOn()) {
+        if(startingStatusHandler || !Game.getIsComputerOn()) {
             currentStatus = game.playGame(x, y, tempMovesList);
         }
         startingStatusHandler = true;
