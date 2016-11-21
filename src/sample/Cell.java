@@ -60,5 +60,5 @@ public class Cell {
         this.piece.setColor(cell.getPiece().getColor());
     }
 
-    public void getCell(){ return this; }
+    public Cell getCell(){ return this; }
 }

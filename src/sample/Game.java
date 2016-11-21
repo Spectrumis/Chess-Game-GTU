@@ -126,7 +126,8 @@ public class Game {
         //Geri alinan her hamle de bu arrayden silinmeli
         // Cell[][] removesss = new Cell[][2]();
         // her satirda source ve target bulunacak
-       return 0;
+
+       //return 0;
     }
 
 
@@ -167,7 +168,7 @@ public class Game {
      * ve currentPlayeri degistirir
      * @return
      */
-    public List<Cell> playComputerEasy() { return 0; }
+    public List<Cell> playComputerEasy() { return null; }
 
     /**
      * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
