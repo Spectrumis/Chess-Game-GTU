@@ -154,6 +154,11 @@ public class Game {
      */
     public void makeMove(Cell source, Cell target){
 
+        board[target.getX()][target.getY()].setPiece(source.getPiece());
+
+        Pieces piece = new NoPiece();
+        board[source.getX()][source.getY()].setPiece(piece);
+
     }
 
     /**
