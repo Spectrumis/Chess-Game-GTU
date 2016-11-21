@@ -5,10 +5,18 @@ import java.util.List;
 
 /**
  * Created by GozdeDogan on 14.11.2016.
- * Implemented by GozdeDogan on 14.11.2016.
+ * Implemented by GozdeDogan, AliEmreBuyukersoy and YasinTuluman.
  */
 public class Game {
 
+    private static int isComputerOn = 0; //oyuncu vs computer ilk basta kapalı
+    /** Degerler soyle:
+     *  0 = No Computer (player vs player)
+     *  1 = Easy
+     *  2 = Normal
+     *  3 = Hard
+     */
+    private static boolean currentPlayer = true; //true = beyaz beyaz baslar
     private Cell tempCell; //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private Cell[][] board;
     //private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
@@ -18,6 +26,7 @@ public class Game {
         //removesss = new Cell[][2];
         this.initBoard();
         //this.printBoard();
+        this.tempCell = new Cell();
     }
 
     //Bunu kaydededilmiş hali diye düşündüm
@@ -32,17 +41,61 @@ public class Game {
                 temp.setCell(board[i][j]);
             }
         }
-
     }
 
     /**
-     * Oyunun oynandigi fonksiyon
+     * Kullanicinin son tiklamasini alir ve eger depolanmis bisey yoksa ve tiklamasi bos veya karsi takimin tasiysa
+     * 0 return eder. Eger bi tasa tiklandiysa 1 return eder ve gidebilecegi yerleri TempMovesList'de depolar
+     * Depolanmis yerlerden birine tiklandiginda ise 2 return eder ve oynanicak tasin yerini ve oynancak celli
+     * TempMovesList'de depolar
+     * @param x
+     * @param y
+     * @param TempMovesList
+     * @return
      */
-    public int playGame(Cell CurrentCell, List<Cell> TempMovesList){
+    public int playGame(int x, int y, List<Cell> TempMovesList){
+        Cell currentCell = new Cell(board[x][y]);
+        Cell emptyCell = new Cell();
 
+        /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
+        if(currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer() ){
+            /* ... ve daha once oynatabilecegimiz biseye tiklamadiysak sifir return edicez demektir*/
+            if(getTempCell().getX() == -1){
+                TempMovesList.clear();
+                return 0;
+            }
+            /* ... ve daha once oynatabilecegimiz bir tasa tikladiysak ...*/
+            else {
+                /* ... tiklanan yer TempMoveList'te yani oynanabilir hamlelerde varmi diye bakiyoruz */
+                /* eger var ise hamlemizi yapiyoruz ve listemizi temizleyip icine hamle source ve targetini atiyoruz*/
+                if(playUser(TempMovesList, currentCell)){
+                    makeMove(getTempCell(), currentCell);
+                    TempMovesList.clear();
+                    TempMovesList.add(getTempCell());
+                    TempMovesList.add(currentCell);
+                    setTempCell(emptyCell);
+                    /* suanki oyuncu degerini degistiriyoruz */
+                    setCurrentPlayer(!getCurrentPlayer());
+                    /* ve 2 komutunu return ederek hamle yaptik diyoruz */
+                    return 2;
+                }
+                /* eger tiklanan yer listede yoksa TempMovesListesini temizleyip sifir return ediyoruz */
+                else {
+                    TempMovesList.clear();
+                    setTempCell(emptyCell);
+                    return 0;
+                }
+            }
+        }
+        else{
+            /* Verilen cellde bi tas varsa TempMoveList'imize tasin oynayabilecegi yerlerin listesi aticaz ve 1
+            return edicez ve kullanicinin targeti secmesini beklemek uzere beklemeye gecicez */
 
+            tempCell.setCell(currentCell);
+            TempMovesList = board[x][y].getPiece().checkMove(board, x,y);
+            return 1;
 
-
+        }
 
 
         //Help'e bu komutlar düzenlenerek yazilabilir!!!!!!!!!!!
@@ -84,25 +137,36 @@ public class Game {
      * Eger secim dogruysa 1 yanlissa 0 return eder
      * @return
      */
-    public int playUser(List<Cell> cellList, Cell cell ) {
+    public boolean playUser(List<Cell> cellList, Cell cell ) {
 
         for (Cell searched : cellList) {
             if (searched == cell)
-                return 1;
+                return true;
         }
-        return 0;
+        return false;
     }
 
     /**
-         * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
-         * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
-         * @return
-         */
+     * board uzerinde degisiklik yapicak olan methodumuz. Source daki tasimizi target'a tasiyacak
+     * @param source
+     * @param target
+     */
+    public void makeMove(Cell source, Cell target){
+
+    }
+
+    /**
+     * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
+     * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
+     * ve currentPlayeri degistirir
+     * @return
+     */
     public List<Cell> playComputerEasy() { return 0; }
 
     /**
      * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
      * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
+     * ve currentPlayeri degistirir
      * @return
      */
     public List<Cell> playComputerMedium(){
@@ -112,6 +176,7 @@ public class Game {
     /**
      * Computer icin , hard mod secildiginde bu fonksiyon cagrilacak
      * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
+     * ve currentPlayeri degistirir
      * @return
      */
     public List<Cell> playComputerHard(){
@@ -247,16 +312,18 @@ public class Game {
         }
     }
 
-    //Burada arrayi nasıl yazacağımı düşünemedim, ekrana basmak için somut bi şey olması lazım ama
-    //benim elimde şimdilik somut bi şey yok kontrol ede ede mi gittim ama bilemedim tam
-    // 0 -> noPiece
-    // Beyaz             Siyah
-    // 1 -> wpawn        -1 -> pawn
-    // 2 -> wrook        -2 -> rook
-    // 3 -> wknight      -3 -> knight
-    // 4 -> wbishop      -4 -> bishop
-    // 5 -> wking        -5 -> king
-    // 6 -> wqueen       -6 -> queen
+    /*
+      Burada arrayi nasıl yazacağımı düşünemedim, ekrana basmak için somut bi şey olması lazım ama
+        benim elimde şimdilik somut bi şey yok kontrol ede ede mi gittim ama bilemedim tam
+        0 -> noPiece
+        Beyaz             Siyah
+        1 -> wpawn        -1 -> pawn
+        2 -> wrook        -2 -> rook
+        3 -> wknight      -3 -> knight
+        4 -> wbishop      -4 -> bishop
+        5 -> wking        -5 -> king
+        6 -> wqueen       -6 -> queen
+    */
     public void printBoard(){
         try
         {
@@ -321,4 +388,12 @@ public class Game {
         }
     }
 
+    public static void setCurrentPlayer( boolean cPlayer ) { currentPlayer = cPlayer; }
+    public static boolean getCurrentPlayer() { return currentPlayer; }
+
+    public static void setIsComputerOn( int isOn ) { isComputerOn = isOn; }
+    public static int getIsComputerOn() { return isComputerOn; }
+
+    public void setTempCell( Cell target ) { tempCell.setCell(target); }
+    public Cell getTempCell() { return tempCell; }
 }

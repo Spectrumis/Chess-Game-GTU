@@ -10,7 +10,9 @@ public class Cell {
     int y;
     Pieces piece;
 
-    public Cell(){}
+    public Cell(){
+        x = -1;
+    }
 
     public Cell(int x, int y, Pieces piece) {
         this.x = x;
@@ -20,8 +22,8 @@ public class Cell {
     }
 
     public Cell(Cell cell){
-        this.x= cell.getX();
-        this.y=cell.getY();
+        this.x = cell.getX();
+        this.y = cell.getY();
         this.piece = cell.getPiece();
         this.piece.setColor(cell.getPiece().getColor());
     }
@@ -52,9 +54,11 @@ public class Cell {
     }
 
     public void setCell(Cell cell){
-        this.x= cell.getX();
-        this.y=cell.getY();
+        this.x = cell.getX();
+        this.y = cell.getY();
         this.piece = cell.getPiece();
         this.piece.setColor(cell.getPiece().getColor());
     }
+
+    public void getCell(){ return this; }
 }
