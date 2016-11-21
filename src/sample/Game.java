@@ -19,8 +19,8 @@ public class Game {
     private static boolean currentPlayer = true; //true = beyaz beyaz baslar
     private Cell tempCell; //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private Cell[][] board;
-    //private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
-    //private static int counterRemovess = 0; //Geri alma islemi icin sayac
+    private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
+    private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
     public Game(){
         //removesss = new Cell[][2];
@@ -126,6 +126,7 @@ public class Game {
         //Geri alinan her hamle de bu arrayden silinmeli
         // Cell[][] removesss = new Cell[][2]();
         // her satirda source ve target bulunacak
+       return 0;
     }
 
 
@@ -170,7 +171,7 @@ public class Game {
      * @return
      */
     public List<Cell> playComputerMedium(){
-        return 0;
+        return null;
     }
 
     /**
@@ -180,7 +181,7 @@ public class Game {
      * @return
      */
     public List<Cell> playComputerHard(){
-        return 0;
+        return null;
     }
 
     /**
@@ -201,10 +202,13 @@ public class Game {
      * Geri alma islemine basildiginda geri alacak
      */
     public void recallMove(){
-        //counterRemovess <= 5 ise
-            //removess arrayine bakilir ve son hamleyi geri alir
-            //geri alma islemi max 5 defa olacagi icinde bir counterRemovesss arttirilir.
-        // degilse hicbir sey yaapilmaz
+        if(counterRemovess <= 5){
+            int index = removesss.length;
+            board[removesss[index][0].getX()][removesss[index][1].getY()]=board[removesss[index][1].getX()][removesss[index][1].getY()];
+            counterRemovess++;
+        }
+        else
+            System.out.println("INVALID!! You can not go back anymore!!");
     }
 
     public void initBoard(){
