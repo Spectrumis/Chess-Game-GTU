@@ -109,36 +109,9 @@ public class Game {
             return -1;
         }
 
-        //Help'e bu komutlar düzenlenerek yazilabilir!!!!!!!!!!!
-        // 1. computer-user mi user-user mi seçildi diye sor
-        // 2. eger computer ile oynama secildiyse
-            // 1. kolay-orta-zor levellerinden hangisinin secildigini sor
-                //kolaysa 1 hamle ilerisine bak (Bakilacak hamle sayilari degisebilir)
-                //ortaysa 2 hamle ilerisine bak
-                //zorsa 3 hamle ilerisine bak
-            // ilk computer baslar (Beyaz), rastgele bir tas acar
-            // Computer in oynamasi icin ilk basta start dugmesine basilmali
-        // 3. eger user-user secildiyse
-            //zaten direkt insanların sectigi hamleyi oynayacaksin
-
-        //Surekli kapatma dugmesine basilip basilmadigini kontrol et
-        // basildiysa
-            // save edilmek istendiyse
-                //Sifreli bir sekilde kaydet
-            //istenmediyse
-                //cik, ekrani kapat
-        //
-
-        //Restart yapildi mi diye bak
-            //yapildiysa oyunu sifirla
-
         //ONEMLI: Her hamlenin kaydedilmesi gerekir, bir arraye.
         //Bu sekilde geri al butonuna basildiginda hamleleri burdan bakarak geri alabiliriz
         //Geri alinan her hamle de bu arrayden silinmeli
-        // Cell[][] removesss = new Cell[][2]();
-        // her satirda source ve target bulunacak
-
-       //return 0;
     }
 
 
