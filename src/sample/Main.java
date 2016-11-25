@@ -59,20 +59,20 @@ public class Main extends Application {
 
          */
         /*------------------------------------Algorithm Part Begins---------------------------------------------------*/
-        if(startingStatusHandler || !Game.getIsComputerOn()) {
+        if(startingStatusHandler || game.getIsComputerOn() == 0) {
             currentStatus = game.playGame(x, y, tempMovesList);
         }
         startingStatusHandler = true;
-        if(game.getIsComputerOn()){
+        if(game.getIsComputerOn() != 0){
             switch (game.getIsComputerOn()){
                 case 1:
-                    tempMovesList.addAll(currentStatus=game.playComputerEasy());
+                    tempMovesList.addAll(game.playComputerEasy());
                     break;
                 case 2:
-                    tempMovesList.addAll(currentStatus=game.playComputerMedium());
+                    tempMovesList.addAll(game.playComputerMedium());
                     break;
                 case 3:
-                    tempMovesList.addAll(currentStatus=game.playComputerHard());
+                    tempMovesList.addAll(game.playComputerHard());
                     break;
                 default:
                     System.out.println("ComputerOn degeri yanlis\n");

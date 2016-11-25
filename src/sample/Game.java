@@ -3,6 +3,10 @@ package sample;
 
 import com.sun.deploy.util.ArrayUtil;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -58,49 +62,51 @@ public class Game {
      * @return
      */
     public int playGame(int x, int y, List<Cell> TempMovesList){
-        Cell currentCell = new Cell(board[x][y]);
-        Cell emptyCell = new Cell();
+        try {
+            Cell currentCell = new Cell(board[x][y]);
+            Cell emptyCell = new Cell();
 
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
-        if(currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer() ){
+            if (currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer()) {
             /* ... ve daha once oynatabilecegimiz biseye tiklamadiysak sifir return edicez demektir*/
-            if(getTempCell().getX() == -1){
-                TempMovesList.clear();
-                return 0;
-            }
-            /* ... ve daha once oynatabilecegimiz bir tasa tikladiysak ...*/
-            else {
-                /* ... tiklanan yer TempMoveList'te yani oynanabilir hamlelerde varmi diye bakiyoruz */
-                /* eger var ise hamlemizi yapiyoruz ve listemizi temizleyip icine hamle source ve targetini atiyoruz*/
-                if(playUser(TempMovesList, currentCell)){
-                    makeMove(getTempCell(), currentCell);
+                if (getTempCell().getX() == -1) {
                     TempMovesList.clear();
-                    TempMovesList.add(getTempCell());
-                    TempMovesList.add(currentCell);
-                    setTempCell(emptyCell);
-                    /* suanki oyuncu degerini degistiriyoruz */
-                    setCurrentPlayer(!getCurrentPlayer());
-                    /* ve 2 komutunu return ederek hamle yaptik diyoruz */
-                    return 2;
-                }
-                /* eger tiklanan yer listede yoksa TempMovesListesini temizleyip sifir return ediyoruz */
-                else {
-                    TempMovesList.clear();
-                    setTempCell(emptyCell);
                     return 0;
                 }
-            }
-        }
-        else{
+            /* ... ve daha once oynatabilecegimiz bir tasa tikladiysak ...*/
+                else {
+                /* ... tiklanan yer TempMoveList'te yani oynanabilir hamlelerde varmi diye bakiyoruz */
+                /* eger var ise hamlemizi yapiyoruz ve listemizi temizleyip icine hamle source ve targetini atiyoruz*/
+                    if (playUser(TempMovesList, currentCell)) {
+                        makeMove(getTempCell(), currentCell);
+                        TempMovesList.clear();
+                        TempMovesList.add(getTempCell());
+                        TempMovesList.add(currentCell);
+                        setTempCell(emptyCell);
+                    /* suanki oyuncu degerini degistiriyoruz */
+                        setCurrentPlayer(!getCurrentPlayer());
+                    /* ve 2 komutunu return ederek hamle yaptik diyoruz */
+                        return 2;
+                    }
+                /* eger tiklanan yer listede yoksa TempMovesListesini temizleyip sifir return ediyoruz */
+                    else {
+                        TempMovesList.clear();
+                        setTempCell(emptyCell);
+                        return 0;
+                    }
+                }
+            } else {
             /* Verilen cellde bi tas varsa TempMoveList'imize tasin oynayabilecegi yerlerin listesi aticaz ve 1
             return edicez ve kullanicinin targeti secmesini beklemek uzere beklemeye gecicez */
 
-            tempCell.setCell(currentCell);
-            TempMovesList = board[x][y].getPiece().checkMove(board, x,y);
-            return 1;
+                tempCell.setCell(currentCell);
+                TempMovesList = board[x][y].getPiece().checkMove(board, x, y);
+                return 1;
 
+            }
+        } catch (NullPointerException e){
+            return -1;
         }
-
 
         //Help'e bu komutlar düzenlenerek yazilabilir!!!!!!!!!!!
         // 1. computer-user mi user-user mi seçildi diye sor
@@ -168,17 +174,15 @@ public class Game {
 
     /**
      * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
-     * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
-     * ve currentPlayeri degistirir
-     * @return
+     * Method icinde currentPlayer degistirilir
+     * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public List<Cell> playComputerEasy() { return null; }
 
     /**
      * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
-     * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
-     * ve currentPlayeri degistirir
-     * @return
+     * Method icinde currentPlayer degistirilir
+     * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public List<Cell> playComputerMedium(){
         return null;
@@ -186,9 +190,8 @@ public class Game {
 
     /**
      * Computer icin , hard mod secildiginde bu fonksiyon cagrilacak
-     * Method icinde source ve targetin sirali olarak bulundugu bir cell listesi return eder
-     * ve currentPlayeri degistirir
-     * @return
+     * Method icinde currentPlayer degistirilir
+     * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public List<Cell> playComputerHard(){
         return null;
@@ -199,6 +202,44 @@ public class Game {
      */
     public void saveGame(){
         //Belirlenen bir dosyaya sifreli sekilde tahtanın son durumu kaydedilir
+
+        try {
+            //dosya classlar ile aynı director icinde olusturuluyor
+            File file = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.txt");
+
+            // dosya yoksa olusturuldu
+            if (!file.exists())
+                file.createNewFile();
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            //tahtanin son hali dosyaya yazildi
+            // hucre\nhucre\n......\nhucre\n\n -> 1 row bu sekilde yaziliyor sonra iki \n sonra diger row!
+            for(int i=0; i<8; i++) {
+                for (int j = 0; j < 8; j++)
+                    bw.write(board[i][j].toString() + "\n");
+                bw.write("\n");
+            }
+            bw.write("\n");
+            // board dan sonra 3 tane \n sonra removess
+
+            //hucre hucre \n sonra diger row
+            for(int i=0; i<removesss.length; i++) {
+                for (int j = 0; j < 2; j++)
+                    bw.write(removesss[i][j].toString() + " ");
+                bw.write("\n");
+            }
+            bw.write("\n");
+
+            // son olarak da counterRemovess dosyaya yazilir
+            bw.write(counterRemovess);
+
+            // dosya kapatilir
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -238,9 +279,13 @@ public class Game {
         boolean color = false;
         for(j=1; j<7; j=j+5) {
             for (i = 0; i < 8; i++) {
-                Pieces piece = new Pawn();
-                board[i][j].setPiece(piece);
-                board[i][j].piece.setColor(color);
+                try {
+                    Pieces piece = new Pawn();
+                    board[i][j].setPiece(piece);
+                    board[i][j].piece.setColor(color);
+                } catch(Exception e){
+
+                }
             }
             color =true;
         }

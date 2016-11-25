@@ -19,4 +19,16 @@ public abstract class Pieces{
     public boolean getColor(){
         return color;
     }
+
+    /**
+     *
+     * @return color
+     */
+    public String toString(){
+
+        if(color == true)
+            return "true";
+        else
+            return "false";
+    }
 }

@@ -62,4 +62,12 @@ public class Cell {
 
     public Cell getCell(){ return this; }
 
+    /**
+     *
+     * @return koordinatlar(x ve y), piece(color), class(piece turu)
+     */
+    public String toString(){
+        return (x + " " + y + " " + piece.toString() + getClass().toString());
+    }
+
 }
