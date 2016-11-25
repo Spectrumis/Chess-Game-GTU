@@ -70,4 +70,5 @@ public class Cell {
         return (x + " " + y + " " + piece.toString() + getClass().toString());
     }
 
+
 }

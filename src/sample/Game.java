@@ -144,6 +144,10 @@ public class Game {
         Pieces piece = new NoPiece();
         board[source.getX()][source.getY()].setPiece(piece);
 
+        //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
+        removesss[removesss.length][0].setCell(source);
+        removesss[removesss.length][1].setCell(target);
+
     }
 
     /**
