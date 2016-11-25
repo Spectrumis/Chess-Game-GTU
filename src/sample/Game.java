@@ -56,6 +56,7 @@ public class Game {
      * 0 return eder. Eger bi tasa tiklandiysa 1 return eder ve gidebilecegi yerleri TempMovesList'de depolar
      * Depolanmis yerlerden birine tiklandiginda ise 2 return eder ve oynanicak tasin yerini ve oynancak celli
      * TempMovesList'de depolar
+     * Hicbir sey yapilmadiysa da -1 return eder. ( Aslinda bu Exception icin )
      * @param x
      * @param y
      * @param TempMovesList
@@ -259,13 +260,21 @@ public class Game {
     }
 
     /**
-     * Geri alma islemine basildiginda geri alacak
+     * Geri alma islemine basildiginda en son yapilan hamleyi geri alacak
+     * removesss in 2. sutunundaki cell den 1. sutunundaki Cell hareket edilir
+     * ve bu hamle artık yapilmadi varsayilip removesss dan kaldirilir.
      */
     public void recallMove(){
         if(counterRemovess <= 5){
             int index = removesss.length;
+
             board[removesss[index][0].getX()][removesss[index][1].getY()]=board[removesss[index][1].getX()][removesss[index][1].getY()];
             board[removesss[index][0].getX()][removesss[index][1].getY()].setPiece(board[removesss[index][1].getX()][removesss[index][1].getY()].getPiece());
+
+            //indexteki cell elemanlari silindi.
+            removesss[index][0] = null;
+            removesss[index][1] = null;
+
             counterRemovess++;
         }
         else
