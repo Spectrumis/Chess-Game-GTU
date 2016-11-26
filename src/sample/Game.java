@@ -23,7 +23,7 @@ public class Game {
      *  3 = Hard
      */
     private static boolean currentPlayer = true; //true = beyaz beyaz baslar
-    private Cell tempCell; //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
+    private Cell tempCell = new Cell(); //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private ArrayList<ArrayList<Cell>> board;
     private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
@@ -76,6 +76,7 @@ public class Game {
      * @return
      */
     public int playGame(int x, int y, List<Cell> TempMovesList){
+        int status=0;
         try {
             Cell currentCell = new Cell(board.get(x).get(y));
             Cell emptyCell = new Cell();
@@ -115,6 +116,8 @@ public class Game {
 
                 tempCell.setCell(currentCell);
                 TempMovesList = board.get(x).get(y).getPiece().checkMove(board, x, y);
+                status = Main.printCellList(TempMovesList);
+                System.out.print("status:" + status + "\n");
                 return 1;
 
             }
@@ -369,9 +372,27 @@ public class Game {
     public void initBoard(){
         int i; int j;
 
+        //Bos hucreler
+        for(i=0; i < 8; ++i){
+            for(j=0; j < 8; ++j){
+                try
+                {
+                    //boş hücreler //boş hücrenin color u ne olacak
+                    Pieces piece = new NoPiece();
+                    board.get(i).get(j).setPiece(piece);
+                    board.get(i).get(j).piece.setColor(true); //şimdilik true atadım
+                    board.get(i).get(j).setX(i);
+                    board.get(i).get(j).setY(j);
+                }catch(Exception e)
+                {
+                    //System.out.println("Null Pointer ");
+                }
+            }
+        }
+
         //piyonların renklerini belirledim ve piyonları yerleştirdim
         boolean color = false; //siyah
-        for(j=1; j<7; j=j+5) {
+        /*for(j=1; j<7; j=j+5) {
             for (i = 0; i < 8; i++) {
                 try {
                     Pieces piece = new Pawn();
@@ -382,25 +403,7 @@ public class Game {
                 }
             }
             color =true;
-        }
-
-        //Bos hucreleri olusturdum
-        for(j=2; j<6; j++) {
-            for (i=0; i<8; i++){
-                try
-                {
-                    //boş hücreler //boş hücrenin color u ne olacak
-                    Pieces piece = new NoPiece();
-                    board.get(i).get(j).setPiece(piece);
-                    board.get(i).get(j).piece.setColor(true); //şimdilik true atadım
-
-                }catch(Exception e)
-                {
-                    //System.out.println("Null Pointer ");
-                }
-
-            }
-        }
+        }*/
 
         //özel taşlar
         try {
@@ -408,91 +411,75 @@ public class Game {
             {
                 Pieces piece = new Rook();
                 board.get(0).get(0).setPiece(piece);
-                board.get(0).get(0).piece.setColor(false);
             }
             {
                 Pieces piece = new Rook();
                 board.get(7).get(0).setPiece(piece);
-                board.get(7).get(0).piece.setColor(false);
             }
             //Beyaz, üst, Rook
             {
                 Pieces piece = new Rook();
                 board.get(0).get(7).setPiece(piece);
-                board.get(0).get(7).piece.setColor(true);
             }
             {
                 Pieces piece = new Rook();
                 board.get(7).get(7).setPiece(piece);
-                board.get(7).get(7).piece.setColor(true);
             }
             //Siyah, alt, Knight
             {
                 Pieces piece = new Knight();
                 board.get(1).get(0).setPiece(piece);
-                board.get(1).get(0).piece.setColor(false);
             }
             {
                 Pieces piece = new Knight();
                 board.get(6).get(0).setPiece(piece);
-                board.get(6).get(0).piece.setColor(false);
             }
             //Beyaz, üst, Knight
             {
                 Pieces piece = new Knight();
                 board.get(1).get(7).setPiece(piece);
-                board.get(1).get(7).piece.setColor(true);
             }
             {
                 Pieces piece = new Knight();
                 board.get(6).get(7).setPiece(piece);
-                board.get(6).get(7).piece.setColor(true);
             }
             //Siyah, alt, Bishop
             {
                 Pieces piece = new Bishop();
                 board.get(2).get(0).setPiece(piece);
-                board.get(2).get(0).piece.setColor(false);
             }
             {
                 Pieces piece = new Bishop();
                 board.get(5).get(0).setPiece(piece);
-                board.get(5).get(0).piece.setColor(false);
             }
             //Beyaz, üst, Bishop
             {
                 Pieces piece = new Bishop();
                 board.get(2).get(7).setPiece(piece);
-                board.get(2).get(7).piece.setColor(true);
             }
             {
                 Pieces piece = new Bishop();
                 board.get(5).get(7).setPiece(piece);
-                board.get(5).get(7).piece.setColor(true);
             }
             //Siyah, alt, King
             {
                 Pieces piece = new King();
                 board.get(3).get(0).setPiece(piece);
-                board.get(3).get(0).piece.setColor(false);
             }
             //Beyaz, üst, King
             {
                 Pieces piece = new King();
                 board.get(3).get(7).setPiece(piece);
-                board.get(3).get(7).piece.setColor(true);
             }
             //Siyah, alt, Queen
             {
                 Pieces piece = new Queen();
                 board.get(4).get(0).setPiece(piece);
-                board.get(4).get(0).piece.setColor(false);
             }
             //Beyaz, üst, Queen
             {
                 Pieces piece = new Queen();
                 board.get(4).get(7).setPiece(piece);
-                board.get(4).get(7).piece.setColor(true);
             }
         }catch(Exception e)
         {
@@ -503,10 +490,10 @@ public class Game {
         color = false;
         for(j=0; j<8; j=j+7) {
             for (i=0; i < 8; i++) {
-                System.out.printf("%d ,%d ", i, j);
+                //System.out.printf("%d ,%d ", i, j);
                 board.get(i).get(j).piece.setColor(color);
-                System.out.print(board.get(i).get(j).piece.getColor());
-                System.out.println();
+                //System.out.print(board.get(i).get(j).piece.getColor());
+                //System.out.println();
             }
             color = true;
         }
