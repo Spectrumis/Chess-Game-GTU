@@ -1,9 +1,5 @@
 package sample;
 
-
-import com.sun.deploy.util.ArrayUtil;
-
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -28,13 +24,13 @@ public class Game {
      */
     private static boolean currentPlayer = true; //true = beyaz beyaz baslar
     private Cell tempCell; //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
-    private Cell[][] board;
+    private ArrayList<ArrayList<Cell>> board;
     private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
     public Game(){
-        board = new Cell[8][];
         removesss = new Cell[64][2];
+        board = new ArrayList<ArrayList<Cell>>(8);
         this.initBoard();
         //this.printBoard();
         this.tempCell = new Cell();
@@ -42,15 +38,14 @@ public class Game {
 
     //Bunu kaydededilmiş hali diye düşündüm
     public Game(Game game){
-        board = new Cell[8][];
+        board = new ArrayList<ArrayList<Cell>>(8);
         removesss = new Cell[64][2];
-        int i, j;
 
         Cell temp = null;
 
-        for(j=0; j<8; j++){
-            for(i=0; i<8; i++){
-                temp.setCell(board[i][j]);
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++){
+                temp.setCell(board.get(i).get(j));
             }
         }
     }
@@ -68,7 +63,7 @@ public class Game {
      */
     public int playGame(int x, int y, List<Cell> TempMovesList){
         try {
-            Cell currentCell = new Cell(board[x][y]);
+            Cell currentCell = new Cell(board.get(x).get(y));
             Cell emptyCell = new Cell();
 
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
@@ -105,7 +100,7 @@ public class Game {
             return edicez ve kullanicinin targeti secmesini beklemek uzere beklemeye gecicez */
 
                 tempCell.setCell(currentCell);
-                TempMovesList = board[x][y].getPiece().checkMove(board, x, y);
+                TempMovesList = board.get(x).get(y).getPiece().checkMove(board, x, y);
                 return 1;
 
             }
@@ -143,10 +138,10 @@ public class Game {
      */
     public void makeMove(Cell source, Cell target){
 
-        board[target.getX()][target.getY()].setPiece(source.getPiece());
+        board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
         Pieces piece = new NoPiece();
-        board[source.getX()][source.getY()].setPiece(piece);
+        board.get(source.getX()).get(source.getY()).setPiece(piece);
 
         //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
         removesss[removesss.length][0].setCell(source);
@@ -176,57 +171,57 @@ public class Game {
         List<Cell> srcMove = new LinkedList<>();
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
-                if(player == board[i][j].getPiece().getColor()){
-                    if(board[i][j].getPiece() instanceof Pawn){
+                if(player == board.get(i).get(j).getPiece().getColor()){
+                    if(board.get(i).get(j).getPiece() instanceof Pawn){
                         Pawn wp = new Pawn();
                         canMove.addAll(wp.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board[i][j]));
+                            srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
                         canMove=null;
                     }
-                    else if(board[i][j].getPiece() instanceof Rook){
+                    else if(board.get(i).get(j).getPiece() instanceof Rook){
                         Rook wr = new Rook();
                         canMove.addAll(wr.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board[i][j]));
+                            srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
                         canMove=null;
                     }
-                    else if(board[i][j].getPiece() instanceof Knight){
+                    else if(board.get(i).get(j).getPiece() instanceof Knight){
                         Knight wkn = new Knight();
                         canMove.addAll(wkn.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board[i][j]));
+                            srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
                         canMove=null;
                     }
-                    else if(board[i][j].getPiece() instanceof Bishop){
+                    else if(board.get(i).get(j).getPiece() instanceof Bishop){
                         Bishop wb = new Bishop();
                         canMove.addAll(wb.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board[i][j]));
+                            srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
                         canMove=null;
                     }
-                    else if(board[i][j].getPiece() instanceof King){
+                    else if(board.get(i).get(j).getPiece() instanceof King){
                         King wki = new King();
                         canMove.addAll(wki.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board[i][j]));
+                            srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
                         canMove=null;
                     }
-                    else if(board[i][j].getPiece() instanceof Queen){
+                    else if(board.get(i).get(j).getPiece() instanceof Queen){
                         Queen wq = new Queen();
                         canMove.addAll(wq.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board[i][j]));
+                            srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
                         canMove=null;
@@ -282,7 +277,7 @@ public class Game {
             // hucre\nhucre\n......\nhucre\n\n -> 1 row bu sekilde yaziliyor sonra iki \n sonra diger row!
             for(int i=0; i<8; i++) {
                 for (int j = 0; j < 8; j++)
-                    bw.write(board[i][j].toString() + "\n");
+                    bw.write(board.get(i).get(j).toString() + "\n");
                 bw.write("\n");
             }
             bw.write("\n");
@@ -332,8 +327,8 @@ public class Game {
         if(counterRemovess <= 5){
             int index = removesss.length;
 
-            board[removesss[index][0].getX()][removesss[index][1].getY()]=board[removesss[index][1].getX()][removesss[index][1].getY()];
-            board[removesss[index][0].getX()][removesss[index][1].getY()].setPiece(board[removesss[index][1].getX()][removesss[index][1].getY()].getPiece());
+            board.get(removesss[index][0].getX()).set(removesss[index][1].getY(), board.get(removesss[index][1].getX()).get(removesss[index][1].getY()));
+            board.get(removesss[index][0].getX()).get(removesss[index][1].getY()).setPiece(board.get(removesss[index][1].getX()).get(removesss[index][1].getY()).getPiece());
 
             //indexteki cell elemanlari silindi.
             removesss[index][0] = null;
@@ -354,8 +349,8 @@ public class Game {
             for (i = 0; i < 8; i++) {
                 try {
                     Pieces piece = new Pawn();
-                    board[i][j].setPiece(piece);
-                    board[i][j].piece.setColor(color);
+                    board.get(i).get(j).setPiece(piece);
+                    board.get(i).get(j).piece.setColor(color);
                 } catch(Exception e){
 
                 }
@@ -370,8 +365,8 @@ public class Game {
                 {
                     //boş hücreler //boş hücrenin color u ne olacak
                     Pieces piece = new NoPiece();
-                    board[i][j].setPiece(piece);
-                    board[i][j].piece.setColor(true); //şimdilik true atadım
+                    board.get(i).get(j).setPiece(piece);
+                    board.get(i).get(j).piece.setColor(true); //şimdilik true atadım
 
                 }catch(Exception e)
                 {
@@ -387,7 +382,7 @@ public class Game {
             for (i=0; i < 8; i++) {
                 try
                 {
-                    board[i][j].piece.setColor(color);
+                    board.get(i).get(j).piece.setColor(color);
 
                 }catch(Exception e)
                 {
@@ -402,44 +397,44 @@ public class Game {
         {
             Pieces piece = new Rook();
             //Siyah, alt, Rook
-            board[0][0].setPiece(piece);
-            board[0][7].setPiece(piece);
+            board.get(0).get(0).setPiece(piece);
+            board.get(0).get(7).setPiece(piece);
 
             //Beyaz, üst, Rook
-            board[7][0].setPiece(piece);
-            board[7][7].setPiece(piece);
+            board.get(7).get(0).setPiece(piece);
+            board.get(7).get(7).setPiece(piece);
 
             piece = new Knight();
             //Siyah, alt, Knight
-            board[0][1].setPiece(piece);
-            board[0][6].setPiece(piece);
+            board.get(0).get(1).setPiece(piece);
+            board.get(0).get(6).setPiece(piece);
 
             //Beyaz, üst, Knight
-            board[7][1].setPiece(piece);
-            board[7][6].setPiece(piece);
+            board.get(7).get(1).setPiece(piece);
+            board.get(7).get(6).setPiece(piece);
 
             piece = new Bishop();
             //Siyah, alt, Bishop
-            board[0][2].setPiece(piece);
-            board[0][5].setPiece(piece);
+            board.get(0).get(2).setPiece(piece);
+            board.get(0).get(5).setPiece(piece);
 
             //Beyaz, üst, Bishop
-            board[7][2].setPiece(piece);
-            board[7][5].setPiece(piece);
+            board.get(7).get(2).setPiece(piece);
+            board.get(7).get(5).setPiece(piece);
 
             piece = new King();
             //Siyah, alt, King
-            board[0][3].setPiece(piece);
+            board.get(0).get(3).setPiece(piece);
 
             //Beyaz, üst, King
-            board[7][3].setPiece(piece);
+            board.get(7).get(3).setPiece(piece);
 
             piece = new Queen();
             //Siyah, alt, Queen
-            board[0][4].setPiece(piece);
+            board.get(0).get(4).setPiece(piece);
 
             //Beyaz, üst, Queen
-            board[7][4].setPiece(piece);
+            board.get(7).get(4).setPiece(piece);
 
         }catch(Exception e)
         {
@@ -460,66 +455,44 @@ public class Game {
         6 -> wqueen       -6 -> queen
     */
     public void printBoard(){
-        try
-        {
-            //System.out.println("PrintBoard, try!!");
-            int i, j;
+        int i, j;
 
-            for(j=7; j>=0; j--){
-                for(i=7; i>=0; i--){
-                    if(board[i][j].piece.getColor() == false)
-                    {
-                        System.out.println("PrintBoard, false, siyah!!");
-                        if(board[i][j].getPiece() instanceof Pawn){
-                            System.out.print("-1");
-                        }
-                        else if(board[i][j].getPiece() instanceof Rook){
-                            System.out.print("-2");
-                        }
-                        else if(board[i][j].getPiece() instanceof Knight){
-                            System.out.print("-3");
-                        }
-                        else if(board[i][j].getPiece() instanceof Bishop){
-                            System.out.print("-4");
-                        }
-                        else if(board[i][j].getPiece() instanceof King){
-                            System.out.print("-5");
-                        }
-                        else if(board[i][j].getPiece() instanceof Queen){
-                            System.out.print("-6");
-                        }
+        for(j=7; j>=0; j--) {
+            for (i = 7; i >= 0; i--) {
+                if (board.get(i).get(j).piece.getColor() == false) {
+                    System.out.println("PrintBoard, false, siyah!!");
+                    if (board.get(i).get(j).getPiece() instanceof Pawn) {
+                        System.out.print("P");
+                    } else if (board.get(i).get(j).getPiece() instanceof Rook) {
+                        System.out.print("K");
+                    } else if (board.get(i).get(j).getPiece() instanceof Knight) {
+                        System.out.print("A");
+                    } else if (board.get(i).get(j).getPiece() instanceof Bishop) {
+                        System.out.print("F");
+                    } else if (board.get(i).get(j).getPiece() instanceof King) {
+                        System.out.print("S");
+                    } else if (board.get(i).get(j).getPiece() instanceof Queen) {
+                        System.out.print("V");
                     }
-                    else if(board[i][j].piece.getColor() == true)
-                    {
-                        //System.out.println("PrintBoard, true, beyaz!!");
-                        if(board[i][j].getPiece() instanceof Pawn){
-                            System.out.print(" 1");
-                        }
-                        else if(board[i][j].getPiece() instanceof Rook){
-                            System.out.print(" 2");
-                        }
-                        else if(board[i][j].getPiece() instanceof Knight){
-                            System.out.print(" 3");
-                        }
-                        else if(board[i][j].getPiece() instanceof Bishop){
-                            System.out.print(" 4");
-                        }
-                        else if(board[i][j].getPiece() instanceof King){
-                            System.out.print(" 5");
-                        }
-                        else if(board[i][j].getPiece() instanceof Queen){
-                            System.out.print(" 6");
-                        }
+                } else if (board.get(i).get(j).piece.getColor() == true) {
+                    //System.out.println("PrintBoard, true, beyaz!!");
+                    if (board.get(i).get(j).getPiece() instanceof Pawn) {
+                        System.out.print("-P");
+                    } else if (board.get(i).get(j).getPiece() instanceof Rook) {
+                        System.out.print("-K");
+                    } else if (board.get(i).get(j).getPiece() instanceof Knight) {
+                        System.out.print("-A");
+                    } else if (board.get(i).get(j).getPiece() instanceof Bishop) {
+                        System.out.print("-F");
+                    } else if (board.get(i).get(j).getPiece() instanceof King) {
+                        System.out.print("-S");
+                    } else if (board.get(i).get(j).getPiece() instanceof Queen) {
+                        System.out.print("-V");
                     }
-                    else
-                        System.out.print(" 0");
-                }
-                System.out.println();
+                } else
+                    System.out.print(" .");
             }
-
-        }catch(Exception e)
-        {
-            //System.out.println("Try a giriyor ama ekrana bi şey yazmıyor ya!");
+            System.out.println();
         }
     }
 

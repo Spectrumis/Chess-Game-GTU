@@ -58,7 +58,7 @@ public class Main extends Application {
 
 
          */
-        /*------------------------------------Algorithm Part Begins---------------------------------------------------*/
+        /*------------------------------------Algorithm Part Begins---------------------------------------------------
         if(startingStatusHandler || game.getIsComputerOn() == 0) {
             currentStatus = game.playGame(x, y, tempMovesList);
         }
@@ -79,7 +79,7 @@ public class Main extends Application {
                     break;
             }
         }
-        /*--------------------------------------Algorithm Part Ends---------------------------------------------------*/
+        --------------------------------------Algorithm Part Ends---------------------------------------------------*/
 
         /*
             Interface Part 2

@@ -1,5 +1,6 @@
 package sample;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public class NoPiece extends Pieces{
     }
 
     @Override
-    public List<Cell> checkMove(Cell[][] board, int x, int y) {
+    public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y) {
         return null;
     }
 

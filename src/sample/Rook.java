@@ -1,5 +1,6 @@
 package sample;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,23 +10,23 @@ import java.util.List;
  */
 public class Rook extends Pieces {
     @Override
-    public List<Cell> checkMove(Cell[][] board, int x, int y) {
+    public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y) {
         List<Cell> moves = new LinkedList<>();
 
         //Ilk olarak secili tasin rengini kiyaslama yapmak icin tutuyorum
-        boolean curColor = board[x][y].getPiece().getColor() ;
+        boolean curColor = board.get(x).get(y).getPiece().getColor() ;
 
         //Sol tarafina dogru hareket edebilirligine bakarak gidiyorum. Ilk bakacagim
         //yer olarak i ye x-1 atadim. Yani tasin hemen soluna bakicam ilk
         for(int i=x-1; i >= 0; --i){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
-            if(board[i][y].getPiece() instanceof NoPiece){
-                moves.add(new Cell(board[i][y]));
+            if(board.get(i).get(y).getPiece() instanceof NoPiece){
+                moves.add(new Cell(board.get(i).get(y)));
             }
             //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
             //fakat yemekten oteye gecemedigimden hemen ardindan dongumu sonlandiriyorum
-            else if(board[i][y].getPiece().getColor() != curColor){
-                moves.add(new Cell(board[i][y]));
+            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+                moves.add(new Cell(board.get(i).get(y)));
                 break;
             }
             //Eger ayni renk bi tas varsa uzerine oynayamıyacagindan ve daha ileri de gidemeyeceginden
@@ -36,11 +37,11 @@ public class Rook extends Pieces {
 
         //Ayni islemleri saga dogru bakiyorum
         for(int i=x+1; i <= 7; ++i){
-            if(board[i][y].getPiece() instanceof NoPiece){
-                moves.add(new Cell(board[i][y]));
+            if(board.get(i).get(y).getPiece() instanceof NoPiece){
+                moves.add(new Cell(board.get(i).get(y)));
             }
-            else if(board[i][y].getPiece().getColor() != curColor){
-                moves.add(new Cell(board[i][y]));
+            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+                moves.add(new Cell(board.get(i).get(y)));
                 break;
             }
             else
@@ -48,13 +49,13 @@ public class Rook extends Pieces {
         }
 
         //Asagiya ve
-        curColor = board[x][y].getPiece().getColor() ;
+        curColor = board.get(x).get(y).getPiece().getColor() ;
         for(int i=y-1; i >= 0; --i){
-            if(board[x][i].getPiece() instanceof NoPiece){
-                moves.add(new Cell(board[x][i]));
+            if(board.get(x).get(i).getPiece() instanceof NoPiece){
+                moves.add(new Cell(board.get(x).get(i)));
             }
-            else if(board[i][y].getPiece().getColor() != curColor){
-                moves.add(new Cell(board[x][i]));
+            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+                moves.add(new Cell(board.get(x).get(i)));
                 break;
             }
             else
@@ -62,13 +63,13 @@ public class Rook extends Pieces {
         }
 
         //Yukariya dogru da ayni islemler gecerli
-        curColor = board[x][y].getPiece().getColor() ;
+        curColor = board.get(x).get(y).getPiece().getColor() ;
         for(int i=y+1; i >= 0; ++i){
-            if(board[x][i].getPiece() instanceof NoPiece){
-                moves.add(new Cell(board[x][i]));
+            if(board.get(x).get(i).getPiece() instanceof NoPiece){
+                moves.add(new Cell(board.get(x).get(i)));
             }
-            else if(board[i][y].getPiece().getColor() != curColor){
-                moves.add(new Cell(board[x][i]));
+            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+                moves.add(new Cell(board.get(x).get(i)));
                 break;
             }
             else

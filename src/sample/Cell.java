@@ -12,6 +12,8 @@ public class Cell {
 
     public Cell(){
         x = -1;
+        piece = new NoPiece();
+        y = -1;
     }
 
     public Cell(int x, int y, Pieces piece) {
