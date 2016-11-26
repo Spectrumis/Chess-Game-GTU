@@ -34,12 +34,12 @@ public class King extends Pieces {
         if((i>= 0) && (j >= 0)){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
             //fakat yemekten oteye gecemedigimden hemen ardindan dongumu sonlandiriyorum
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
         }
         //Ayni islemleri saga dogru bakiyorum
@@ -56,19 +56,19 @@ public class King extends Pieces {
         j = y-1;
         if((i <= 7) && (j >= 0)){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             else if(board.get(i).get(j).getPiece().getColor() != curColor) {
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
         }
         //Asagiya ve
         if(j >= 0){
             if(board.get(x).get(i).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(x).get(i)));
+                moves.add(new Cell(board.get(x).get(j)));
             }
             else if(board.get(i).get(y).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(x).get(i)));
+                moves.add(new Cell(board.get(x).get(j)));
             }
         }
 
@@ -76,29 +76,29 @@ public class King extends Pieces {
         j = y+1;
         if((i <= 7) && (j <= 7)){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
         }
         //Yukariya dogru da ayni islemler gecerli
         if(j <= 0){
             if(board.get(x).get(i).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(x).get(i)));
+                moves.add(new Cell(board.get(x).get(j)));
             }
             else if(board.get(i).get(y).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(x).get(i)));
+                moves.add(new Cell(board.get(x).get(j)));
             }
         }
         //Sol uste dogru da ayni islemler gecerli
         i = x-1;
-        if((i >= 0) && (j >= 0)){
+        if((i >= 0) && (j <= 7)){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
         }
         //Kalenin her yone dogru oynayabilecegi hamleleri move listesine atadik ve donduruyoruz
