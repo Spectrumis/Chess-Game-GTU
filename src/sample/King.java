@@ -24,6 +24,7 @@ public class King extends Pieces {
             if(board[i][y].getPiece() instanceof NoPiece){
                 moves.add(new Cell(board[i][y]));
             }
+
             //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
             //fakat yemekten oteye gecemedigimden hemen ardindan dongumu sonlandiriyorum
             else if(board[i][y].getPiece().getColor() != curColor){
@@ -107,7 +108,7 @@ public class King extends Pieces {
 
     @Override
     public void setColor(boolean colors) {
-
+        color = colors;
     }
 
     @Override

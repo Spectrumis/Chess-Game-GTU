@@ -3,11 +3,15 @@ package sample;
 
 import com.sun.deploy.util.ArrayUtil;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by GozdeDogan on 14.11.2016.
@@ -153,9 +157,92 @@ public class Game {
     /**
      * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
      * Method icinde currentPlayer degistirilir
+     *
+     * tum board tek tek dolasilir.
+     * boardin uzerinde player ile aynı renge sahip taslar bulundugunda
+     * bu tasin olasi yapabilecegi tum hamleler bir listde tutulur
+     * daha sonra random sayi olusturularak bu listden bir hamlenin
+     * sirasi secilir ve return listi 2 eleman icerir.
+     * ilk elemani source'dur.ikinci elemani target'tir.
+     * Lutfen bu methodu kullanicak arkadaslar bu sirayi
+     * dikkate aliniz.
+     *
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
-    public List<Cell> playComputerEasy() { return null; }
+    public List<Cell> playComputerEasy() {
+        boolean player = getCurrentPlayer();
+        List<Cell> canMove = new LinkedList<>();
+        List<Cell> trgtMove = new LinkedList<>();
+        List<Cell> srcMove = new LinkedList<>();
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if(player == board[i][j].getPiece().getColor()){
+                    if(board[i][j].getPiece() instanceof Pawn){
+                        Pawn wp = new Pawn();
+                        canMove.addAll(wp.checkMove(board, i, j));
+                        for (int k = 0; k < canMove.size(); k++) {
+                            srcMove.add(new Cell(board[i][j]));
+                        }
+                        trgtMove.addAll(canMove);
+                        canMove=null;
+                    }
+                    else if(board[i][j].getPiece() instanceof Rook){
+                        Rook wr = new Rook();
+                        canMove.addAll(wr.checkMove(board, i, j));
+                        for (int k = 0; k < canMove.size(); k++) {
+                            srcMove.add(new Cell(board[i][j]));
+                        }
+                        trgtMove.addAll(canMove);
+                        canMove=null;
+                    }
+                    else if(board[i][j].getPiece() instanceof Knight){
+                        Knight wkn = new Knight();
+                        canMove.addAll(wkn.checkMove(board, i, j));
+                        for (int k = 0; k < canMove.size(); k++) {
+                            srcMove.add(new Cell(board[i][j]));
+                        }
+                        trgtMove.addAll(canMove);
+                        canMove=null;
+                    }
+                    else if(board[i][j].getPiece() instanceof Bishop){
+                        Bishop wb = new Bishop();
+                        canMove.addAll(wb.checkMove(board, i, j));
+                        for (int k = 0; k < canMove.size(); k++) {
+                            srcMove.add(new Cell(board[i][j]));
+                        }
+                        trgtMove.addAll(canMove);
+                        canMove=null;
+                    }
+                    else if(board[i][j].getPiece() instanceof King){
+                        King wki = new King();
+                        canMove.addAll(wki.checkMove(board, i, j));
+                        for (int k = 0; k < canMove.size(); k++) {
+                            srcMove.add(new Cell(board[i][j]));
+                        }
+                        trgtMove.addAll(canMove);
+                        canMove=null;
+                    }
+                    else if(board[i][j].getPiece() instanceof Queen){
+                        Queen wq = new Queen();
+                        canMove.addAll(wq.checkMove(board, i, j));
+                        for (int k = 0; k < canMove.size(); k++) {
+                            srcMove.add(new Cell(board[i][j]));
+                        }
+                        trgtMove.addAll(canMove);
+                        canMove=null;
+                    }
+                }
+            }
+        }
+        Random randomGenerator = new Random();
+        List<Cell> retList = new ArrayList<>();
+        int randomInt = randomGenerator.nextInt(canMove.size());
+        retList.add(srcMove.get(randomInt));
+        retList.add(trgtMove.get(randomInt));
+
+        setCurrentPlayer(!player);
+        return retList;
+    }
 
     /**
      * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
