@@ -311,6 +311,18 @@ public class Game {
             // dosya kapatilir
             bw.close();
 
+            String key = "I hope this project will finish8";
+
+            File inputFile = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.txt");
+            File encryptedFile = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.encrypted");
+
+            try {
+                CryptoUtils.encrypt(key, inputFile, encryptedFile);
+            } catch (CryptoException ex) {
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
