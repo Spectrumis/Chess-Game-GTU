@@ -21,31 +21,31 @@ public class Pawn extends Pieces {
         {
             if (firstMove)
             {
-                if (board.get(x+2).get(y).getPiece() instanceof NoPiece)
+                if (board.get(x).get(y-2).getPiece() instanceof NoPiece)
                 {
-                    moves.add(new Cell(board.get(x+2).get(y)));
+                    moves.add(new Cell(board.get(x).get(y-2)));
                 }
             }
 
             //yukarı
-            if (x+1 < 8 && board.get(x+1).get(y).getPiece() instanceof NoPiece)
+            if (y-1 >= 0 && board.get(x).get(y-1).getPiece() instanceof NoPiece)
             {
-                moves.add(new Cell(board.get(x+1).get(y)));
+                moves.add(new Cell(board.get(x).get(y-1)));
             }
 
             //sag capraz
-            if (x+1 < 8 && y+1 < 8 && !board.get(x+1).get(y+1).getPiece().getColor())
+            if (x-1 >= 0 && y-1 >= 0 && !board.get(x-1).get(y-1).getPiece().getColor())
             {
-                if (!(board.get(x + 1).get(y + 1).getPiece() instanceof NoPiece))
+                if (!(board.get(x-1).get(y-1).getPiece() instanceof NoPiece))
                 {
-                    moves.add(new Cell(board.get(x+1).get(y+1)));
+                    moves.add(new Cell(board.get(x-1).get(y-1)));
                 }
             }
 
             //sol capraz
-            if (x+1 < 8 && y-1 >= 0 && !board.get(x + 1).get(y - 1).getPiece().getColor())
+            if (x+1 < 8 && y-1 >= 0 && !board.get(x+1).get(y-1).getPiece().getColor())
             {
-                if (!(board.get(x + 1).get(y - 1).getPiece() instanceof NoPiece))
+                if (!(board.get(x+1).get(y-1).getPiece() instanceof NoPiece))
                 {
                     moves.add(new Cell(board.get(x+1).get(y-1)));
                 }
@@ -55,31 +55,31 @@ public class Pawn extends Pieces {
         {
             if (firstMove)
             {
-                if (board.get(x-2).get(y).getPiece() instanceof NoPiece)
+                if (board.get(x).get(y+2).getPiece() instanceof NoPiece)
                 {
-                    moves.add(new Cell(board.get(x-2).get(y)));
+                    moves.add(new Cell(board.get(x).get(y+2)));
                 }
             }
 
             //yukarı
-            if (x-1 >= 0 && board.get(x-1).get(y).getPiece() instanceof NoPiece)
+            if (y+1 < 8 && board.get(x).get(y+1).getPiece() instanceof NoPiece)
             {
-                moves.add(new Cell(board.get(x-1).get(y)));
+                moves.add(new Cell(board.get(x).get(y+1)));
             }
 
             //sag capraz
-            if (x-1 >= 0 && y-1 >= 0 && board.get(x-1).get(y-1).getPiece().getColor())
+            if (x+1 < 8 && y+1 < 8 && board.get(x+1).get(y+1).getPiece().getColor())
             {
-                if (!(board.get(x-1).get(y-1).getPiece() instanceof NoPiece))
+                if (!(board.get(x+1).get(y+1).getPiece() instanceof NoPiece))
                 {
-                    moves.add(new Cell(board.get(x-1).get(y-1)));
+                    moves.add(new Cell(board.get(x+1).get(y+1)));
                 }
             }
 
             //sol capraz
             if (x-1 >= 0 && y+1 < 8 && board.get(x-1).get(y+1).getPiece().getColor())
             {
-                if (!(board.get(x - 1).get(y + 1).getPiece() instanceof NoPiece))
+                if (!(board.get(x-1).get(y+1).getPiece() instanceof NoPiece))
                 {
                     moves.add(new Cell(board.get(x-1).get(y+1)));
                 }
