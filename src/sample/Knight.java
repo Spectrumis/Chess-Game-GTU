@@ -14,7 +14,7 @@ public class Knight extends Pieces {
 
         List<Cell> moves = new LinkedList<>();
 
-        if(!getColor()) { //siraya gore islem yapiyor false = siyah
+        if(!getColor()) { //!getColor() = false = siyah
             // 1 saga, 2 yukari
             if (y+2 < 8 && x+1 < 8 && (board.get(x+1).get(y+2).getPiece().getColor() || board.get(x+1).get(y+2).getPiece() instanceof NoPiece))
                 moves.add(new Cell(board.get(x+1).get(y+2)));
@@ -40,7 +40,7 @@ public class Knight extends Pieces {
             if(y-1 >= 0 && x+2 < 8 && (board.get(x+2).get(y-1).getPiece().getColor() || board.get(x+2).get(y-1).getPiece() instanceof NoPiece))
                 moves.add(new Cell(board.get(x+2).get(y-1)));
         }
-        else if(getColor()) { //siraya gore islem yapiyor true = beyaz
+        else if(getColor()) { //getColor() = true = beyaz
             // 1 saga, 2 yukari
             if (y+2 < 8 && x+1 < 8 && (!board.get(x+1).get(y+2).getPiece().getColor() || board.get(x+1).get(y+2).getPiece() instanceof NoPiece))
                 moves.add(new Cell(board.get(x+1).get(y+2)));

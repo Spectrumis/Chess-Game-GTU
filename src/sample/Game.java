@@ -380,7 +380,7 @@ public class Game {
 
         //piyonların renklerini belirledim ve piyonları yerleştirdim
         boolean color = false; //siyah
-        /*for(j=1; j<7; j=j+5) {
+        for(j=1; j<7; j=j+5) {
             for (i = 0; i < 8; i++) {
                 try {
                     Pieces piece = new Pawn();
@@ -391,7 +391,7 @@ public class Game {
                 }
             }
             color =true;
-        }*/
+        }
 
         //özel taşlar
         try {
