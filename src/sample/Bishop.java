@@ -85,13 +85,4 @@ public class Bishop extends Pieces {
         return moves;
     }
 
-    @Override
-    public void setColor(boolean colors) {
-
-    }
-
-    @Override
-    public boolean getColor() {
-        return color;
-    }
 }

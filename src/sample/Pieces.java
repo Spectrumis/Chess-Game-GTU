@@ -9,7 +9,7 @@ import java.util.List;
  */
 public abstract class Pieces{
 
-    public boolean color = false; //tasin rengi true->beyaz false ->siyah oynayan kim
+    public boolean color; //tasin rengi true->beyaz false ->siyah oynayan kim
 
     public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y){
         return null;

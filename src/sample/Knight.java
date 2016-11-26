@@ -69,13 +69,4 @@ public class Knight extends Pieces {
         return moves;
     }
 
-    @Override
-    public void setColor(boolean colors) {
-        super.setColor(colors);
-    }
-
-    @Override
-    public boolean getColor() {
-        return super.getColor();
-    }
 }

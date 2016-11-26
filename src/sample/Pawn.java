@@ -88,10 +88,5 @@ public class Pawn extends Pieces {
 
         return moves;
     }
-    public void setColor(boolean colors){
-        super.setColor(colors);
-    }
-    public boolean getColor(){
-        return super.getColor();
-    }
+
 }

@@ -358,7 +358,7 @@ public class Game {
         int i; int j;
 
         //piyonların renklerini belirledim ve piyonları yerleştirdim
-        boolean color = false;
+        boolean color = false; //siyah
         for(j=1; j<7; j=j+5) {
             for (i = 0; i < 8; i++) {
                 try {
@@ -390,69 +390,113 @@ public class Game {
             }
         }
 
-        //Ozel taslar icin renk belirledim, ust beyaz, alt siyah
-        color =false;
-        for(j=0; j<8; j=j+7) {
-            for (i=0; i < 8; i++) {
-                try
-                {
-                    board.get(i).get(j).piece.setColor(color);
-
-                }catch(Exception e)
-                {
-                    //System.out.println("Null Pointer ");
-                }
-            }
-            color = true;
-        }
-
         //özel taşlar
-        try
-        {
-            Pieces piece = new Rook();
+        try {
             //Siyah, alt, Rook
-            board.get(0).get(0).setPiece(piece);
-            board.get(0).get(7).setPiece(piece);
-
+            {
+                Pieces piece = new Rook();
+                board.get(0).get(0).setPiece(piece);
+                board.get(0).get(0).piece.setColor(false);
+            }
+            {
+                Pieces piece = new Rook();
+                board.get(7).get(0).setPiece(piece);
+                board.get(7).get(0).piece.setColor(false);
+            }
             //Beyaz, üst, Rook
-            board.get(7).get(0).setPiece(piece);
-            board.get(7).get(7).setPiece(piece);
-
-            piece = new Knight();
+            {
+                Pieces piece = new Rook();
+                board.get(0).get(7).setPiece(piece);
+                board.get(0).get(7).piece.setColor(true);
+            }
+            {
+                Pieces piece = new Rook();
+                board.get(7).get(7).setPiece(piece);
+                board.get(7).get(7).piece.setColor(true);
+            }
             //Siyah, alt, Knight
-            board.get(0).get(1).setPiece(piece);
-            board.get(0).get(6).setPiece(piece);
-
+            {
+                Pieces piece = new Knight();
+                board.get(1).get(0).setPiece(piece);
+                board.get(1).get(0).piece.setColor(false);
+            }
+            {
+                Pieces piece = new Knight();
+                board.get(6).get(0).setPiece(piece);
+                board.get(6).get(0).piece.setColor(false);
+            }
             //Beyaz, üst, Knight
-            board.get(7).get(1).setPiece(piece);
-            board.get(7).get(6).setPiece(piece);
-
-            piece = new Bishop();
+            {
+                Pieces piece = new Knight();
+                board.get(1).get(7).setPiece(piece);
+                board.get(1).get(7).piece.setColor(true);
+            }
+            {
+                Pieces piece = new Knight();
+                board.get(6).get(7).setPiece(piece);
+                board.get(6).get(7).piece.setColor(true);
+            }
             //Siyah, alt, Bishop
-            board.get(0).get(2).setPiece(piece);
-            board.get(0).get(5).setPiece(piece);
-
+            {
+                Pieces piece = new Bishop();
+                board.get(2).get(0).setPiece(piece);
+                board.get(2).get(0).piece.setColor(false);
+            }
+            {
+                Pieces piece = new Bishop();
+                board.get(5).get(0).setPiece(piece);
+                board.get(5).get(0).piece.setColor(false);
+            }
             //Beyaz, üst, Bishop
-            board.get(7).get(2).setPiece(piece);
-            board.get(7).get(5).setPiece(piece);
-
-            piece = new King();
+            {
+                Pieces piece = new Bishop();
+                board.get(2).get(7).setPiece(piece);
+                board.get(2).get(7).piece.setColor(true);
+            }
+            {
+                Pieces piece = new Bishop();
+                board.get(5).get(7).setPiece(piece);
+                board.get(5).get(7).piece.setColor(true);
+            }
             //Siyah, alt, King
-            board.get(0).get(3).setPiece(piece);
-
+            {
+                Pieces piece = new King();
+                board.get(3).get(0).setPiece(piece);
+                board.get(3).get(0).piece.setColor(false);
+            }
             //Beyaz, üst, King
-            board.get(7).get(3).setPiece(piece);
-
-            piece = new Queen();
+            {
+                Pieces piece = new King();
+                board.get(3).get(7).setPiece(piece);
+                board.get(3).get(7).piece.setColor(true);
+            }
             //Siyah, alt, Queen
-            board.get(0).get(4).setPiece(piece);
-
+            {
+                Pieces piece = new Queen();
+                board.get(4).get(0).setPiece(piece);
+                board.get(4).get(0).piece.setColor(false);
+            }
             //Beyaz, üst, Queen
-            board.get(7).get(4).setPiece(piece);
-
+            {
+                Pieces piece = new Queen();
+                board.get(4).get(7).setPiece(piece);
+                board.get(4).get(7).piece.setColor(true);
+            }
         }catch(Exception e)
         {
             //System.out.println("Null Pointer ");
+        }
+
+        //Ozel taslar icin renk belirledim, ust beyaz, alt siyah
+        color = false;
+        for(j=0; j<8; j=j+7) {
+            for (i=0; i < 8; i++) {
+                System.out.printf("%d ,%d ", i, j);
+                board.get(i).get(j).piece.setColor(color);
+                System.out.print(board.get(i).get(j).piece.getColor());
+                System.out.println();
+            }
+            color = true;
         }
     }
 
@@ -469,26 +513,25 @@ public class Game {
         6 -> wqueen       -6 -> queen
     */
     public void printBoard(){
-        int i, j;
-
-        for(j=7; j>=0; j--) {
-            for (i = 7; i >= 0; i--) {
-                if (board.get(i).get(j).piece.getColor() == false) {
+        for(int j=7; j>=0; j--) {
+            for (int i = 7; i >= 0; i--) {
+                if (!board.get(i).get(j).piece.getColor()) {
                     //System.out.println("PrintBoard, false, siyah!!");
                     if (board.get(i).get(j).getPiece() instanceof Pawn) {
-                        System.out.print("P");
+                        System.out.print(" P");
                     } else if (board.get(i).get(j).getPiece() instanceof Rook) {
-                        System.out.print("K");
+                        System.out.print(" K");
                     } else if (board.get(i).get(j).getPiece() instanceof Knight) {
-                        System.out.print("A");
+                        System.out.print(" A");
                     } else if (board.get(i).get(j).getPiece() instanceof Bishop) {
-                        System.out.print("F");
+                        System.out.print(" F");
                     } else if (board.get(i).get(j).getPiece() instanceof King) {
-                        System.out.print("S");
+                        System.out.print(" S");
                     } else if (board.get(i).get(j).getPiece() instanceof Queen) {
-                        System.out.print("V");
-                    }
-                } else if (board.get(i).get(j).piece.getColor() == true) {
+                        System.out.print(" V");
+                    } else
+                        System.out.print(" .");
+                } else if (board.get(i).get(j).piece.getColor()) {
                     //System.out.println("PrintBoard, true, beyaz!!");
                     if (board.get(i).get(j).getPiece() instanceof Pawn) {
                         System.out.print("-P");
@@ -502,9 +545,9 @@ public class Game {
                         System.out.print("-S");
                     } else if (board.get(i).get(j).getPiece() instanceof Queen) {
                         System.out.print("-V");
-                    }
-                } else
-                    System.out.print(" .");
+                    } else
+                        System.out.print(" .");
+                }
             }
             System.out.println();
         }

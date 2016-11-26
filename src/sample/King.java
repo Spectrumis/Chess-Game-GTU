@@ -107,13 +107,4 @@ public class King extends Pieces {
         return moves;
     }
 
-    @Override
-    public void setColor(boolean colors) {
-        color = colors;
-    }
-
-    @Override
-    public boolean getColor() {
-        return color;
-    }
 }
