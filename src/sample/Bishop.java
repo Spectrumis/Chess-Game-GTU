@@ -22,12 +22,12 @@ public class Bishop extends Pieces {
         for(int i=x-1; (i >= 0) && (j >= 0); --i){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
             //fakat yemekten oteye gecemedigimden hemen ardindan dongumu sonlandiriyorum
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
                 break;
             }
             //Eger ayni renk bi tas varsa uzerine oynayamıyacagindan ve daha ileri de gidemeyeceginden
@@ -41,10 +41,10 @@ public class Bishop extends Pieces {
         j=y-1;
         for(int i=x+1; (i <= 7) && (j >= 0); ++i){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
                 break;
             }
             else
@@ -56,10 +56,10 @@ public class Bishop extends Pieces {
         j=y+1;
         for(int i=x+1; (i <= 7) && (j <= 7); ++i){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
                 break;
             }
             else
@@ -69,7 +69,7 @@ public class Bishop extends Pieces {
 
         //Sol uste dogru da ayni islemler gecerli
         j=y+1;
-        for(int i=x-1; (i >= 0) && (j >= 0); --i){
+        for(int i=x-1; (i >= 0) && (j <= 7); --i){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(i).get(y)));
             }

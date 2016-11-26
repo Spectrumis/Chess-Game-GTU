@@ -64,7 +64,7 @@ public class Rook extends Pieces {
 
         //Yukariya dogru da ayni islemler gecerli
         curColor = board.get(x).get(y).getPiece().getColor() ;
-        for(int i=y+1; i >= 0; ++i){
+        for(int i=y+1; i <= 7; ++i){
             if(board.get(x).get(i).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(x).get(i)));
             }

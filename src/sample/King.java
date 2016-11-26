@@ -25,9 +25,7 @@ public class King extends Pieces {
             if(board.get(i).get(y).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(i).get(y)));
             }
-
             //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
-            //fakat yemekten oteye gecemedigimden hemen ardindan dongumu sonlandiriyorum
             else if(board.get(i).get(y).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(i).get(y)));
             }

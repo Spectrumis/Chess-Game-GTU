@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.stage.Stage;
-
+import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         /*launch(args);*/
         List<Cell> tempMovesList = new LinkedList<>();
-        int x=0, y=0, currentStatus = 0;
+        int x=0, y=0, currentStatus = 0, a=0;
         boolean startingStatusHandler = false;
 
         Game game = new Game();
@@ -58,28 +58,49 @@ public class Main extends Application {
 
 
          */
-        /*------------------------------------Algorithm Part Begins---------------------------------------------------
-        if(startingStatusHandler || game.getIsComputerOn() == 0) {
-            currentStatus = game.playGame(x, y, tempMovesList);
-        }
-        startingStatusHandler = true;
-        if(game.getIsComputerOn() != 0){
-            switch (game.getIsComputerOn()){
-                case 1:
-                    tempMovesList.addAll(game.playComputerEasy());
-                    break;
-                case 2:
-                    tempMovesList.addAll(game.playComputerMedium());
-                    break;
-                case 3:
-                    tempMovesList.addAll(game.playComputerHard());
-                    break;
-                default:
-                    System.out.println("ComputerOn degeri yanlis\n");
-                    break;
+        /*------------------------------------Algorithm Part Begins---------------------------------------------------*/
+        /*Deneme*/
+        Scanner input = new Scanner(System.in);
+        System.out.print("Pvp 0, pvEasy 1\n");
+
+        Game.setIsComputerOn(input.nextInt());
+
+        System.out.print("butona tıklama islemi icin sirasiyla x ve y kordinatı girilir\n");
+
+        while(true) {
+            System.out.print("X'i gir\n");
+            x = input.nextInt();
+            System.out.print("Y'yi gir\n");
+            y = input.nextInt();
+
+        /*Deneme Sonu*/
+            if (startingStatusHandler || game.getIsComputerOn() == 0) {
+                System.out.println("check\n");
+                currentStatus = game.playGame(x, y, tempMovesList);
+                System.out.print("Status:" + currentStatus + "\n");
+                a = printCellList(tempMovesList);
+                System.out.print("TempListCounter:" + a + "\n");
             }
+            startingStatusHandler = true;
+            if (game.getIsComputerOn() != 0) {
+                switch (game.getIsComputerOn()) {
+                    case 1:
+                        tempMovesList.addAll(game.playComputerEasy());
+                        break;
+                    case 2:
+                        tempMovesList.addAll(game.playComputerMedium());
+                        break;
+                    case 3:
+                        tempMovesList.addAll(game.playComputerHard());
+                        break;
+                    default:
+                        System.out.println("ComputerOn degeri yanlis\n");
+                        break;
+                }
+            }
+            game.printBoard();
         }
-        --------------------------------------Algorithm Part Ends---------------------------------------------------*/
+        /*--------------------------------------Algorithm Part Ends---------------------------------------------------*/
 
         /*
             Interface Part 2
@@ -95,5 +116,14 @@ public class Main extends Application {
             (save game, undo move gibi oyun arasi basilabilecek butonlari ilk asamada yapmiycaz. Daha sonra eklicez)
         */
 
+    }
+
+    public static int printCellList(List<Cell> tempList){
+        System.out.print("----------\n");
+        for(int i = tempList.size()-1; i >= 0; --i){
+            System.out.print(tempList.get(i));
+            System.out.println();
+        }
+        return tempList.size();
     }
 }

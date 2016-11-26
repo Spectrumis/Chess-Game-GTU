@@ -69,7 +69,7 @@ public class Cell {
      * @return koordinatlar(x ve y), piece(color), class(piece turu)
      */
     public String toString(){
-        return (x + " " + y + " " + piece.toString() + getClass().toString());
+        return (x + " " + y + " " + piece.toString() + " " + getClass().toString());
     }
 
 
