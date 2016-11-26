@@ -64,10 +64,10 @@ public class King extends Pieces {
         }
         //Asagiya ve
         if(j >= 0){
-            if(board.get(x).get(i).getPiece() instanceof NoPiece){
+            if(board.get(x).get(j).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(x).get(j)));
             }
-            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+            else if(board.get(x).get(j).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(x).get(j)));
             }
         }
@@ -84,7 +84,7 @@ public class King extends Pieces {
         }
         //Yukariya dogru da ayni islemler gecerli
         if(j <= 0){
-            if(board.get(x).get(i).getPiece() instanceof NoPiece){
+            if(board.get(x).get(j).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(x).get(j)));
             }
             else if(board.get(i).get(y).getPiece().getColor() != curColor){
