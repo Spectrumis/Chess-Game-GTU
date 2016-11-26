@@ -10,8 +10,6 @@ import java.util.List;
  */
 public class Pawn extends Pieces {
 
-    private boolean firstMove = true;
-
     @Override
     public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y) {
 
@@ -19,7 +17,7 @@ public class Pawn extends Pieces {
 
         if (getColor())
         {
-            if (firstMove)
+            if (y == 6)
             {
                 if (board.get(x).get(y-2).getPiece() instanceof NoPiece)
                 {
@@ -53,7 +51,7 @@ public class Pawn extends Pieces {
         }
         else if (!getColor())
         {
-            if (firstMove)
+            if (y == 1)
             {
                 if (board.get(x).get(y+2).getPiece() instanceof NoPiece)
                 {
