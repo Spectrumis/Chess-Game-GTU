@@ -314,6 +314,18 @@ public class Game {
             // dosya kapatilir
             bw.close();
 
+            String key = "I hope this project will finish8";
+
+            File inputFile = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.txt");
+            File encryptedFile = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.encrypted");
+
+            try {
+                CryptoUtils.encrypt(key, inputFile, encryptedFile);
+            } catch (CryptoException ex) {
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -380,7 +392,7 @@ public class Game {
 
         //piyonların renklerini belirledim ve piyonları yerleştirdim
         boolean color = false; //siyah
-        /*for(j=1; j<7; j=j+5) {
+        for(j=1; j<7; j=j+5) {
             for (i = 0; i < 8; i++) {
                 try {
                     Pieces piece = new Pawn();
@@ -391,7 +403,7 @@ public class Game {
                 }
             }
             color =true;
-        }*/
+        }
 
         //özel taşlar
         try {
