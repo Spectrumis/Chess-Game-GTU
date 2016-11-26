@@ -31,6 +31,13 @@ public class Game {
     public Game(){
         removesss = new Cell[64][2];
         board = new ArrayList<ArrayList<Cell>>(8);
+        for(int i =0; i < 8; ++i){
+            board.add(new ArrayList<Cell>());
+
+            for(int j =0; j < 8; ++j) {
+                board.get(i).add(new Cell());
+            }
+        }
         this.initBoard();
         //this.printBoard();
         this.tempCell = new Cell();
@@ -39,6 +46,13 @@ public class Game {
     //Bunu kaydededilmiş hali diye düşündüm
     public Game(Game game){
         board = new ArrayList<ArrayList<Cell>>(8);
+        for(int i =0; i < 8; ++i){
+            board.add(new ArrayList<Cell>());
+
+            for(int j =0; j < 8; ++j) {
+                board.get(i).add(new Cell());
+            }
+        }
         removesss = new Cell[64][2];
 
         Cell temp = null;
@@ -460,7 +474,7 @@ public class Game {
         for(j=7; j>=0; j--) {
             for (i = 7; i >= 0; i--) {
                 if (board.get(i).get(j).piece.getColor() == false) {
-                    System.out.println("PrintBoard, false, siyah!!");
+                    //System.out.println("PrintBoard, false, siyah!!");
                     if (board.get(i).get(j).getPiece() instanceof Pawn) {
                         System.out.print("P");
                     } else if (board.get(i).get(j).getPiece() instanceof Rook) {
