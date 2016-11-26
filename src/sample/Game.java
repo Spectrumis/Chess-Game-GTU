@@ -404,7 +404,6 @@ public class Game {
             }
             color =true;
         }
-
         //özel taşlar
         try {
             //Siyah, alt, Rook
@@ -513,7 +512,7 @@ public class Game {
     */
     public void printBoard(){
         for(int j=7; j>=0; j--) {
-            for (int i = 7; i >= 0; i--) {
+            for (int i = 0; i <= 7; i++) {
                 if (!board.get(i).get(j).piece.getColor()) {
                     //System.out.println("PrintBoard, false, siyah!!");
                     if (board.get(i).get(j).getPiece() instanceof Pawn) {
