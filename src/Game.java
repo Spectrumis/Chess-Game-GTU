@@ -351,8 +351,11 @@ public class Game {
      * ve bu hamle artık yapilmadi varsayilip removesss dan kaldirilir.
      */
     public void recallMove(){
-        if(counterRemovess <= 5){
+        //removesss.lenght 0 dan buyuk olmalı cunku en az bir hamle yapılmadan geri alma işemi gerçekleştirilemez
+        //yani oyunun başında bu buton calismaz!!!
+        if(counterRemovess <= 5 && removesss.length > 0){
             int index = removesss.length;
+
 
             board.get(removesss[index][0].getX()).set(removesss[index][1].getY(), board.get(removesss[index][1].getX()).get(removesss[index][1].getY()));
             board.get(removesss[index][0].getX()).get(removesss[index][1].getY()).setPiece(board.get(removesss[index][1].getX()).get(removesss[index][1].getY()).getPiece());
