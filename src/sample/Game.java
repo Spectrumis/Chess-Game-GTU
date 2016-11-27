@@ -84,8 +84,8 @@ public class Game {
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
             if (currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer()) {
             /* ... ve daha once oynatabilecegimiz biseye tiklamadiysak sifir return edicez demektir*/
-                if (getTempCell().getX() == -1) {
-                    TempMovesList.clear();
+                if (TempMovesList.size() == 0) {
+                    System.out.print("debug1\n");
                     return 0;
                 }
             /* ... ve daha once oynatabilecegimiz bir tasa tikladiysak ...*/
@@ -95,8 +95,6 @@ public class Game {
                     if (playUser(TempMovesList, currentCell)) {
                         makeMove(getTempCell(), currentCell);
                         TempMovesList.clear();
-                        TempMovesList.add(getTempCell());
-                        TempMovesList.add(currentCell);
                         setTempCell(emptyCell);
                     /* suanki oyuncu degerini degistiriyoruz */
                         setCurrentPlayer(!getCurrentPlayer());
@@ -117,7 +115,7 @@ public class Game {
                 tempCell.setCell(currentCell);
                 TempMovesList = board.get(x).get(y).getPiece().checkMove(board, x, y);
                 status = Main.printCellList(TempMovesList);
-                System.out.print("status:" + status + "\n");
+                System.out.print("TempListCounter:" + status + " (Game.java 118. satır)" + "\n");
                 return 1;
 
             }
@@ -154,7 +152,7 @@ public class Game {
      * @param target
      */
     public void makeMove(Cell source, Cell target){
-
+        System.out.print("Movemakera girdi\n");
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
         Pieces piece = new NoPiece();

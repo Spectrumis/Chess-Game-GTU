@@ -75,9 +75,16 @@ public class Main extends Application {
 
         /*Deneme Sonu*/
             if (startingStatusHandler || game.getIsComputerOn() == 0) {
-                System.out.println("check\n");
+                System.out.print(".......................\n");
+                a = printCellList(tempMovesList);
+                System.out.print("TempListCounter:" + a + "\n");
+                System.out.print(".......................\n");
+
                 currentStatus = game.playGame(x, y, tempMovesList);
+
                 System.out.print("Status:" + currentStatus + "\n");
+
+                System.out.print("return ettikten hemen sonrasında aynı tempMoveListi tekrar kontrol ediyorum ve:\n");
                 a = printCellList(tempMovesList);
                 System.out.print("TempListCounter:" + a + "\n");
             }
@@ -119,7 +126,6 @@ public class Main extends Application {
     }
 
     public static int printCellList(List<Cell> tempList){
-        System.out.print("----------\n");
         for(int i = tempList.size()-1; i >= 0; --i){
             System.out.print(tempList.get(i));
             System.out.println();
