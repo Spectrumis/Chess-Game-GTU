@@ -31,9 +31,14 @@ public class Main extends Application  {
     public void start(Stage primaryStage) throws Exception{
 
         window=primaryStage;
+        Label Space=new Label();
+        Space.setText("       ");
         window.setTitle("Chess");
         GridPane grid=new GridPane();
         OpenDialogue Open=new OpenDialogue();
+        ExtendedButton Restart=new ExtendedButton();
+        Restart.setMinSize(80,80);
+        Restart.setStyle("-fx-border-color: gray; -fx-background-image: url('img/restart.png')");
 
         int i,j;
         Game.setIsComputerOn(0);
@@ -108,6 +113,9 @@ public class Main extends Application  {
                 GridPane.setConstraints(button[i][j],7-i,7-j);
             }
         }
+        GridPane.setConstraints(Restart,10,3);
+        GridPane.setConstraints(Space,9,3);
+        Restart.setDisable(true);
         for(i=7;i>=0;--i)
         {
             for(j=7;j>=0;--j)
@@ -115,6 +123,7 @@ public class Main extends Application  {
                 grid.getChildren().addAll(button[i][j]);
             }
         }
+        grid.getChildren().addAll(Space,Restart);
         for(i=0;i<8;++i)
         {
             button[i][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
@@ -150,7 +159,7 @@ public class Main extends Application  {
         }
         BorderPane pane=new BorderPane();
         pane.setLeft(grid);
-        Scene scene=new Scene(pane,750,660);
+        Scene scene=new Scene(pane,760,660);
         MenuBar menuBar = new MenuBar();
 
         // --- Menu File
@@ -172,7 +181,87 @@ public class Main extends Application  {
         window.setScene(scene);
         window.show();
         ExtendedButton Start=new ExtendedButton();
+        Open.initialWindow();
         Open.OpenMenu(Start,button);
+
+        Restart.setOnAction(e->{
+            tempMovesList.clear();
+            Open.OpenMenu(Start,button);
+            if(Open.Color==1)
+            {
+
+                for(a=0;a<8;++a)
+                {
+                    button[a][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+
+                }
+                button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                for(a=0;a<8;++a)
+                {
+                    button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+
+                }
+            }
+            else
+            if(Open.Color==0)
+            {
+
+                for(a=0;a<8;++a)
+                {
+                    button[a][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+
+                }
+                button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                for(a=0;a<8;++a)
+                {
+                    button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+
+                }
+            }
+            for(a=0;a<8;++a) {
+                for (b = 2; b < 6; ++b) {
+                    button[a][b].setStyle("-fx-border-color: gray;");
+                }
+            }
+            for(a=0;a<8;++a)
+            {
+                for(b=0;b<8;++b)
+                {
+                    button[a][b].setDisable(false);
+                }
+            }
+            Restart.setDisable(true);
+        });
 
         Start.setOnAction(e->{
             int a;
@@ -209,6 +298,37 @@ public class Main extends Application  {
 
                 }
             }
+            else
+            if(Open.Color==0)
+            {
+
+                for(a=0;a<8;++a)
+                {
+                    button[a][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+
+                }
+                button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                for(a=0;a<8;++a)
+                {
+                    button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+
+                }
+            }
             for(a=0;a<8;++a)
             {
                 for(b=0;b<8;++b)
@@ -216,6 +336,7 @@ public class Main extends Application  {
                     button[a][b].setDisable(false);
                 }
             }
+            Restart.setDisable(false);
         });
         Exit.setOnAction(e->{
             Platform.exit();

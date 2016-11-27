@@ -22,16 +22,17 @@ public class OpenDialogue {
     int LevelOfGame=-1;
     int Color=-1;
     Stage window=new Stage();
-    public  void OpenMenu(ExtendedButton Start,ExtendedButton [][]board)
+    public void initialWindow()
     {
-
-
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Welcome To GTUChess!");
         window.setMinWidth(400);
         window.setMinHeight(250);
         window.setMaxWidth(400);
         window.setMaxHeight(250);
+    }
+    public  void OpenMenu(ExtendedButton Start,ExtendedButton [][]board)
+    {
 
         Text Space=new Text();
         Text Space2=new Text();
