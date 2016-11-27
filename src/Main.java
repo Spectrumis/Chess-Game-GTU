@@ -23,7 +23,7 @@ public class Main extends Application  {
     List<Cell> tempMovesList = new ArrayList<Cell>();
     int x=0, y=0, currentStatus = 0, a=0;
     boolean startingStatusHandler = false;
-
+    int markButton=0;
     Game game = new Game();
     int b;
     @Override
@@ -79,8 +79,10 @@ public class Main extends Application  {
                     }
                     if(currentStatus==1)
                     {
-                        for (a = 0; a < tempMovesList.size(); ++a)
+                        for (a = markButton; a < tempMovesList.size(); ++a) {
                             markButton(button[tempMovesList.get(a).getX()][tempMovesList.get(a).getY()]);
+                        }
+
                             markButton(CurrentButton);
                     }
                     if(currentStatus==2)
@@ -88,6 +90,7 @@ public class Main extends Application  {
                         button[CurrentButton.getCoorX()][CurrentButton.getCoorY()].setStyle(button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].getStyle());
                         button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].setStyle("-fx-border-color: gray; )");
                     }
+                    markButton=tempMovesList.size();
                     currentPoint.add(new Coordinate(CurrentButton.getCoorX(),CurrentButton.getCoorY()));
 
 
