@@ -1,5 +1,7 @@
 package sample;
 
+import java.util.Objects;
+
 /**
  * Created by Selman Ahatlı on 14.11.2016.
  * Implemented by GozdeDogan on 14.11.2016.
@@ -72,5 +74,16 @@ public class Cell {
         return (x + " " + y + " " + piece.toString() + " " + getClass().toString());
     }
 
+    public boolean equals(Cell obj) {
+        if (obj == this)
+            return true;
 
+        if(((Cell) obj).getX() == this.getX()){
+            if(((Cell) obj).getY() == this.getY()){
+                if(((Cell) obj).getPiece() == this.getPiece())
+                    return true;
+            }
+        }
+        return false;
+    }
 }

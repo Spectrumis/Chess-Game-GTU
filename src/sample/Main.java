@@ -58,9 +58,11 @@ public class Main extends Application {
 
 
          */
+
+
         /*------------------------------------Algorithm Part Begins---------------------------------------------------*/
         /*Deneme*/
-        Scanner input = new Scanner(System.in);
+        /*Scanner input = new Scanner(System.in);
         System.out.print("Pvp 0, pvEasy 1\n");
 
         Game.setIsComputerOn(input.nextInt());
@@ -72,20 +74,21 @@ public class Main extends Application {
             x = input.nextInt();
             System.out.print("Y'yi gir\n");
             y = input.nextInt();
-
+        */
         /*Deneme Sonu*/
             if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                 currentStatus = game.playGame(x, y, tempMovesList);
 
-                System.out.print("Status:" + currentStatus + "\n");
+                /*System.out.print("Status:" + currentStatus + "\n");
 
-                System.out.print("return ettikten hemen sonrasında aynı tempMoveListi tekrar kontrol ediyorum ve:\n");
+                System.out.print("return ettikten hemen sonrasında aynı tempMoveListi tekrar kontrol ediyorum ve:\n");*/
                 a = printCellList(tempMovesList);
                 System.out.print("TempListCounter:" + a + "\n");
             }
             startingStatusHandler = true;
             if (game.getIsComputerOn() != 0) {
+                tempMovesList.clear();
                 switch (game.getIsComputerOn()) {
                     case 1:
                         tempMovesList.addAll(game.playComputerEasy());
@@ -101,7 +104,7 @@ public class Main extends Application {
                         break;
                 }
             }
-            game.printBoard();
+            //game.printBoard();
         }
         /*--------------------------------------Algorithm Part Ends---------------------------------------------------*/
 
@@ -111,9 +114,9 @@ public class Main extends Application {
                 Eger sifir ise hicbir deisiklik yapmiyacak ve tiklanan yer haric hicbir yer isaretlemeyeceksiniz
                 Eger bir degeri var ise yapacaginiz is tempMoveList'teki degerlerin hepsini ve son tiklanan yeri
               isaretlemek olucak
-                Eger iki degeri var ise iki secenek var
-                    -tempMoveListte iki cell var ise birincideki tasi ikinci kordinata oynaticaksiniz
-                    -tempMoveListte dort cell var ise birinciyi ikinci kordinata, ucuncuyu dorduncu kordinata oynatacaksiniz
+                Eger iki degeri var ise bu bizim hamleyi board uzerinde yaptigimiz anlamina geliyo. boardimizi print
+              etme islemini game.board dan guncelliceksiniz.
+
             Sonra ise yine bi butona basilmasi beklenicek
 
             (save game, undo move gibi oyun arasi basilabilecek butonlari ilk asamada yapmiycaz. Daha sonra eklicez)

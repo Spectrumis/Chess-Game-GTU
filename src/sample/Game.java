@@ -138,11 +138,11 @@ public class Game {
      * @return
      */
     public boolean playUser(List<Cell> cellList, Cell cell ) {
-
-        for (Cell searched : cellList) {
-            if (searched == cell)
-                return true;
-        }
+            int lengt = cellList.size();
+            for (int i = 0; i < lengt; ++i) {
+                if(cellList.get(i).equals(cell))
+                    return true;
+            }
         return false;
     }
 
@@ -159,8 +159,8 @@ public class Game {
         board.get(source.getX()).get(source.getY()).setPiece(piece);
 
         //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
-        removesss[removesss.length][0].setCell(source);
-        removesss[removesss.length][1].setCell(target);
+        //removesss[removesss.length][0].setCell(source);
+        //removesss[removesss.length][1].setCell(target);
 
     }
 
