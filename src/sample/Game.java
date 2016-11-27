@@ -181,56 +181,56 @@ public class Game {
      */
     public List<Cell> playComputerEasy() {
         boolean player = getCurrentPlayer();
-        List<Cell> canMove = new LinkedList<>();
-        List<Cell> trgtMove = new LinkedList<>();
-        List<Cell> srcMove = new LinkedList<>();
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                if(player == board.get(i).get(j).getPiece().getColor()){
-                    if(board.get(i).get(j).getPiece() instanceof Pawn){
-                        Pawn wp = new Pawn();
-                        canMove.addAll(wp.checkMove(board, i, j));
-                        for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board.get(i).get(j)));
-                        }
-                        trgtMove.addAll(canMove);
-                        canMove=null;
+        List<Cell> canMove = new ArrayList<>();
+        List<Cell> trgtMove = new ArrayList<>();
+        List<Cell> srcMove = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(board.get(i).get(j).getPiece() instanceof Pawn){
+                    Pawn wp = new Pawn();
+                    canMove.addAll(wp.checkMove(board, i, j));
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
                     }
-                    else if(board.get(i).get(j).getPiece() instanceof Rook){
-                        Rook wr = new Rook();
-                        canMove.addAll(wr.checkMove(board, i, j));
-                        for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board.get(i).get(j)));
-                        }
-                        trgtMove.addAll(canMove);
-                        canMove=null;
+                    trgtMove.addAll(canMove);
+                    canMove.removeAll(srcMove);
+                }
+                else if(board.get(i).get(j).getPiece() instanceof Rook){
+                    Rook wr = new Rook();
+                    canMove.addAll(wr.checkMove(board, i, j));
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
                     }
-                    else if(board.get(i).get(j).getPiece() instanceof Knight){
-                        Knight wkn = new Knight();
-                        canMove.addAll(wkn.checkMove(board, i, j));
-                        for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board.get(i).get(j)));
-                        }
-                        trgtMove.addAll(canMove);
-                        canMove=null;
+                    trgtMove.addAll(canMove);
+                    canMove.removeAll(srcMove);
+                }
+                else if(board.get(i).get(j).getPiece() instanceof Knight){
+                    Knight wkn = new Knight();
+                    canMove.addAll(wkn.checkMove(board, i, j));
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
                     }
-                    else if(board.get(i).get(j).getPiece() instanceof Bishop){
-                        Bishop wb = new Bishop();
-                        canMove.addAll(wb.checkMove(board, i, j));
-                        for (int k = 0; k < canMove.size(); k++) {
-                            srcMove.add(new Cell(board.get(i).get(j)));
-                        }
-                        trgtMove.addAll(canMove);
-                        canMove=null;
+                    trgtMove.addAll(canMove);
+                    canMove.removeAll(srcMove);
+                }
+                else if(board.get(i).get(j).getPiece() instanceof Bishop){
+                    Bishop wb = new Bishop();
+                    canMove.addAll(wb.checkMove(board, i, j));
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
                     }
-                    else if(board.get(i).get(j).getPiece() instanceof King){
+                    trgtMove.addAll(canMove);
+                    canMove.removeAll(srcMove);
+                }
+                else if(player == board.get(i).get(j).getPiece().getColor()){
+                     if(board.get(i).get(j).getPiece() instanceof King){
                         King wki = new King();
                         canMove.addAll(wki.checkMove(board, i, j));
                         for (int k = 0; k < canMove.size(); k++) {
                             srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
-                        canMove=null;
+                        canMove.removeAll(srcMove);
                     }
                     else if(board.get(i).get(j).getPiece() instanceof Queen){
                         Queen wq = new Queen();
@@ -239,7 +239,7 @@ public class Game {
                             srcMove.add(new Cell(board.get(i).get(j)));
                         }
                         trgtMove.addAll(canMove);
-                        canMove=null;
+                        canMove.removeAll(srcMove);
                     }
                 }
             }
@@ -247,10 +247,12 @@ public class Game {
         Random randomGenerator = new Random();
         List<Cell> retList = new ArrayList<>();
         int randomInt = randomGenerator.nextInt(canMove.size());
+        makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+
         retList.add(srcMove.get(randomInt));
         retList.add(trgtMove.get(randomInt));
 
-        setCurrentPlayer(!player);
+        this.setCurrentPlayer(!player);
         return retList;
     }
 
