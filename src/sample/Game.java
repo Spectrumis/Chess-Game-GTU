@@ -93,6 +93,7 @@ public class Game {
                 /* ... tiklanan yer TempMoveList'te yani oynanabilir hamlelerde varmi diye bakiyoruz */
                 /* eger var ise hamlemizi yapiyoruz ve listemizi temizleyip icine hamle source ve targetini atiyoruz*/
                     if (playUser(TempMovesList, currentCell)) {
+                        System.out.print("debug2\n");
                         makeMove(getTempCell(), currentCell);
                         TempMovesList.clear();
                         setTempCell(emptyCell);
@@ -103,6 +104,7 @@ public class Game {
                     }
                 /* eger tiklanan yer listede yoksa TempMovesListesini temizleyip sifir return ediyoruz */
                     else {
+                        System.out.print("debug3\n");
                         TempMovesList.clear();
                         setTempCell(emptyCell);
                         return 0;
@@ -111,11 +113,9 @@ public class Game {
             } else {
             /* Verilen cellde bi tas varsa TempMoveList'imize tasin oynayabilecegi yerlerin listesi aticaz ve 1
             return edicez ve kullanicinin targeti secmesini beklemek uzere beklemeye gecicez */
-
+                System.out.print("debug4\n");
                 tempCell.setCell(currentCell);
-                TempMovesList = board.get(x).get(y).getPiece().checkMove(board, x, y);
-                status = Main.printCellList(TempMovesList);
-                System.out.print("TempListCounter:" + status + " (Game.java 118. satır)" + "\n");
+                TempMovesList.addAll(board.get(x).get(y).getPiece().checkMove(board, x, y));
                 return 1;
 
             }

@@ -75,10 +75,6 @@ public class Main extends Application {
 
         /*Deneme Sonu*/
             if (startingStatusHandler || game.getIsComputerOn() == 0) {
-                System.out.print(".......................\n");
-                a = printCellList(tempMovesList);
-                System.out.print("TempListCounter:" + a + "\n");
-                System.out.print(".......................\n");
 
                 currentStatus = game.playGame(x, y, tempMovesList);
 
