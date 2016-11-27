@@ -87,7 +87,7 @@ public class Main extends Application {
                 System.out.print("TempListCounter:" + a + "\n");
             }
             startingStatusHandler = true;
-            if (game.getIsComputerOn() != 0) {
+            if (game.getIsComputerOn() != 0 && currentStatus == 2) {
                 tempMovesList.clear();
                 switch (game.getIsComputerOn()) {
                     case 1:
