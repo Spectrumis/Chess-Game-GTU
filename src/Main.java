@@ -13,7 +13,6 @@ import java.util.List;
 
 public class Main extends Application  {
 
-
     Stage window;
     Scene scene1;
     boolean answer;

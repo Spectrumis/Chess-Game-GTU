@@ -81,7 +81,7 @@ public class King extends Pieces {
             }
         }
         //Yukariya dogru da ayni islemler gecerli
-        if(j <= 0){
+        if(j <= 7){
             if(board.get(x).get(j).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(x).get(j)));
             }

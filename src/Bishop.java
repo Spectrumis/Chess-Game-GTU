@@ -69,10 +69,10 @@ public class Bishop extends Pieces {
         j=y+1;
         for(int i=x-1; (i >= 0) && (j <= 7); --i){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
             }
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
-                moves.add(new Cell(board.get(i).get(y)));
+                moves.add(new Cell(board.get(i).get(j)));
                 break;
             }
             else
