@@ -98,16 +98,16 @@ public class Main extends Application  {
 
             }
         }
-        for(i=0;i<8;++i)
+        for(i=7;i>=0;--i)
         {
-            for(j=0;j<8;++j)
+            for(j=7;j>=0;--j)
             {
-                GridPane.setConstraints(button[i][j],i,j);
+                GridPane.setConstraints(button[i][j],7-i,7-j);
             }
         }
-        for(i=0;i<8;++i)
+        for(i=7;i>=0;--i)
         {
-            for(j=0;j<8;++j)
+            for(j=7;j>=0;--j)
             {
                 grid.getChildren().addAll(button[i][j]);
             }
