@@ -117,7 +117,11 @@ public class King extends Pieces {
 
                         moves = board.get(i).get(j).getPiece().checkMove(board,i,j);
 
+<<<<<<< HEAD
                         if(kingInList(moves))
+=======
+                        if(true)
+>>>>>>> master
                         {
                             return true;
                         }
