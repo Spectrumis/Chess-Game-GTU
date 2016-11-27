@@ -6,9 +6,9 @@ import java.util.Objects;
  */
 public class Cell {
 
-    int x;
-    int y;
-    Pieces piece;
+    private int x;
+    private int y;
+    public Pieces piece;
 
     public Cell(){
         x = -1;
