@@ -1,3 +1,5 @@
+package sample;
+
 /**
  * Created by Selman Ahatlı on 26.11.2016.
  */
