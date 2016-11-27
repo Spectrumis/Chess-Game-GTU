@@ -15,18 +15,17 @@ public class Pawn extends Pieces {
 
         if (getColor())
         {
-            if (y == 6)
-            {
-                if (board.get(x).get(y-2).getPiece() instanceof NoPiece)
-                {
-                    moves.add(new Cell(board.get(x).get(y-2)));
-                }
-            }
-
             //yukarı
             if (y-1 >= 0 && board.get(x).get(y-1).getPiece() instanceof NoPiece)
             {
                 moves.add(new Cell(board.get(x).get(y-1)));
+                if (y == 6)
+                {
+                    if (board.get(x).get(y-2).getPiece() instanceof NoPiece)
+                    {
+                        moves.add(new Cell(board.get(x).get(y-2)));
+                    }
+                }
             }
 
             //sag capraz
@@ -49,18 +48,17 @@ public class Pawn extends Pieces {
         }
         else if (!getColor())
         {
-            if (y == 1)
-            {
-                if (board.get(x).get(y+2).getPiece() instanceof NoPiece)
-                {
-                    moves.add(new Cell(board.get(x).get(y+2)));
-                }
-            }
-
             //yukarı
             if (y+1 < 8 && board.get(x).get(y+1).getPiece() instanceof NoPiece)
             {
                 moves.add(new Cell(board.get(x).get(y+1)));
+                if (y == 1)
+                {
+                    if (board.get(x).get(y+2).getPiece() instanceof NoPiece)
+                    {
+                        moves.add(new Cell(board.get(x).get(y+2)));
+                    }
+                }
             }
 
             //sag capraz
