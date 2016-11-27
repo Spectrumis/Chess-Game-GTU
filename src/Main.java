@@ -1,15 +1,13 @@
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 public class Main extends Application  {
 
@@ -20,6 +18,7 @@ public class Main extends Application  {
     ArrayList<Coordinate> currentPoint=new ArrayList<Coordinate>();
     ExtendedButton CurrentButton;
     ExtendedButton[][] button=new ExtendedButton[8][];
+    Stack<Table> ListGame=new Stack<Table>();//oyunu geri alabilmek için stack oluşturuldu.
     List<Cell> tempMovesList = new ArrayList<Cell>();
     int x=0, y=0, currentStatus = 0, a=0;
     boolean startingStatusHandler = false;
@@ -38,6 +37,9 @@ public class Main extends Application  {
         ExtendedButton Restart=new ExtendedButton();
         Restart.setMinSize(80,80);
         Restart.setStyle("-fx-border-color: gray; -fx-background-image: url('img/restart.png')");
+        ExtendedButton Previous=new ExtendedButton();
+        Previous.setMinSize(80,80);
+        Previous.setStyle("-fx-border-color: gray; -fx-background-image: url('img/previous.png')");
 
         int i,j;
         for(i=0;i<8;++i)
@@ -95,7 +97,8 @@ public class Main extends Application  {
                     }
                     markButton=tempMovesList.size();
                     currentPoint.add(new Coordinate(CurrentButton.getCoorX(),CurrentButton.getCoorY()));
-
+                    Table temp=new Table(button);//oyunun her bir anı kayıt edilmektedir geri alabilmek için.
+                    ListGame.add(temp);//stacke kayıtlanmaktadır.
 
                 });
 
@@ -108,8 +111,14 @@ public class Main extends Application  {
                 GridPane.setConstraints(button[i][j],7-i,7-j);
             }
         }
-        GridPane.setConstraints(Restart,10,3);
-        GridPane.setConstraints(Space,9,3);
+        setButoons(button);//taşları boarda yerleştiriyorum.
+        //BU kısımdada boardı ekrana yerleştiriyorum.
+        Label Space2=new Label();
+        Space2.setText("       ");
+        GridPane.setConstraints(Restart,10,2);
+        GridPane.setConstraints(Space,9,2);
+        GridPane.setConstraints(Previous,10,4);
+        GridPane.setConstraints(Space2,9,4);
         Restart.setDisable(true);
         for(i=7;i>=0;--i)
         {
@@ -119,32 +128,8 @@ public class Main extends Application  {
             }
         }
         grid.getChildren().addAll(Space,Restart);
-        for(i=0;i<8;++i)
-        {
-            button[i][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
-
-        }
-        button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-        button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-        button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-        button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-        button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-        button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-        button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
-        button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
-        button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-        button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-        button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-        button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-        button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-        button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-        button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
-        button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
-        for(i=0;i<8;++i)
-        {
-            button[i][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
-
-        }
+        grid.getChildren().addAll(Space2,Previous);
+        Previous.setDisable(true);
         for(i=0;i<8;++i)
         {
             for(j=0;j<8;++j)
@@ -157,7 +142,7 @@ public class Main extends Application  {
         Scene scene=new Scene(pane,760,660);
         MenuBar menuBar = new MenuBar();
 
-        // --- Menu File
+        // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
         MenuItem restart=new MenuItem("Restart");
         MenuItem Options=new MenuItem("Options");
@@ -167,7 +152,7 @@ public class Main extends Application  {
         menuFile.getItems().addAll(restart,Options,Load,Save,Exit);
         ExtendedButton Start=new ExtendedButton();
 
-        restart.setOnAction(e->{
+        restart.setOnAction(e->{//new game menu kısmındaki.
             Open.OpenMenu(Start,button);
             if(Open.Color==1)
             {
@@ -185,39 +170,7 @@ public class Main extends Application  {
                     button[a][b].setDisable(false);
                 }
             }
-            for(a=0;a<8;++a)
-            {
-                for(b=2;b<6;++b)
-                {
-                    button[a][b].setStyle("-fx-border-color: gray;");
-                }
-            }
-            for(b=0;b<8;++b)
-            {
-                button[b][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
-
-            }
-            button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-            button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-            button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-            button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-            button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-            button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-            button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
-            button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
-            button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-            button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-            button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-            button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-            button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-            button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-            button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
-            button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
-            for(a=0;a<8;++a)
-            {
-                button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
-
-            }
+            setButoons(button);
             Restart.setDisable(true);
 
 
@@ -235,43 +188,43 @@ public class Main extends Application  {
         Open.initialWindow();
         Open.OpenMenu(Start,button);
 
-        Restart.setOnAction(e->{
-            for(a=0;a<8;++a)
-            {
-                for(b=2;b<6;++b)
-                {
-                    button[a][b].setStyle("-fx-border-color: gray;");
-                }
-            }
-            for(b=0;b<8;++b)
-            {
-                button[b][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
-
-            }
-            button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-            button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-            button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-            button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-            button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-            button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-            button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
-            button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
-            button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-            button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-            button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-            button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-            button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-            button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-            button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
-            button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
-            for(a=0;a<8;++a)
-            {
-                button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
-
-            }
+        Restart.setOnAction(e->{//geçerli olan oyunun yeniden başlaması yani sağdaki button olan restart.
+            setButoons(button);
             game.restartGame();
         });
+        Previous.setOnAction(e->{//undo yani geri alma buttonunun event handleri.
+            Table temp=  ListGame.peek();
+            int m,n;
 
+            if(temp!=null) {
+                //game.recallMove(); //recall Methodunu çağırıdığım zaman geri alma yapmıyor.
+                ListGame.pop();
+                for (m = 0; m < 8; ++m) {
+                    for (n = 0; n < 8; ++n) {
+                        button[m][n].setStyle(temp.Table[m][n].getStyle());
+                    }
+                }
+                for (m = 0; m < 8; ++m)
+                    for (n = 0; n < 8; ++n)
+                        GridPane.setConstraints(button[m][n],7- m, 7-n);
+                for (m = 0; m < 8; ++m)
+                    for (n = 0; n < 8; ++n)
+                        grid.getChildren().addAll(button[m][n]);
+            }
+            else{
+                for (m = 0; m < 8; ++m)
+                    for (n = 0; n < 8; ++n)
+                        button[m][n].setStyle(" -fx-border-color: gray;  -fx-background-radius:0");
+                setButoons(button);
+
+                for (m = 0; m < 8; ++m)
+                    for (n = 0; n < 8; ++n)
+                        GridPane.setConstraints(button[m][n], m, n + 1);
+                for (m = 0; m < 8; ++m)
+                    for (n = 0; n < 8; ++n)
+                        grid.getChildren().addAll(button[m][n]);
+            }
+                });
         Start.setOnAction(e->{
             int a;
             Open.window.close();
@@ -295,6 +248,7 @@ public class Main extends Application  {
             }
             Restart.setDisable(false);
             game.restartGame();
+            Previous.setDisable(false);
         });
         Exit.setOnAction(e->{
             Platform.exit();
@@ -386,5 +340,65 @@ public class Main extends Application  {
         button.setStyle("-fx-border-color: lawngreen; -fx-border-width: 3; -fx-background-image: url('img/"+"" +
                 getPieces(button)+".png')");
     }
+    private void setButoons(ExtendedButton [][] button)
+    {
+        int i,a,b;
+        for(a=0;a<8;++a)
+        {
+            for(b=2;b<6;++b)
+            {
+                button[a][b].setStyle("-fx-border-color: gray;");
+            }
+        }
+        for(i=0;i<8;++i)
+        {
+            button[i][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
 
+        }
+        button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+        button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+        button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+        button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+        button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+        button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+        button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+        button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+        button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+        button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+        button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+        button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+        button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+        button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+        button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+        button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+        for(i=0;i<8;++i)
+        {
+            button[i][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+
+        }
+    }
+
+    /**
+     * Created by Recep Sivri on 28.11.2016.
+     * Bu class remove yani geri alma methodu implement edilebilmek için oluşturuldu
+     */
+    public static class Table {
+        public ExtendedButton [][] Table;
+        public Table(ExtendedButton[][] Game)
+        {
+            int i,j;
+            Table= new ExtendedButton[8][];
+            for(i=0;i<8;++i)
+            {
+                Table[i] = new ExtendedButton[8];
+                for (j = 0; j < 8; ++j) {
+                    Table[i][j] = new ExtendedButton();
+                    Table[i][j].setMinSize(80, 80);
+
+                    Table[i][j].setStyle(Game[i][j].getStyle());
+                    Table[i][j].setCoor(new Coordinate(i, j));
+                }
+            }
+        }
+    }
 }

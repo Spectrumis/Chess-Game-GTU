@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 /**
  * Created by Recep Sivri on 27.11.2016.
  */
-public class OpenDialogue {
+public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bir classtır.
     int LevelOfGame=-1;
     int Color=-1;
     Stage window=new Stage();
