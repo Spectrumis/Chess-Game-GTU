@@ -103,4 +103,42 @@ public class King extends Pieces {
         return moves;
     }
 
+    public boolean inDanger(ArrayList<ArrayList<Cell>> board)
+    {
+        for (int i=0 ; i<7 ; ++i)
+        {
+            for (int j=0 ; j<7 ; ++j)
+            {
+                if (!(board.get(i).get(j).getPiece() instanceof NoPiece))
+                {
+                    if (getColor() != board.get(i).get(j).getPiece().getColor())
+                    {
+                        List<Cell> moves = new LinkedList<>();
+
+                        moves = board.get(i).get(j).getPiece().checkMove(board,i,j);
+
+                        if(true)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean kingInList(List<Cell> moves)
+    {
+        for (int i=0 ; i<moves.size() ; ++i)
+        {
+            if(moves.get(i).getPiece() instanceof King)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
