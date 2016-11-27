@@ -40,7 +40,6 @@ public class Main extends Application  {
         Restart.setStyle("-fx-border-color: gray; -fx-background-image: url('img/restart.png')");
 
         int i,j;
-        Game.setIsComputerOn(0);
         for(i=0;i<8;++i)
         {
             button[i]=new ExtendedButton[8];
@@ -160,27 +159,15 @@ public class Main extends Application  {
 
         // --- Menu File
         Menu menuFile = new Menu("Game");
-        MenuItem Level=new MenuItem("Levels");
+        MenuItem restart=new MenuItem("Restart");
         MenuItem Options=new MenuItem("Options");
         MenuItem Load=new MenuItem("Load");
         MenuItem Save=new MenuItem("Save");
         MenuItem Exit=new MenuItem("Exit");
-        menuFile.getItems().addAll(Level,Options,Load,Save,Exit);
-        // --- Menu Edit
-        Menu About = new Menu("About");
-
-
-        // --- Menu View
-        Menu menuView = new Menu("Help");
-        menuBar.getMenus().addAll(menuFile, About, menuView);
-        pane.setTop(menuBar);
-        window.setScene(scene);
-        window.show();
+        menuFile.getItems().addAll(restart,Options,Load,Save,Exit);
         ExtendedButton Start=new ExtendedButton();
-        Open.initialWindow();
-        Open.OpenMenu(Start,button);
 
-        Restart.setOnAction(e->{
+        restart.setOnAction(e->{
             Open.OpenMenu(Start,button);
             if(Open.Color==1)
             {
@@ -198,7 +185,91 @@ public class Main extends Application  {
                     button[a][b].setDisable(false);
                 }
             }
+            for(a=0;a<8;++a)
+            {
+                for(b=2;b<6;++b)
+                {
+                    button[a][b].setStyle("-fx-border-color: gray;");
+                }
+            }
+            for(b=0;b<8;++b)
+            {
+                button[b][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+
+            }
+            button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+            button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+            button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+            button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+            button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+            button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+            button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+            button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+            button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+            button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+            button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+            button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+            button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+            button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+            button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+            button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+            for(a=0;a<8;++a)
+            {
+                button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+
+            }
             Restart.setDisable(true);
+
+
+        });
+        // --- Menu Edit
+        Menu About = new Menu("About");
+
+
+        // --- Menu View
+        Menu menuView = new Menu("Help");
+        menuBar.getMenus().addAll(menuFile, About, menuView);
+        pane.setTop(menuBar);
+        window.setScene(scene);
+        window.show();
+        Open.initialWindow();
+        Open.OpenMenu(Start,button);
+
+        Restart.setOnAction(e->{
+            for(a=0;a<8;++a)
+            {
+                for(b=2;b<6;++b)
+                {
+                    button[a][b].setStyle("-fx-border-color: gray;");
+                }
+            }
+            for(b=0;b<8;++b)
+            {
+                button[b][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+
+            }
+            button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+            button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+            button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+            button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+            button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+            button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+            button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+            button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+            button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+            button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+            button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+            button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+            button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+            button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+            button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+            button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+            for(a=0;a<8;++a)
+            {
+                button[a][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+
+            }
+            game.restartGame();
         });
 
         Start.setOnAction(e->{
@@ -223,6 +294,7 @@ public class Main extends Application  {
                 }
             }
             Restart.setDisable(false);
+            game.restartGame();
         });
         Exit.setOnAction(e->{
             Platform.exit();
