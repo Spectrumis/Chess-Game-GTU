@@ -105,23 +105,22 @@ public class OpenDialogue {
                         easy.setDisable(true);
                         Medium.setDisable(true);
                         Hard.setDisable(true);
+                        p1.setDisable(true);
+                        p2.setDisable(true);
                         LevelOfGame=0;
+                        Start.setDisable(false);
                     }
                     else
                     if (!vs.isSelected()) {
                         easy.setDisable(false);
                         Medium.setDisable(false);
                         Hard.setDisable(false);
+                        p1.setDisable(false);
+                        p2.setDisable(false);
+                        Start.setDisable(true);
                         LevelOfGame=-1;
                     }
-                    if (vs.isSelected()||easy.isSelected()||Medium.isSelected()||Hard.isSelected()) {
-                        if(p1.isSelected()||p2.isSelected())
-                            Start.setDisable(false);
-                        else
-                            Start.setDisable(true);
-                    }
-                    else
-                        Start.setDisable(true);
+
 
         });
         easy.setOnAction(e-> {
