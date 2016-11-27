@@ -1,10 +1,13 @@
+import com.sun.glass.ui.CommonDialogs;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -139,18 +142,70 @@ public class Main extends Application  {
         }
         BorderPane pane=new BorderPane();
         pane.setLeft(grid);
-        Scene scene=new Scene(pane,760,660);
+        Scene scene=new Scene(pane,800,680);
         MenuBar menuBar = new MenuBar();
 
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
         MenuItem restart=new MenuItem("Restart");
-        MenuItem Options=new MenuItem("Options");
         MenuItem Load=new MenuItem("Load");
         MenuItem Save=new MenuItem("Save");
         MenuItem Exit=new MenuItem("Exit");
-        menuFile.getItems().addAll(restart,Options,Load,Save,Exit);
+        menuFile.getItems().addAll(restart,Load,Save,Exit);
         ExtendedButton Start=new ExtendedButton();
+
+        Label[] col=new Label[8];
+        Label[] row=new Label[8];
+        String [] alphabet={"A","B","C","D","E","F","G","H"};
+        for(i=1;i<9;++i)
+        {
+            col[i-1] = new Label(alphabet[i-1]);
+            col[i-1].setStyle("-fx-border-color: gray;");
+            col[i-1].setMinSize(80,20);
+            GridPane.setConstraints(col[i-1],i-1,0);
+        }
+        for(i=1;i<9;++i)
+        {
+            row[i-1] = new Label(""+i);
+            row[i-1].setStyle("-fx-border-color: gray;");
+            row[i-1].setMinSize(20,80);
+            GridPane.setConstraints(row[i-1],8,i);
+        }
+        for(i=0;i<8;++i)
+            for(j=0;j<8;++j)
+                GridPane.setConstraints(button[i][j],7-i,7-j+1);
+        for(i=0;i<8;++i)
+            grid.getChildren().addAll(col[i]);
+        for(i=0;i<8;++i)
+            grid.getChildren().addAll(row[i]);
+
+        Save.setOnAction(e->{//eğer Save'e tıklanılırsa
+            FileChooser fileChooser = new FileChooser();
+
+            //Set extension filter
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            //Show save file dialog
+            File file = fileChooser.showSaveDialog(primaryStage);
+
+            if(file != null){
+                //Burada Dosya kayıt işlemleri yaplacaktır.
+            }
+        });
+
+        Load.setOnAction(e->{//eğer Load'a tıklanılırsa
+            FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Load File");
+                FileChooser.ExtensionFilter extFilter =new FileChooser.ExtensionFilter("*", "*");
+                fileChooser.getExtensionFilters().add(extFilter);
+                 File file = fileChooser.showOpenDialog(null);
+
+            if(file!=null)
+            {
+                //Load işlemi burada yapılacaktır.
+            }
+        });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
             Open.OpenMenu(Start,button);
@@ -206,7 +261,7 @@ public class Main extends Application  {
                 }
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
-                        GridPane.setConstraints(button[m][n],7- m, 7-n);
+                        GridPane.setConstraints(button[m][n],7- m, 7-n+1);
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
                         grid.getChildren().addAll(button[m][n]);
@@ -219,7 +274,7 @@ public class Main extends Application  {
 
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
-                        GridPane.setConstraints(button[m][n], m, n + 1);
+                        GridPane.setConstraints(button[m][n], m, 7-n + 1);
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
                         grid.getChildren().addAll(button[m][n]);
