@@ -62,7 +62,7 @@ public class Main extends Application {
 
         /*------------------------------------Algorithm Part Begins---------------------------------------------------*/
         /*Deneme*/
-        /*Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         System.out.print("Pvp 0, pvEasy 1\n");
 
         Game.setIsComputerOn(input.nextInt());
@@ -74,15 +74,15 @@ public class Main extends Application {
             x = input.nextInt();
             System.out.print("Y'yi gir\n");
             y = input.nextInt();
-        */
+
         /*Deneme Sonu*/
             if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                 currentStatus = game.playGame(x, y, tempMovesList);
 
-                /*System.out.print("Status:" + currentStatus + "\n");
+                System.out.print("Status:" + currentStatus + "\n");
 
-                System.out.print("return ettikten hemen sonrasında aynı tempMoveListi tekrar kontrol ediyorum ve:\n");*/
+                System.out.print("return ettikten hemen sonrasında aynı tempMoveListi tekrar kontrol ediyorum ve:\n");
                 a = printCellList(tempMovesList);
                 System.out.print("TempListCounter:" + a + "\n");
             }
@@ -104,7 +104,7 @@ public class Main extends Application {
                         break;
                 }
             }
-            //game.printBoard();
+            game.printBoard();
         }
         /*--------------------------------------Algorithm Part Ends---------------------------------------------------*/
 
