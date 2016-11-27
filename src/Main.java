@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Main extends Application  {
 
+
     Stage window;
     Scene scene1;
     boolean answer;
@@ -28,6 +29,7 @@ public class Main extends Application  {
     int b;
     @Override
     public void start(Stage primaryStage) throws Exception{
+
         window=primaryStage;
         window.setTitle("Chess");
         GridPane grid=new GridPane();
@@ -164,6 +166,7 @@ public class Main extends Application  {
         Exit.setOnAction(e->{
             Platform.exit();
         });
+        OpenDialogue.OpenMenu();
     }
 
 
