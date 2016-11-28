@@ -1,7 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +8,7 @@ import java.util.Random;
  * Created by GozdeDogan on 14.11.2016.
  * Implemented by GozdeDogan, AliEmreBuyukersoy and YasinTuluman.
  */
-public class Game {
+public class Game implements Serializable {
 
     private static int isComputerOn = 0; //oyuncu vs computer ilk basta kapalı
     /** Degerler soyle:

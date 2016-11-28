@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -5,7 +6,7 @@ import java.util.List;
  * Created by GozdeDogan on 15.11.2016.
  * Implemented by GozdeDogan on 14.11.2016.
  */
-public abstract class Pieces{
+public abstract class Pieces implements Serializable{
 
     public boolean color; //tasin rengi true->beyaz false ->siyah oynayan kim
 

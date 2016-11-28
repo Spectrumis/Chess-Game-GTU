@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Created by Selman Ahatlı on 14.11.2016.
  * Implemented by GozdeDogan on 14.11.2016.
  */
-public class Cell {
+public class Cell implements Serializable{
 
     private int x;
     private int y;

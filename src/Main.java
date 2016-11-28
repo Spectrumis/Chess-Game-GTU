@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -189,6 +190,7 @@ public class Main extends Application  {
             grid.getChildren().addAll(row[i]);
 
         Save.setOnAction(e->{//eğer Save'e tıklanılırsa
+
             FileChooser fileChooser = new FileChooser();
 
             //Set extension filter
@@ -198,9 +200,18 @@ public class Main extends Application  {
             //Show save file dialog
             File file = fileChooser.showSaveDialog(primaryStage);
 
-            if(file != null){
-                //Burada Dosya kayıt işlemleri yaplacaktır.
-                game.saveGame();
+            try {
+
+                FileOutputStream fileOut = new FileOutputStream(file.toString());
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(game);
+                out.close();
+                fileOut.close();
+                System.out.println("Serialized data is saved in " + file.toString());
+
+            }catch(IOException s) {
+
+                s.printStackTrace();
             }
         });
 
@@ -209,7 +220,7 @@ public class Main extends Application  {
                 fileChooser.setTitle("Load File");
                 FileChooser.ExtensionFilter extFilter =new FileChooser.ExtensionFilter("*", "*");
                 fileChooser.getExtensionFilters().add(extFilter);
-                 File file = fileChooser.showOpenDialog(null);
+                File file = fileChooser.showOpenDialog(null);
 
             if(file!=null)
             {
