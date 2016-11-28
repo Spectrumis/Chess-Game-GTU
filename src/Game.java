@@ -268,8 +268,37 @@ public class Game implements Serializable {
      * Method icinde currentPlayer degistirilir
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
-    public List<Cell> playComputerMedium(){
-        return null;
+    public void playComputerMedium(){
+
+        List<Cell> allMoves = new LinkedList<>();
+        //List<Cell> allSource = new LinkedList<>();
+
+        for (int i=0 ; i<7 ; ++i)
+        {
+            for (int j=0 ; j<7 ; ++j)
+            {
+                if (!(board.get(i).get(j).getPiece() instanceof NoPiece))
+                {
+                    if (this.currentPlayer == board.get(i).get(j).getPiece().getColor())
+                    {
+
+                        List<Cell> moves = new LinkedList<>();
+
+                        moves = board.get(i).get(j).getPiece().checkMove(board,i,j);
+
+                        for (int k=0 ; k<moves.size() ; ++k)
+                        {
+                            allMoves.add(new Cell(moves.get(k)));
+                        }
+                    }
+                }
+            }
+        }
+
+        Random rand = new Random();
+        int  n = rand.nextInt(allMoves.size());
+
+        makeMove();
     }
 
     /**
