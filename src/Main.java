@@ -4,7 +4,12 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -18,11 +23,11 @@ public class Main extends Application  {
     Scene scene1;
     boolean answer;
     String[][] ButtonBorders=new String[8][8];
-    ArrayList<Coordinate> currentPoint=new ArrayList<Coordinate>();
-    ExtendedButton CurrentButton;
-    ExtendedButton[][] button=new ExtendedButton[8][];
+    ArrayList<Coordinate> currentPoint=new ArrayList<Coordinate>();//tıklanan buttonların oluşturduğu arraydir.
+    ExtendedButton CurrentButton;//o anki tıklanan buttonu represent eder.
+    ExtendedButton[][] button=new ExtendedButton[8][];//boarddaki satranç tahtasını represent eder.
     Stack<Table> ListGame=new Stack<Table>();//oyunu geri alabilmek için stack oluşturuldu.
-    List<Cell> tempMovesList = new ArrayList<Cell>();
+    List<Cell> tempMovesList = new ArrayList<Cell>();//Algoritma tarafından gelen geçerli hareketlerin olduğu arraydir.
     int x=0, y=0, currentStatus = 0, a=0;
     boolean startingStatusHandler = false;
     int markButton=0;
@@ -232,7 +237,8 @@ public class Main extends Application  {
         });
         // --- Menu Edit
         Menu About = new Menu("About");
-
+        MenuItem Project=new MenuItem("Project");
+        About.getItems().addAll(Project);
 
         // --- Menu View
         Menu menuView = new Menu("Help");
@@ -280,6 +286,54 @@ public class Main extends Application  {
                         grid.getChildren().addAll(button[m][n]);
             }
                 });
+        Project.setOnAction(e->{ //About için event handler.
+            System.out.println("asdsad");
+            Stage window2=new Stage();
+            window2.initModality(Modality.APPLICATION_MODAL);
+            window2.setTitle("About GTUChess");
+            window2.setMinWidth(300);
+            window2.setMinHeight(600);
+            window2.setMaxWidth(300);
+            window2.setMaxHeight(600);
+            Text p=new Text();
+            p.setText(    "      ----Group8----");
+            p.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p1=new Text();
+            p1.setText("        Recep Sivri");
+            p1.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p2=new Text();
+            p2.setText("        Ali Emre Büyükersoy");
+            p2.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p3=new Text();
+            p3.setText("        Yasin Açıkgöz");
+            p3.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p4=new Text();
+            p4.setText("        Selman Ahatlı");
+            p4.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p5=new Text();
+            p5.setText("        Yasin Tulumen");
+            p5.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p6=new Text();
+            p6.setText("        Gözde Doğan");
+            p6.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p7=new Text();
+            p7.setText("        Halil Köse");
+            p7.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p8=new Text();
+            p8.setText("        Mehmet Öztürk\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            p8.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            Text p9=new Text();
+            p9.setText("    CSE343    Uraz Cengiz Türker\n" +
+                    "     Gebze Technical University\n " +
+                    "               Gebze-Kocaeli");
+            p9.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+            VBox Layout=new VBox(10);
+            Layout.getChildren().addAll(p,p1,p2,p3,p4,p5,p6,p7,p8,p9);
+            Scene s1=new Scene(Layout);
+            window2.setScene(s1);
+            window2.show();
+
+        });
         Start.setOnAction(e->{
             int a;
             Open.window.close();
