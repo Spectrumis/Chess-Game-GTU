@@ -72,8 +72,7 @@ public class Main extends Application  {
 
                         System.out.print("TempListCounter:" + a + "\n");
                     }
-                    startingStatusHandler = true;
-                    if (game.getIsComputerOn() != 0) {
+                    if (game.getIsComputerOn() != 0 && (currentStatus == 2 || !startingStatusHandler)) {
                         tempMovesList.clear();
                         switch (game.getIsComputerOn()) {
                             case 1:
@@ -89,7 +88,9 @@ public class Main extends Application  {
                                 System.out.println("ComputerOn degeri yanlis\n");
                                 break;
                         }
+                        tempMovesList.clear();
                     }
+                    startingStatusHandler = true;
                     if(currentStatus==1)
                     {
                         for (a = markButton; a < tempMovesList.size(); ++a) {
@@ -102,6 +103,9 @@ public class Main extends Application  {
                     {
                         button[CurrentButton.getCoorX()][CurrentButton.getCoorY()].setStyle(button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].getStyle());
                         button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].setStyle("-fx-border-color: gray; )");
+                    }
+                    if(currentStatus==3){
+                        Platform.exit();
                     }
                     markButton=tempMovesList.size();
                     currentPoint.add(new Coordinate(CurrentButton.getCoorX(),CurrentButton.getCoorY()));
@@ -152,7 +156,7 @@ public class Main extends Application  {
 
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
-        MenuItem restart=new MenuItem("Restart");
+        MenuItem restart=new MenuItem("New Game");
         MenuItem Load=new MenuItem("Load");
         MenuItem Save=new MenuItem("Save");
         MenuItem Exit=new MenuItem("Exit");
@@ -196,6 +200,7 @@ public class Main extends Application  {
 
             if(file != null){
                 //Burada Dosya kayıt işlemleri yaplacaktır.
+                game.saveGame();
             }
         });
 
@@ -251,6 +256,7 @@ public class Main extends Application  {
 
         Restart.setOnAction(e->{//geçerli olan oyunun yeniden başlaması yani sağdaki button olan restart.
             setButoons(button);
+            currentStatus = 0;
             game.restartGame();
         });
         Previous.setOnAction(e->{//undo yani geri alma buttonunun event handleri.

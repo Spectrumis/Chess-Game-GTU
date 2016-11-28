@@ -30,4 +30,7 @@ public abstract class Pieces{
         else
             return "false";
     }
+
+    public boolean inDanger(ArrayList<ArrayList<Cell>> board){ return false; }
+    public boolean kingInList(List<Cell> moves){ return false; }
 }

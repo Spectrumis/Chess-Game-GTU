@@ -78,7 +78,19 @@ public class Game {
         try {
             Cell currentCell = new Cell(board.get(x).get(y));
             Cell emptyCell = new Cell();
+            int king;
 
+            king = kingPosition(getCurrentPlayer());
+            //oyun sonu geldiyse 3 dondurur
+            if(isEnd()){
+                return 3;
+            }
+            //burada sah tehlikedemi diye bakar
+            if(board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)){
+                if(x != king/10 || y != king-(king/10)*10){
+                    return 0;
+                }
+            }
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
             if (currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer()) {
             /* ... ve daha once oynatabilecegimiz biseye tiklamadiysak sifir return edicez demektir*/
@@ -333,7 +345,6 @@ public class Game {
      * oyuna tekrar baslanmak istendiginde yazilacak kod
      */
     public void restartGame(){
-        int i,j;
         //tahta ilk haline getirildi
         this.initBoard();
 
@@ -372,6 +383,8 @@ public class Game {
 
     public void initBoard(){
         int i; int j;
+
+        Game.currentPlayer = true;
 
         //Bos hucreler
         for(i=0; i < 8; ++i){
@@ -550,6 +563,35 @@ public class Game {
             }
             System.out.println();
         }
+    }
+
+    public boolean isEnd(){
+        int counter = 0;
+        for(int i=0; i <= 7; ++i){
+            for(int j=0; j <= 7; ++j){
+                if(this.board.get(i).get(j).getPiece() instanceof King){
+                    if(counter == 0){
+                        ++counter;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public int kingPosition(boolean kingColor){
+        for(int i=0; i <= 7; ++i){
+            for(int j=0; j <= 7; ++j){
+                if(board.get(i).get(j).getPiece() instanceof King && board.get(i).get(j).getPiece().getColor() == kingColor){
+                    return (10*i+j);
+                }
+            }
+        }
+
+        System.out.print("KingPosition hatası\n");
+        return -1;
     }
 
     public static void setCurrentPlayer( boolean cPlayer ) { currentPlayer = cPlayer; }
