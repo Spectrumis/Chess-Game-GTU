@@ -271,7 +271,7 @@ public class Game implements Serializable {
     public void playComputerMedium(){
 
         List<Cell> allMoves = new LinkedList<>();
-        //List<Cell> allSource = new LinkedList<>();
+        List<Cell> allSource = new LinkedList<>();
 
         for (int i=0 ; i<7 ; ++i)
         {
@@ -289,6 +289,7 @@ public class Game implements Serializable {
                         for (int k=0 ; k<moves.size() ; ++k)
                         {
                             allMoves.add(new Cell(moves.get(k)));
+                            allSource.add(new Cell(board.get(i).get(j)));
                         }
                     }
                 }
@@ -298,7 +299,7 @@ public class Game implements Serializable {
         Random rand = new Random();
         int  n = rand.nextInt(allMoves.size());
 
-        makeMove();
+        makeMove(allSource.get(n),allMoves.get(n));
     }
 
     /**
