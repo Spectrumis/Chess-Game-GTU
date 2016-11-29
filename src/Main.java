@@ -77,10 +77,10 @@ public class Main extends Application  {
                         tempMovesList.clear();
                         switch (game.getIsComputerOn()) {
                             case 1:
-                                tempMovesList.addAll(game.playComputerEasy());
+                                game.playComputerEasy();
                                 break;
                             case 2:
-                                tempMovesList.addAll(game.playComputerMedium());
+                                game.playComputerMedium();
                                 break;
                             case 3:
                                 tempMovesList.addAll(game.playComputerHard());
