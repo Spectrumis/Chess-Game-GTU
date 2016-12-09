@@ -62,7 +62,54 @@ public class Main extends Application  {
                 button[i][j].setCoor(new Coordinate(i,j));
                 a=i;
                 b=j;
+
+
+
+
+
                 button[i][j].setOnAction(e->{
+                    ArrayList<ArrayList<Cell>> board=game.getBoard();
+                    int a,b;
+                    game.printBoard();
+                    for(a=0;a<board.size();++a)
+                    {
+                        for(b=0;b<board.get(a).size();++b)
+                            if (!board.get(a).get(b).piece.getColor()) {
+                                //System.out.println("PrintBoard, false, siyah!!");
+                                if (board.get(a).get(b).getPiece() instanceof Pawn) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Rook) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Knight) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Bishop) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof King) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Queen) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                                } else
+                                    button[a][b].setStyle("-fx-border-color: gray;");
+                            }
+                            else
+                            {
+                                if (board.get(a).get(b).getPiece() instanceof Pawn) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Rook) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Knight) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Bishop) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof King) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Queen) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                                } else
+                                    button[a][b].setStyle("-fx-border-color: gray;");
+                            }
+                    }
+
                     refreshTable();
                     CurrentButton=(ExtendedButton)e.getSource();
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
@@ -78,12 +125,15 @@ public class Main extends Application  {
                         switch (game.getIsComputerOn()) {
                             case 1:
                                 game.playComputerEasy();
+
                                 break;
                             case 2:
                                 game.playComputerMedium();
+                                refreshTable();
                                 break;
                             case 3:
                                 tempMovesList.addAll(game.playComputerHard());
+                                refreshTable();
                                 break;
                             default:
                                 System.out.println("ComputerOn degeri yanlis\n");
@@ -114,6 +164,10 @@ public class Main extends Application  {
                     ListGame.add(temp);//stacke kayıtlanmaktadır.
 
                 });
+
+
+
+
 
             }
         }

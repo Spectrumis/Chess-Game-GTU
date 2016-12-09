@@ -23,6 +23,10 @@ public class Game implements Serializable {
     private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
+    public ArrayList<ArrayList<Cell>> getBoard()
+    {
+        return board;
+    }
     public Game(){
         removesss = new Cell[64][2];
         board = new ArrayList<ArrayList<Cell>>(8);
