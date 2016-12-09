@@ -21,8 +21,8 @@ import java.util.Stack;
 public class Main extends Application  {
 
     Stage window;
-    Scene scene1;
-    boolean answer;
+   // Scene scene1; // hic kullanilmamis silinsin
+   // boolean answer; // hic kullanilmamis silinsin
     String[][] ButtonBorders=new String[8][8];
     ArrayList<Coordinate> currentPoint=new ArrayList<Coordinate>();//tıklanan buttonların oluşturduğu arraydir.
     ExtendedButton CurrentButton;//o anki tıklanan buttonu represent eder.
