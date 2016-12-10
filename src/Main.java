@@ -203,7 +203,7 @@ public class Main extends Application  {
         pane.setLeft(grid);
         Scene scene=new Scene(pane,800,680);
         MenuBar menuBar = new MenuBar();
-
+        System.out.println("BEN BURADAYIM!!");
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
         MenuItem restart=new MenuItem("New Game");
