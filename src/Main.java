@@ -3,6 +3,10 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -12,8 +16,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -21,8 +28,8 @@ import java.util.Stack;
 public class Main extends Application  {
 
     Stage window;
-    Scene scene1;
-    boolean answer;
+   // Scene scene1; // hic kullanilmamis silinsin
+   // boolean answer; // hic kullanilmamis silinsin
     String[][] ButtonBorders=new String[8][8];
     ArrayList<Coordinate> currentPoint=new ArrayList<Coordinate>();//tıklanan buttonların oluşturduğu arraydir.
     ExtendedButton CurrentButton;//o anki tıklanan buttonu represent eder.
@@ -62,7 +69,54 @@ public class Main extends Application  {
                 button[i][j].setCoor(new Coordinate(i,j));
                 a=i;
                 b=j;
+
+
+
+
+
                 button[i][j].setOnAction(e->{
+                    ArrayList<ArrayList<Cell>> board=game.getBoard();
+                    int a,b;
+                    game.printBoard();
+                    for(a=0;a<board.size();++a)
+                    {
+                        for(b=0;b<board.get(a).size();++b)
+                            if (!board.get(a).get(b).piece.getColor()) {
+                                //System.out.println("PrintBoard, false, siyah!!");
+                                if (board.get(a).get(b).getPiece() instanceof Pawn) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Rook) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Knight) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Bishop) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof King) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Queen) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                                } else
+                                    button[a][b].setStyle("-fx-border-color: gray;");
+                            }
+                            else
+                            {
+                                if (board.get(a).get(b).getPiece() instanceof Pawn) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Rook) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Knight) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Bishop) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof King) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Queen) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                                } else
+                                    button[a][b].setStyle("-fx-border-color: gray;");
+                            }
+                    }
+
                     refreshTable();
                     CurrentButton=(ExtendedButton)e.getSource();
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
@@ -78,12 +132,15 @@ public class Main extends Application  {
                         switch (game.getIsComputerOn()) {
                             case 1:
                                 game.playComputerEasy();
+
                                 break;
                             case 2:
                                 game.playComputerMedium();
+                                refreshTable();
                                 break;
                             case 3:
                                 tempMovesList.addAll(game.playComputerHard());
+                                refreshTable();
                                 break;
                             default:
                                 System.out.println("ComputerOn degeri yanlis\n");
@@ -114,7 +171,6 @@ public class Main extends Application  {
                     ListGame.add(temp);//stacke kayıtlanmaktadır.
 
                 });
-
             }
         }
         for(i=7;i>=0;--i)
@@ -154,7 +210,6 @@ public class Main extends Application  {
         pane.setLeft(grid);
         Scene scene=new Scene(pane,800,680);
         MenuBar menuBar = new MenuBar();
-
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
         MenuItem restart=new MenuItem("New Game");
@@ -166,7 +221,7 @@ public class Main extends Application  {
 
         Label[] col=new Label[8];
         Label[] row=new Label[8];
-        String [] alphabet={"A","B","C","D","E","F","G","H"};
+        String [] alphabet={" \t A"," \t B"," \t C"," \t D"," \t E"," \t F"," \t G"," \t H"};
         for(i=1;i<9;++i)
         {
             col[i-1] = new Label(alphabet[i-1]);
@@ -252,12 +307,40 @@ public class Main extends Application  {
 
         });
         // --- Menu Edit
-        Menu About = new Menu("About");
-        MenuItem Project=new MenuItem("Project");
+        Menu About = new Menu("About Project");
+        MenuItem Project=new MenuItem("Members");
         About.getItems().addAll(Project);
+        MenuItem page=new MenuItem("GitHub Page");
+        About.getItems().addAll(page);
+        page.setOnAction(event -> {
+            if(Desktop.isDesktopSupported())
+            {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/Spectrumis/Chess-Game-GTU"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // --- Menu View
         Menu menuView = new Menu("Help");
+        MenuItem learn=new MenuItem("Learn Chess");
+        menuView.getItems().addAll(learn);
+        learn.setOnAction(event -> {
+            if(Desktop.isDesktopSupported())
+            {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://en.wikipedia.org/wiki/Chess"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         menuBar.getMenus().addAll(menuFile, About, menuView);
         pane.setTop(menuBar);
         window.setScene(scene);
