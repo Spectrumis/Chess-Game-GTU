@@ -210,7 +210,6 @@ public class Main extends Application  {
         pane.setLeft(grid);
         Scene scene=new Scene(pane,800,680);
         MenuBar menuBar = new MenuBar();
-        System.out.println("BEN BURADAYIM!!");
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
         MenuItem restart=new MenuItem("New Game");
@@ -222,7 +221,7 @@ public class Main extends Application  {
 
         Label[] col=new Label[8];
         Label[] row=new Label[8];
-        String [] alphabet={"A","B","C","D","E","F","G","H"};
+        String [] alphabet={" \t A"," \t B"," \t C"," \t D"," \t E"," \t F"," \t G"," \t H"};
         for(i=1;i<9;++i)
         {
             col[i-1] = new Label(alphabet[i-1]);
