@@ -9,6 +9,8 @@ package path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.swing.text.html.HTML.Tag.HEAD;
+
 /**
  *
  * @author Selman Ahatlı
@@ -276,18 +278,6 @@ public class Path {
             _20(true,path);
             _20(false,path);
         }    
-    }
-    
-<<<<<<< HEAD
-
-    
-    public static void main(String[] args) {
-        
-        List<String> path = new ArrayList<>();
-       
-        path.add("1-");
-        _2(true,path);
-        _2(false,path);
     }
 
     public static void _42(boolean value, List<String> path){
@@ -570,15 +560,9 @@ public class Path {
         }
     }
     public static void _5(boolean value, List<String> path){
-
-        path.add("5");
-
-=======
-    public static void _5(boolean value, List<String> path){
         
         path.add("5");
-        
->>>>>>> origin/master
+
         if(value)
         {
             path.add("(T)-");
@@ -591,31 +575,18 @@ public class Path {
             path.add("(F)-");
             _2(true,path);
             _2(false,path);
-<<<<<<< HEAD
         }
-    }
-
-    public static void _7(boolean value, List<String> path){
-
-        path.add("7");
-
-=======
-        }    
     }
     
     public static void _7(boolean value, List<String> path){
         
         path.add("7");
-        
->>>>>>> origin/master
+
         if(value)
         {
             path.add("(T)-");
             path.add("8-");
-<<<<<<< HEAD
             printList(path);
-=======
->>>>>>> origin/master
             _9(true,path);
             _9(false,path);
         }
@@ -623,26 +594,15 @@ public class Path {
         {
             path.add("(F)-");
             path.add("13-");
-<<<<<<< HEAD
             printList(path);
             _14(true,path);
             _14(false,path);
         }
     }
     public static void _2(boolean value, List<String> path) {
-
-        path.add("2");
-
-=======
-            _14(true,path);
-            _14(false,path);
-        }  
-    }
-    public static void _2(boolean value, List<String> path) {
         
         path.add("2");
-        
->>>>>>> origin/master
+
         if(value)
         {
             path.add("(T)-");
@@ -658,29 +618,16 @@ public class Path {
             _7(false,path);
         }
     }
-<<<<<<< HEAD
 
-
-
-    public static void printList(List<String> path)
-    {
-        for (int i = 0; i < path.size(); ++i) {
-
-            System.out.print(path.get(i));
-
-        }
-
-=======
-    
     public static void main(String[] args) {
-        
+
         List<String> path = new ArrayList<>();
-       
+
         path.add("1-");
         _2(true,path);
         _2(false,path);
     }
-    
+
     public static void printList(List<String> path)
     {
         for (int i = 0; i < path.size(); ++i) {
@@ -688,8 +635,7 @@ public class Path {
             System.out.print(path.get(i));
             
         }
-        
->>>>>>> origin/master
+
         System.out.println("");
     }
 
@@ -898,26 +844,6 @@ public class Path {
             path.add("(F)-");
             _103(true,path);
             _103(false,path);
-        }
-    }
-    public static void _103(boolean value, List<String> path) {
-
-        path.add("103");
-
-        if(value)
-        {
-            path.add("(T)-");
-            path.add("104-");
-            path.add("105-");
-            _107(true,path);
-            _107(false,path);
-        }
-        else
-        {
-            path.add("(F)-");
-            path.add("105-");
-            _107(true,path);
-            _107(false,path);
         }
     }
 
