@@ -169,6 +169,11 @@ public class Main extends Application  {
 
 
 
+
+
+
+
+
             }
         }
         for(i=7;i>=0;--i)
