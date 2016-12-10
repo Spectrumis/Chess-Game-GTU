@@ -278,6 +278,7 @@ public class Path {
         }    
     }
     
+<<<<<<< HEAD
 
     
     public static void main(String[] args) {
@@ -572,6 +573,12 @@ public class Path {
 
         path.add("5");
 
+=======
+    public static void _5(boolean value, List<String> path){
+        
+        path.add("5");
+        
+>>>>>>> origin/master
         if(value)
         {
             path.add("(T)-");
@@ -584,6 +591,7 @@ public class Path {
             path.add("(F)-");
             _2(true,path);
             _2(false,path);
+<<<<<<< HEAD
         }
     }
 
@@ -591,11 +599,23 @@ public class Path {
 
         path.add("7");
 
+=======
+        }    
+    }
+    
+    public static void _7(boolean value, List<String> path){
+        
+        path.add("7");
+        
+>>>>>>> origin/master
         if(value)
         {
             path.add("(T)-");
             path.add("8-");
+<<<<<<< HEAD
             printList(path);
+=======
+>>>>>>> origin/master
             _9(true,path);
             _9(false,path);
         }
@@ -603,6 +623,7 @@ public class Path {
         {
             path.add("(F)-");
             path.add("13-");
+<<<<<<< HEAD
             printList(path);
             _14(true,path);
             _14(false,path);
@@ -612,6 +633,16 @@ public class Path {
 
         path.add("2");
 
+=======
+            _14(true,path);
+            _14(false,path);
+        }  
+    }
+    public static void _2(boolean value, List<String> path) {
+        
+        path.add("2");
+        
+>>>>>>> origin/master
         if(value)
         {
             path.add("(T)-");
@@ -627,6 +658,7 @@ public class Path {
             _7(false,path);
         }
     }
+<<<<<<< HEAD
 
 
 
@@ -638,6 +670,26 @@ public class Path {
 
         }
 
+=======
+    
+    public static void main(String[] args) {
+        
+        List<String> path = new ArrayList<>();
+       
+        path.add("1-");
+        _2(true,path);
+        _2(false,path);
+    }
+    
+    public static void printList(List<String> path)
+    {
+        for (int i = 0; i < path.size(); ++i) {
+            
+            System.out.print(path.get(i));
+            
+        }
+        
+>>>>>>> origin/master
         System.out.println("");
     }
 }
