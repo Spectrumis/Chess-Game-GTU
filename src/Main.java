@@ -308,10 +308,10 @@ public class Main extends Application  {
 
         });
         // --- Menu Edit
-        Menu About = new Menu("About");
-        MenuItem Project=new MenuItem("Project");
+        Menu About = new Menu("About Project");
+        MenuItem Project=new MenuItem("Members");
         About.getItems().addAll(Project);
-        MenuItem page=new MenuItem("Project GitHub Page");
+        MenuItem page=new MenuItem("GitHub Page");
         About.getItems().addAll(page);
         page.setOnAction(event -> {
             if(Desktop.isDesktopSupported())
@@ -328,6 +328,20 @@ public class Main extends Application  {
 
         // --- Menu View
         Menu menuView = new Menu("Help");
+        MenuItem learn=new MenuItem("Learn Chess");
+        menuView.getItems().addAll(learn);
+        learn.setOnAction(event -> {
+            if(Desktop.isDesktopSupported())
+            {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://en.wikipedia.org/wiki/Chess"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         menuBar.getMenus().addAll(menuFile, About, menuView);
         pane.setTop(menuBar);
         window.setScene(scene);
