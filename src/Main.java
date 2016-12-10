@@ -164,16 +164,6 @@ public class Main extends Application  {
                     ListGame.add(temp);//stacke kayıtlanmaktadır.
 
                 });
-
-
-
-
-
-
-
-
-
-
             }
         }
         for(i=7;i>=0;--i)
