@@ -75,6 +75,7 @@ public class Main extends Application  {
 
 
                 button[i][j].setOnAction(e->{
+                    /*
                     ArrayList<ArrayList<Cell>> board=game.getBoard();
                     int a,b;
                     game.printBoard();
@@ -115,7 +116,8 @@ public class Main extends Application  {
                                 } else
                                     button[a][b].setStyle("-fx-border-color: gray;");
                             }
-                    }
+
+                    }*/
 
                     refreshTable();
                     CurrentButton=(ExtendedButton)e.getSource();
