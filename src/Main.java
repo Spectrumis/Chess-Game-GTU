@@ -70,12 +70,8 @@ public class Main extends Application  {
                 a=i;
                 b=j;
 
-
-
-
-
                 button[i][j].setOnAction(e->{
-                    /*
+
                     ArrayList<ArrayList<Cell>> board=game.getBoard();
                     int a,b;
                     game.printBoard();
@@ -117,7 +113,7 @@ public class Main extends Application  {
                                     button[a][b].setStyle("-fx-border-color: gray;");
                             }
 
-                    }*/
+                    }
 
                     refreshTable();
                     CurrentButton=(ExtendedButton)e.getSource();
@@ -134,14 +130,14 @@ public class Main extends Application  {
                         switch (game.getIsComputerOn()) {
                             case 1:
                                 game.playComputerEasy();
-
+                                refreshTable();
                                 break;
                             case 2:
                                 game.playComputerMedium();
                                 refreshTable();
                                 break;
                             case 3:
-                                tempMovesList.addAll(game.playComputerHard());
+                                game.playComputerHard();
                                 refreshTable();
                                 break;
                             default:

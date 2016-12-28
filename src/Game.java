@@ -191,48 +191,6 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerEasy() {
-        System.out.println(getCurrentPlayer());
-        boolean player = getCurrentPlayer();
-        List<Cell> canMove = new ArrayList<>();
-        List<Cell> trgtMove = new ArrayList<>();
-        List<Cell> srcMove = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
-                        board.get(i).get(j).getPiece().getColor() == player){
-                    //System.out.println("im in"+i + " "+ j);
-
-                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
-                    for (int k=0 ; k<canMove.size() ; ++k)
-                        canMove.get(k).getPiece().setColor(player);
-                    //System.out.println("CAN MOVE:\n"+canMove.toString());
-
-                    for (int k = 0; k < canMove.size(); k++) {
-                        srcMove.add(new Cell(board.get(i).get(j)));
-                    }
-                    trgtMove.addAll(canMove);
-                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
-
-                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
-
-                    canMove.clear();
-                }
-            }
-        }
-        Random randomGenerator = new Random();
-        int randomInt = randomGenerator.nextInt(trgtMove.size());
-        System.out.println("random: " + randomInt);
-        makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
-        this.setCurrentPlayer(!player);
-    }
-
-    /**
-     * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
-     * Method icinde currentPlayer degistirilir
-     * @return source ve targetin sirali olarak bulundugu bir cell listesi
-     */
-    public void playComputerMedium(){
-
         List<Cell> allMoves = new LinkedList<>();
         List<Cell> allSource = new LinkedList<>();
 
@@ -263,7 +221,18 @@ public class Game implements Serializable {
         int  n = rand.nextInt(allMoves.size());
 
         makeMove(allSource.get(n),allMoves.get(n));
+        this.setCurrentPlayer(!getCurrentPlayer());
         printBoard();
+    }
+
+    /**
+     * Computer icin , medium mod secildiginde bu fonksiyon cagrilacak
+     * Method icinde currentPlayer degistirilir
+     * @return source ve targetin sirali olarak bulundugu bir cell listesi
+     */
+    public void playComputerMedium(){
+
+
     }
 
     /**
