@@ -15,43 +15,69 @@ public class King extends Pieces {
         //Ilk olarak secili tasin rengini kiyaslama yapmak icin tutuyorum
         boolean curColor = board.get(x).get(y).getPiece().getColor() ;
 
+        // SOL TARAFA BAKIYORUZ
+        if(x-1 >= 0 && (board.get(x-1).get(y).getPiece() instanceof NoPiece || board.get(x-1).get(y).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x-1).get(y)));
+        // SAG TARAFA BAKIYORUZ
+        if(x+1 <= 7 && (board.get(x+1).get(y).getPiece() instanceof NoPiece || board.get(x+1).get(y).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x+1).get(y)));
+        // ALT TARAFA BAKIYORUZ
+        if(y-1 >= 0 && (board.get(x).get(y-1).getPiece() instanceof NoPiece || board.get(x).get(y-1).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x).get(y-1)));
+        // UST TARAFA BAKIYORUZ
+        if(y+1 <= 7 && (board.get(x).get(y+1).getPiece() instanceof NoPiece || board.get(x).get(y+1).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x).get(y+1)));
+
+
+        // SOL ALT TARAFA BAKIYORUZ
+        if(x-1 >= 0 && y-1 >= 0 && (board.get(x-1).get(y-1).getPiece() instanceof NoPiece || board.get(x-1).get(y-1).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x-1).get(y-1)));
+        // SOL UST TARAFA BAKIYORUZ
+        if(x-1 >= 0 && y+1 <=7 && (board.get(x-1).get(y+1).getPiece() instanceof NoPiece || board.get(x-1).get(y+1).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x-1).get(y+1)));
+        // SAG ALT TARAFA BAKIYORUZ
+        if(x+1 <= 7 && y-1 >= 0 && (board.get(x+1).get(y-1).getPiece() instanceof NoPiece || board.get(x+1).get(y-1).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x+1).get(y-1)));
+        // SAG UST TARAFA BAKIYORUZ
+        if(x+1 <= 7 && y+1 <= 7 && (board.get(x+1).get(y+1).getPiece() instanceof NoPiece || board.get(x+1).get(y+1).getPiece().getColor() != curColor))
+            moves.add(new Cell(board.get(x+1).get(y+1)));
+
+
+/*
         //Sol tarafina dogru hareket edebilirligine bakarak gidiyorum. Ilk bakacagim
         //yer olarak i ye x-1 atadim. Yani tasin hemen soluna bakicam ilk
-        i = x-1;
+        i = x-1; // x-1, y -> SOL
         if(i >= 0){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
-            if(board.get(i).get(y).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
-            }
-            //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
-            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+            if(board.get(i).get(y).getPiece() instanceof NoPiece || board.get(i).get(y).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(i).get(y)));
             }
         }
-        j = y-1;
+        j = y-1; // x-1, y-1 -> SOL ALT
         if((i>= 0) && (j >= 0)){
             //Eger tasin solu bos ise moves listeme ekleyerek devam ederim
-            if(board.get(i).get(j).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(j)));
-            }
-            //Eger bi tas varsa ve ayni renk deilse yiyebilecegim icin move listesine ekliyorum
-            //fakat yemekten oteye gecemedigimden hemen ardindan dongumu sonlandiriyorum
-            else if(board.get(i).get(j).getPiece().getColor() != curColor){
+            if(board.get(i).get(j).getPiece() instanceof NoPiece || board.get(i).get(j).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(i).get(j)));
             }
         }
+
         //Ayni islemleri saga dogru bakiyorum
-        i = x+1;
+        i = x+1; // x+1, y -> SAÐ
         if(i <= 7){
-            if(board.get(i).get(y).getPiece() instanceof NoPiece){
-                moves.add(new Cell(board.get(i).get(y)));
-            }
-            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+            if(board.get(i).get(y).getPiece() instanceof NoPiece || board.get(i).get(y).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(i).get(y)));
             }
         }
+
+        j=y+1; // x+1, y+1 -> SAG UST
+        if(j <= 7){
+            if(board.get(i).get(j).getPiece() instanceof NoPiece || board.get(i).get(j).getPiece().getColor() != curColor){
+                moves.add(new Cell(board.get(i).get(j)));
+            }
+        }
+
         //Ayni islemleri sag alta dogru bakiyorum
-        j = y-1;
+        j = y-1; // x+1, y-1 -> SAG ALT
         if((i <= 7) && (j >= 0)){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(i).get(j)));
@@ -70,8 +96,9 @@ public class King extends Pieces {
             }
         }
 
-        //Sag uste ve
-        j = y+1;
+        //Sol uste ve
+        i = x-1;
+        j = y+1; // x-1, y+1 -> SOL UST
         if((i <= 7) && (j <= 7)){
             if(board.get(i).get(j).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(i).get(j)));
@@ -98,7 +125,7 @@ public class King extends Pieces {
             else if(board.get(i).get(j).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(i).get(j)));
             }
-        }
+        }*/
         //Kalenin her yone dogru oynayabilecegi hamleleri move listesine atadik ve donduruyoruz
         return moves;
     }
