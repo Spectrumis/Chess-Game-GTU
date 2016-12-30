@@ -10,6 +10,7 @@ public abstract class Pieces implements Serializable{
 
     public boolean color; //tasin rengi true->beyaz false ->siyah oynayan kim
 
+
     public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y){
         return null;
     }

@@ -220,7 +220,7 @@ public class Game implements Serializable {
         Random rand = new Random();
         int  n = rand.nextInt(allMoves.size());
 
-        makeMove(allSource.get(n),allMoves.get(n));
+        makeMove(allSource.get(n), allMoves.get(n));
         this.setCurrentPlayer(!getCurrentPlayer());
         printBoard();
     }
@@ -245,14 +245,15 @@ public class Game implements Serializable {
     }
 
     /**
-     * kapatma dugmesine basildiginda oyunu kaydetmek icin yazilacak fonksiyon
+     * kapatma dugmesine basildiginda oyunu kaydetmek icin yazilan metot
+     * Yaptigi islem, Game class i attributelerinin degerlerini dosyaya yazmak
      */
     public void saveGame(){
         //Belirlenen bir dosyaya sifreli sekilde tahtanın son durumu kaydedilir
 
         try {
             //dosya classlar ile aynı director icinde olusturuluyor
-            File file = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.txt");
+            File file = new File("game.txt");
 
             // dosya yoksa olusturuldu
             if (!file.exists())
@@ -301,6 +302,98 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * load dugmesine basildiginda oyunu yuklemek icin yazilan metot
+     * Yaptigi islem, dosyadaki verileri Game classinin attributelerine atamak.
+     */
+    public void loadGame(){
+
+        try {
+            //dosya classlar ile aynı director icinde.
+            File file = new File("game.txt");
+
+            if (file.exists()) {
+                FileReader fr = new FileReader(file.getAbsoluteFile());
+                BufferedReader br = new BufferedReader(fr);
+                char [] ch = new char[1];
+
+                //READ
+                readToFile(br, ch, 8, 8);
+                // board dan sonra 3 tane \n sonra removess
+                readToFile(br, ch, removesss.length, 2);
+                // son olarak da counterRemovess dosyadan okunur
+                br.read(ch);
+                counterRemovess = (int) ch[0];
+
+                // dosya kapatilir
+                br.close();
+
+                String key = "I hope this project will finish.";
+
+                File inputFile = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.txt");
+                File encryptedFile = new File("/Users/Desktop/Chess-Game-GTU/Chess-Game-GTU/src/sample/saveGame.encrypted");
+
+                try {
+                    CryptoUtils.decrypt(key, inputFile, encryptedFile);
+                } catch (CryptoException ex) {
+                    System.out.println(ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Bu method ayni satirlarin birden cok yerde kullanilmasi sebebiyle yazildi.
+     * @param br, BufferedReader, bu parametre ile dosyadan okuma islemi gerceklestirildi.
+     * @param ch, okunan degerler bu parametreye kaydedilip sonra islendi
+     * @param row, ilk dongu icin UST SINIR
+     * @param col, ikinci dongu icin UST SINIR
+     */
+    void readToFile(BufferedReader br, char[] ch, int row, int col){
+        try {
+            int i, j;
+            //tahtanin son hali dosyadan okundu
+            // hucre\nhucre\n......\nhucre\n\n -> 1 row bu sekilde yaziliyor sonra iki \n sonra diger row!
+            for (i = 0; i < 8; i++) {
+                for (j = 0; j < 8; j++) {
+                    br.read(ch);
+                    board.get(i).get(j).setX((int) ch[0]);
+                    br.read(ch); // " " ifadesi icin
+                    br.read(ch);
+                    board.get(i).get(j).setY((int) ch[0]);
+                    br.read(ch); // " " ifadesi icin
+                    br.read(ch);
+                    Pieces p = new NoPiece();
+                    if (ch.equals("Pawn"))
+                        p = new Pawn();
+                    else if (ch.equals("Bishop"))
+                        p = new Bishop();
+                    else if (ch.equals("King"))
+                        p = new King();
+                    else if (ch.equals("Knight"))
+                        p = new Knight();
+                    else if (ch.equals("Queen"))
+                        p = new Queen();
+                    else if (ch.equals("Rook"))
+                        p = new Rook();
+                    br.read(ch);// " " ifadesi icin
+                    br.read(ch);
+                    if (ch.equals("true"))
+                        p.setColor(true);
+                    else
+                        p.setColor(false);
+                    board.get(i).get(j).setPiece(p);
+                }
+                br.read(ch);
+            }
+            br.read(ch);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * oyuna tekrar baslanmak istendiginde yazilacak kod
      */

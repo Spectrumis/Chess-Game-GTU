@@ -243,8 +243,8 @@ public class Main extends Application  {
             grid.getChildren().addAll(row[i]);
 
         Save.setOnAction(e->{//eğer Save'e tıklanılırsa
-
-            FileChooser fileChooser = new FileChooser();
+            game.saveGame();
+          /*  FileChooser fileChooser = new FileChooser();
 
             //Set extension filter
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -265,20 +265,18 @@ public class Main extends Application  {
             }catch(IOException s) {
 
                 s.printStackTrace();
-            }
+            }*/
         });
 
         Load.setOnAction(e->{//eğer Load'a tıklanılırsa
-            FileChooser fileChooser = new FileChooser();
+            game.loadGame();
+            /*FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Load File");
                 FileChooser.ExtensionFilter extFilter =new FileChooser.ExtensionFilter("*", "*");
                 fileChooser.getExtensionFilters().add(extFilter);
                 File file = fileChooser.showOpenDialog(null);
 
-            if(file!=null)
-            {
-                //Load işlemi burada yapılacaktır.
-            }
+            if(file!=null){ }*/
         });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
