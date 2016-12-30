@@ -6,7 +6,7 @@ import java.util.Random;
 
 /**
  * Created by GozdeDogan on 14.11.2016.
- * Implemented by GozdeDogan, AliEmreBuyukersoy and YasinTuluman.
+ * Implemented by GozdeDogan, AliEmreBuyukersoy and YasinTulumen.
  */
 public class Game implements Serializable {
 
@@ -137,6 +137,8 @@ public class Game implements Serializable {
         //ONEMLI: Her hamlenin kaydedilmesi gerekir, bir arraye.
         //Bu sekilde geri al butonuna basildiginda hamleleri burdan bakarak geri alabiliriz
         //Geri alinan her hamle de bu arrayden silinmeli
+        // KAYDETME ISLEMI, makeMove methodunda gerceklestirilmeli.
+        // SILME ISLEMI, recallMove methodunda gerceklestirilmeli.
     }
 
 
@@ -163,15 +165,15 @@ public class Game implements Serializable {
      * @param target
      */
     public void makeMove(Cell source, Cell target){
-        System.out.print("Movemakera girdi\n");
+        //System.out.print("Movemakera girdi\n");
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
         Pieces piece = new NoPiece();
         board.get(source.getX()).get(source.getY()).setPiece(piece);
 
         //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
-        //removesss[removesss.length][0].setCell(source);
-        //removesss[removesss.length][1].setCell(target);
+       // removesss[removesss.length][0].setCell(source);
+       // removesss[removesss.length][1].setCell(target);
 
     }
 
