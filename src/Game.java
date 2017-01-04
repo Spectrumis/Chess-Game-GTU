@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by GozdeDogan on 14.11.2016.
@@ -20,7 +17,7 @@ public class Game implements Serializable {
     private static boolean currentPlayer = true; //true = beyaz beyaz baslar
     private Cell tempCell = new Cell(); //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private ArrayList<ArrayList<Cell>> board;
-    private Cell[][] removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
+    private Stack<Cell> removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
     public ArrayList<ArrayList<Cell>> getBoard()
@@ -28,7 +25,11 @@ public class Game implements Serializable {
         return board;
     }
     public Game(){
-        removesss = new Cell[64][2];
+        removesss = new Stack<Cell>();
+        for(int i =0; i < 64*2; ++i) {
+            removesss.add(new Cell());
+        }
+
         board = new ArrayList<ArrayList<Cell>>(8);
         for(int i =0; i < 8; ++i){
             board.add(new ArrayList<Cell>());
@@ -52,14 +53,19 @@ public class Game implements Serializable {
                 board.get(i).add(new Cell());
             }
         }
-        removesss = new Cell[64][2];
-
-        Cell temp = null;
+        removesss = new Stack<Cell>();
+        for(int i =0; i < 64*2; ++i) {
+            removesss.add(new Cell());
+        }
 
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
-                temp.setCell(board.get(i).get(j));
+                board.get(i).get(j).setCell(game.board.get(i).get(j));
             }
+        }
+
+        for(int i=0; i<game.removesss.size()*2; i++){
+                removesss.get(i).setCell(game.removesss.get(i));
         }
     }
 
@@ -172,8 +178,8 @@ public class Game implements Serializable {
         board.get(source.getX()).get(source.getY()).setPiece(piece);
 
         //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
-       // removesss[removesss.length][0].setCell(source);
-       // removesss[removesss.length][1].setCell(target);
+        removesss.push(new Cell(source));
+        removesss.push(new Cell(target));
 
     }
 
@@ -274,9 +280,8 @@ public class Game implements Serializable {
             // board dan sonra 3 tane \n sonra removess
 
             //hucre hucre \n sonra diger row
-            for(int i=0; i<removesss.length; i++) {
-                for (int j = 0; j < 2; j++)
-                    bw.write(removesss[i][j].toString() + " ");
+            for(int i=0; i<removesss.size()*2; i++) {
+                bw.write(removesss.get(i).toString() + " ");
                 bw.write("\n");
             }
             bw.write("\n");
@@ -322,7 +327,7 @@ public class Game implements Serializable {
                 //READ
                 readToFile(br, ch, 8, 8);
                 // board dan sonra 3 tane \n sonra removess
-                readToFile(br, ch, removesss.length, 2);
+                readToFile(br, ch, removesss.size(), 2);
                 // son olarak da counterRemovess dosyadan okunur
                 br.read(ch);
                 counterRemovess = (int) ch[0];
@@ -405,7 +410,10 @@ public class Game implements Serializable {
 
         //hamlelerin tutuldugu array silindi, tekrar oluşturuldu.
         removesss = null;
-        removesss = new Cell[64][2];
+        removesss = new Stack<Cell>();
+        for(int i =0; i < 64*2; ++i) {
+            removesss.add(new Cell());
+        }
 
         //geri alinan hamle sayisi da sifirlandi
         counterRemovess=0;
@@ -417,18 +425,20 @@ public class Game implements Serializable {
      * ve bu hamle artık yapilmadi varsayilip removesss dan kaldirilir.
      */
     public void recallMove(){
-        //removesss.lenght 0 dan buyuk olmalı cunku en az bir hamle yapılmadan geri alma işemi gerçekleştirilemez
+        //removesss.size 0 dan buyuk olmalı cunku en az bir hamle yapılmadan geri alma işemi gerçekleştirilemez
         //yani oyunun başında bu buton calismaz!!!
-        if(counterRemovess <= 5 && removesss.length > 0){
-            int index = removesss.length;
+        if(counterRemovess <= 5 && removesss.size() > 0){
+            Cell sourceCell = new Cell();
+            Cell targetCell = new Cell();
 
+            //stackten son hamle silindi!
+            sourceCell.setCell(removesss.pop());
+            targetCell.setCell(removesss.pop());
 
-            board.get(removesss[index][0].getX()).set(removesss[index][1].getY(), board.get(removesss[index][1].getX()).get(removesss[index][1].getY()));
-            board.get(removesss[index][0].getX()).get(removesss[index][1].getY()).setPiece(board.get(removesss[index][1].getX()).get(removesss[index][1].getY()).getPiece());
-
-            //indexteki cell elemanlari silindi.
-            removesss[index][0] = null;
-            removesss[index][1] = null;
+            //index son eleman, index-1 bir önceki; son eleman target(new source), önceki eleman source(new target)!
+            //geri almak icin target source'a tasinir
+            board.get(targetCell.getX()).get(targetCell.getY()).setCell(board.get(sourceCell.getX()).get(sourceCell.getY()));
+            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
 
             counterRemovess++;
         }
@@ -446,7 +456,7 @@ public class Game implements Serializable {
             for(j=0; j < 8; ++j){
                 try
                 {
-                    //boş hücreler //boş hücrenin color u ne olacak
+                    //boş hücreler
                     Pieces piece = new NoPiece();
                     board.get(i).get(j).setPiece(piece);
                     board.get(i).get(j).piece.setColor(true); //şimdilik true atadım

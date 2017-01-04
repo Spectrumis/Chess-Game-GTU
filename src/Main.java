@@ -354,7 +354,7 @@ public class Main extends Application  {
             int m,n;
 
             if(temp!=null) {
-                //game.recallMove(); //recall Methodunu çağırıdığım zaman geri alma yapmıyor.
+                game.recallMove();
                 ListGame.pop();
                 for (m = 0; m < 8; ++m) {
                     for (n = 0; n < 8; ++n) {
