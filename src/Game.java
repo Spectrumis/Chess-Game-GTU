@@ -20,10 +20,18 @@ public class Game implements Serializable {
     private Stack<Cell> removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<ArrayList<Cell>> getBoard()
     {
         return board;
     }
+
+    /**
+     *
+     */
     public Game(){
         removesss = new Stack<Cell>();
         for(int i =0; i < 64*2; ++i) {
@@ -43,7 +51,10 @@ public class Game implements Serializable {
         this.tempCell = new Cell();
     }
 
-    //Bunu kaydededilmiş hali diye düşündüm
+    /**
+     * kaydededilmiş hali diye düşündüm
+     * @param game
+     */
     public Game(Game game){
         board = new ArrayList<ArrayList<Cell>>(8);
         for(int i =0; i < 8; ++i){
@@ -116,6 +127,10 @@ public class Game implements Serializable {
                         setTempCell(emptyCell);
                     /* suanki oyuncu degerini degistiriyoruz */
                         setCurrentPlayer(!getCurrentPlayer());
+
+                    /*PAWN SON SATIRA ULASTI MI DIYE BAKIYORUZ, ULASTIYSA PAWN KALE OLUR!!*/
+                        checkPawn();
+
                     /* ve 2 komutunu return ederek hamle yaptik diyoruz */
                         return 2;
                     }
@@ -139,12 +154,6 @@ public class Game implements Serializable {
         } catch (NullPointerException e){
             return -1;
         }
-
-        //ONEMLI: Her hamlenin kaydedilmesi gerekir, bir arraye.
-        //Bu sekilde geri al butonuna basildiginda hamleleri burdan bakarak geri alabiliriz
-        //Geri alinan her hamle de bu arrayden silinmeli
-        // KAYDETME ISLEMI, makeMove methodunda gerceklestirilmeli.
-        // SILME ISLEMI, recallMove methodunda gerceklestirilmeli.
     }
 
 
@@ -558,6 +567,25 @@ public class Game implements Serializable {
             System.out.println("INVALID!! You can not go back anymore!!");
     }
 
+    /**
+     * piyon tahtanın sonuna geldiginde degisir!
+     */
+    public void checkPawn(){
+        //beyaz oynuyor ise en UST SATIR kontol edilir. ROW=0
+        //siyah oynuyor ise en ALT SATIR kontrol edilir. ROW=7
+        int row = 7;
+        if(getCurrentPlayer())//true, beyaz
+            row = 0;
+
+
+        for(int j=0; j<8; j++)
+            if(board.get(row).get(j).getPiece() instanceof Pawn && board.get(row).get(j).getPiece().getColor() == getCurrentPlayer()){
+                Pieces piece = new Rook();
+                piece.setColor(getCurrentPlayer()); //piece rengi oynayan oyuncunun rengi olur.
+                board.get(row).get(j).setCell(new Cell(row, j, piece));
+            }
+    }
+
     public void initBoard(){
         int i; int j;
 
@@ -689,18 +717,7 @@ public class Game implements Serializable {
         }
     }
 
-    /*
-      Burada arrayi nasıl yazacağımı düşünemedim, ekrana basmak için somut bi şey olması lazım ama
-        benim elimde şimdilik somut bi şey yok kontrol ede ede mi gittim ama bilemedim tam
-        0 -> noPiece
-        Beyaz             Siyah
-        1 -> wpawn        -1 -> pawn
-        2 -> wrook        -2 -> rook
-        3 -> wknight      -3 -> knight
-        4 -> wbishop      -4 -> bishop
-        5 -> wking        -5 -> king
-        6 -> wqueen       -6 -> queen
-    */
+
     public void printBoard(){
         for(int j=7; j>=0; j--) {
             for (int i = 0; i <= 7; i++) {
