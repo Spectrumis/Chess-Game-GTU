@@ -199,38 +199,55 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerEasy() {
-        List<Cell> allMoves = new LinkedList<>();
-        List<Cell> allSource = new LinkedList<>();
-
-        for (int i=0 ; i<7 ; ++i)
-        {
-            for (int j=0 ; j<7 ; ++j)
-            {
-                if (!(board.get(i).get(j).getPiece() instanceof NoPiece))
-                {
-                    if (this.currentPlayer == board.get(i).get(j).getPiece().getColor())
-                    {
-
-                        List<Cell> moves = new LinkedList<>();
-
-                        moves = board.get(i).get(j).getPiece().checkMove(board,i,j);
-
-                        for (int k=0 ; k<moves.size() ; ++k)
-                        {
-                            allMoves.add(new Cell(moves.get(k)));
-                            allSource.add(new Cell(board.get(i).get(j)));
-                        }
+        System.out.println(getCurrentPlayer());
+        List<Cell> canMove = new ArrayList<>();
+        List<Cell> trgtMove = new ArrayList<>();
+        List<Cell> srcMove = new ArrayList<>();
+        boolean flag = true;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
+                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()){
+                    //System.out.println("im in"+i + " "+ j);
+                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
+                    //System.out.println("CAN MOVE:\n"+canMove.toString());
+                    //System.out.println("player" + this.getCurrentPlayer());
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
                     }
+                    trgtMove.addAll(canMove);
+                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
+
+                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
+
+                    canMove.clear();
                 }
             }
         }
+        for(int i=0 ; i<trgtMove.size() ; ++i) {
+            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
+            if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
+                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
+                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                System.out.println("-------->" + !this.getCurrentPlayer());
 
-        Random rand = new Random();
-        int  n = rand.nextInt(allMoves.size());
+                makeMove(srcMove.get(i), trgtMove.get(i));
+                this.setCurrentPlayer(!this.getCurrentPlayer());
 
-        makeMove(allSource.get(n), allMoves.get(n));
-        this.setCurrentPlayer(!getCurrentPlayer());
+                System.out.println("-------->" + x + " " + y);
+
+                flag = false;
+                break;
+            }
+        }
         printBoard();
+        if(flag) {
+            Random randomGenerator = new Random();
+            int randomInt = randomGenerator.nextInt(trgtMove.size());
+            System.out.println("random: " + randomInt);
+            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+            this.setCurrentPlayer(!this.getCurrentPlayer());
+        }
     }
 
     /**
@@ -239,8 +256,55 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerMedium(){
+        System.out.println(getCurrentPlayer());
+        List<Cell> canMove = new ArrayList<>();
+        List<Cell> trgtMove = new ArrayList<>();
+        List<Cell> srcMove = new ArrayList<>();
+        boolean flag = true;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
+                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()){
+                    //System.out.println("im in"+i + " "+ j);
+                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
+                    //System.out.println("CAN MOVE:\n"+canMove.toString());
+                    //System.out.println("player" + this.getCurrentPlayer());
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
+                    }
+                    trgtMove.addAll(canMove);
+                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
 
+                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
 
+                    canMove.clear();
+                }
+            }
+        }
+        for(int i=0 ; i<trgtMove.size() ; ++i) {
+            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
+            if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
+                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
+                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                System.out.println("-------->" + !this.getCurrentPlayer());
+
+                makeMove(srcMove.get(i), trgtMove.get(i));
+                this.setCurrentPlayer(!this.getCurrentPlayer());
+
+                System.out.println("-------->" + x + " " + y);
+
+                flag = false;
+                break;
+            }
+        }
+        printBoard();
+        if(flag) {
+            Random randomGenerator = new Random();
+            int randomInt = randomGenerator.nextInt(trgtMove.size());
+            System.out.println("random: " + randomInt);
+            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+            this.setCurrentPlayer(!this.getCurrentPlayer());
+        }
     }
 
     /**
@@ -248,8 +312,56 @@ public class Game implements Serializable {
      * Method icinde currentPlayer degistirilir
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
-    public List<Cell> playComputerHard(){
-        return null;
+    public void playComputerHard(){
+        System.out.println(getCurrentPlayer());
+        List<Cell> canMove = new ArrayList<>();
+        List<Cell> trgtMove = new ArrayList<>();
+        List<Cell> srcMove = new ArrayList<>();
+        boolean flag = true;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
+                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()){
+                    //System.out.println("im in"+i + " "+ j);
+                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
+                    //System.out.println("CAN MOVE:\n"+canMove.toString());
+                    //System.out.println("player" + this.getCurrentPlayer());
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
+                    }
+                    trgtMove.addAll(canMove);
+                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
+
+                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
+
+                    canMove.clear();
+                }
+            }
+        }
+        for(int i=0 ; i<trgtMove.size() ; ++i) {
+            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
+            if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
+                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
+                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                System.out.println("-------->" + !this.getCurrentPlayer());
+
+                makeMove(srcMove.get(i), trgtMove.get(i));
+                this.setCurrentPlayer(!this.getCurrentPlayer());
+
+                System.out.println("-------->" + x + " " + y);
+
+                flag = false;
+                break;
+            }
+        }
+        printBoard();
+        if(flag) {
+            Random randomGenerator = new Random();
+            int randomInt = randomGenerator.nextInt(trgtMove.size());
+            System.out.println("random: " + randomInt);
+            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+            this.setCurrentPlayer(!this.getCurrentPlayer());
+        }
     }
 
     /**
