@@ -17,8 +17,21 @@ public class Game implements Serializable {
     private static boolean currentPlayer = true; //true = beyaz beyaz baslar
     private Cell tempCell = new Cell(); //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private ArrayList<ArrayList<Cell>> board;
+    private ArrayList<ArrayList<Cell>> fakeBoard;
+
     private Stack<Cell> removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
+    /**
+     * bu degerler minimax algoritmasi icin kullanilacak
+     */
+    private static final double PAWN = 1.0;
+    private static final double KNIGHT = 3.2;
+    private static final double BISHOP = 3.33;
+    private static final double ROOK = 5.1;
+    private static final double QUEEN = 8.8;
+    private static final double KING = Double.POSITIVE_INFINITY;
+
+
 
     /**
      *
@@ -249,14 +262,18 @@ public class Game implements Serializable {
                 break;
             }
         }
-        printBoard();
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
             System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
             this.setCurrentPlayer(!this.getCurrentPlayer());
+
         }
+        printBoard();
+        recallMove();
+        printBoard();
+
     }
 
     /**
@@ -306,7 +323,6 @@ public class Game implements Serializable {
                 break;
             }
         }
-        printBoard();
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
@@ -363,7 +379,6 @@ public class Game implements Serializable {
                 break;
             }
         }
-        printBoard();
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
@@ -372,7 +387,51 @@ public class Game implements Serializable {
             this.setCurrentPlayer(!this.getCurrentPlayer());
         }
     }
+    private double evaluate(){
+        double total=0.0;
 
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!(fakeBoard.get(i).get(j).getPiece() instanceof NoPiece)) {
+                    if (fakeBoard.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()) {
+                        System.out.println("i- "+i+"j- "+j);
+
+                        if(fakeBoard.get(i).get(j).getPiece() instanceof Pawn)
+                            total += PAWN;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Knight)
+                            total += KNIGHT;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Bishop)
+                            total += BISHOP;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Rook)
+                            total += ROOK;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Queen)
+                            total += QUEEN;
+/*                        else if(fakeBoard.get(i).get(j).getPiece() instanceof King)
+                            total += KING;
+*/
+                    }
+                    else{
+                        if(fakeBoard.get(i).get(j).getPiece() instanceof Pawn)
+                            total -= PAWN;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Knight)
+                            total -= KNIGHT;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Bishop)
+                            total -= BISHOP;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Rook)
+                            total -= ROOK;
+                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Queen)
+                            total -= QUEEN;
+/*                        else if(fakeBoard.get(i).get(j).getPiece() instanceof King)
+                            total -= KING;
+*/
+                    }
+
+                }
+            }
+        }
+        System.out.println("total-------- "+total);
+        return total;
+    }
     /**
      * kapatma dugmesine basildiginda oyunu kaydetmek icin yazilan metot
      * Yaptigi islem, Game class i attributelerinin degerlerini dosyaya yazmak
