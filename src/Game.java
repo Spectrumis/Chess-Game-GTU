@@ -249,6 +249,9 @@ public class Game implements Serializable {
                 break;
             }
         }
+
+        checkPawn();
+
         printBoard();
         if(flag) {
             Random randomGenerator = new Random();
@@ -573,16 +576,16 @@ public class Game implements Serializable {
     public void checkPawn(){
         //beyaz oynuyor ise en UST SATIR kontol edilir. ROW=0
         //siyah oynuyor ise en ALT SATIR kontrol edilir. ROW=7
-        int row = 7;
+        int j = 7;
         if(getCurrentPlayer())//true, beyaz
-            row = 0;
+            j = 0;
 
 
-        for(int j=0; j<8; j++)
-            if(board.get(row).get(j).getPiece() instanceof Pawn && board.get(row).get(j).getPiece().getColor() == getCurrentPlayer()){
+        for(int i=0; i<8; i++)
+            if(board.get(i).get(j).getPiece() instanceof Pawn && board.get(i).get(j).getPiece().getColor() == getCurrentPlayer()){
                 Pieces piece = new Rook();
                 piece.setColor(getCurrentPlayer()); //piece rengi oynayan oyuncunun rengi olur.
-                board.get(row).get(j).setCell(new Cell(row, j, piece));
+                board.get(i).get(j).setCell(new Cell(i, j, piece));
             }
     }
 
