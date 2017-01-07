@@ -51,10 +51,10 @@ public class Main extends Application  {
         GridPane grid=new GridPane();
         OpenDialogue Open=new OpenDialogue();
         ExtendedButton Restart=new ExtendedButton();
-        Restart.setMinSize(80,80);
+        Restart.setMinSize(60,60);
         Restart.setStyle("-fx-border-color: gray; -fx-background-image: url('img/restart.png')");
         ExtendedButton Previous=new ExtendedButton();
-        Previous.setMinSize(80,80);
+        Previous.setMinSize(60,60);
         Previous.setStyle("-fx-border-color: gray; -fx-background-image: url('img/previous.png')");
 
         int i,j;
@@ -64,7 +64,7 @@ public class Main extends Application  {
             for(j=0;j<8;++j)
             {
                 button[i][j]=new ExtendedButton();
-                button[i][j].setMinSize(80,80);
+                button[i][j].setMinSize(60,60);
                 button[i][j].setStyle(" -fx-border-color: gray;  -fx-background-radius:0");
                 button[i][j].setCoor(new Coordinate(i,j));
                 a=i;
@@ -206,7 +206,7 @@ public class Main extends Application  {
         }
         BorderPane pane=new BorderPane();
         pane.setLeft(grid);
-        Scene scene=new Scene(pane,800,680);
+        Scene scene=new Scene(pane,600,520);
         MenuBar menuBar = new MenuBar();
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
@@ -224,14 +224,14 @@ public class Main extends Application  {
         {
             col[i-1] = new Label(alphabet[i-1]);
             col[i-1].setStyle("-fx-border-color: gray;");
-            col[i-1].setMinSize(80,20);
+            col[i-1].setMinSize(60,20);
             GridPane.setConstraints(col[i-1],i-1,0);
         }
         for(i=1;i<9;++i)
         {
             row[i-1] = new Label(""+i);
             row[i-1].setStyle("-fx-border-color: gray;");
-            row[i-1].setMinSize(20,80);
+            row[i-1].setMinSize(20,60);
             GridPane.setConstraints(row[i-1],8,i);
         }
         for(i=0;i<8;++i)
@@ -598,7 +598,7 @@ public class Main extends Application  {
                 Table[i] = new ExtendedButton[8];
                 for (j = 0; j < 8; ++j) {
                     Table[i][j] = new ExtendedButton();
-                    Table[i][j].setMinSize(80, 80);
+                    Table[i][j].setMinSize(60, 60);
 
                     Table[i][j].setStyle(Game[i][j].getStyle());
                     Table[i][j].setCoor(new Coordinate(i, j));
