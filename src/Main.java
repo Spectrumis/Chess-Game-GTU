@@ -74,7 +74,6 @@ public class Main extends Application  {
 
                     ArrayList<ArrayList<Cell>> board=game.getBoard();
                     int a,b;
-                    game.printBoard();
                     for(a=0;a<board.size();++a)
                     {
                         for(b=0;b<board.get(a).size();++b)

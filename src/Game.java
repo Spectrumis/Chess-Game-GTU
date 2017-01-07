@@ -205,6 +205,8 @@ public class Game implements Serializable {
 
     }
 
+
+
     /**
      * Computer icin , easy mod secildiginde bu fonksiyon cagrilacak
      * Method icinde currentPlayer degistirilir
@@ -267,12 +269,10 @@ public class Game implements Serializable {
             int randomInt = randomGenerator.nextInt(trgtMove.size());
             System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+
             this.setCurrentPlayer(!this.getCurrentPlayer());
 
         }
-        printBoard();
-        recallMove();
-        printBoard();
 
     }
 
@@ -338,54 +338,82 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerHard(){
-        System.out.println(getCurrentPlayer());
-        List<Cell> canMove = new ArrayList<>();
-        List<Cell> trgtMove = new ArrayList<>();
-        List<Cell> srcMove = new ArrayList<>();
-        boolean flag = true;
+        fakeBoard = new ArrayList<ArrayList<Cell>>(getBoard());
+        int depth = 5;
+        maxofHard(depth);
+    }
+    private double maxofHard(int depth){
+        double v = Double.NEGATIVE_INFINITY;
+        List<Cell> notMove = new LinkedList<>();
+
+        if(depth<=0){
+            return evaluate();
+        }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
-                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()){
-                    //System.out.println("im in"+i + " "+ j);
-                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
-                    //System.out.println("CAN MOVE:\n"+canMove.toString());
-                    //System.out.println("player" + this.getCurrentPlayer());
-                    for (int k = 0; k < canMove.size(); k++) {
-                        srcMove.add(new Cell(board.get(i).get(j)));
+                if (fakeBoard.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer() &&
+                        !(fakeBoard.get(i).get(j).getPiece() instanceof NoPiece)){
+                    notMove.addAll(fakeBoard.get(i).get(j).getPiece().checkMove(fakeBoard, i, j));
+
+                    if(!notMove.isEmpty()){
+                        for (int k = 0; k < notMove.size(); k++) {
+                            makeMove(fakeBoard.get(i).get(j), notMove.get(k));
+                            this.setCurrentPlayer(!this.getCurrentPlayer());
+                            System.out.println("fake1 " + depth);
+                            printFake();
+                            double curVal = minofHard(--depth);
+                            fakeBoard.get(fakeBoard.get(i).get(j).getX()).get(fakeBoard.get(i).get(j).getY()).setPiece(notMove.get(k).getPiece());
+                            fakeBoard.get(notMove.get(k).getX()).get(notMove.get(k).getY()).setPiece(new NoPiece());
+                            System.out.println("fake2 " + depth);
+                            printFake();
+                            if(curVal>v){
+                                v=curVal;
+                            }
+
+                        }
                     }
-                    trgtMove.addAll(canMove);
-                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
-
-                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
-
-                    canMove.clear();
+                    notMove.clear();
                 }
             }
         }
-        for(int i=0 ; i<trgtMove.size() ; ++i) {
-            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
-            if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
-                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
-                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
-                System.out.println("-------->" + !this.getCurrentPlayer());
+        return v;
+    }
+    /**
+     * Computer icin minimax algoritmasindaki min methodu
+     * bu method user icin en mantikli olmayan hamleyi oynayacak
+     * @return source ve targetin icinde bulundugu bir liste
+     */
+    private double minofHard(int depth){
+        double v = Double.POSITIVE_INFINITY;
+        List<Cell> notMove = new LinkedList<>();
+        if(depth<=0){
+            return evaluate();
+        }
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (fakeBoard.get(i).get(j).getPiece().getColor() == !this.getCurrentPlayer() &&
+                        !(fakeBoard.get(i).get(j).getPiece() instanceof NoPiece)){
+                    notMove.addAll(fakeBoard.get(i).get(j).getPiece().checkMove(fakeBoard, i, j));
 
-                makeMove(srcMove.get(i), trgtMove.get(i));
-                this.setCurrentPlayer(!this.getCurrentPlayer());
+                    if(!notMove.isEmpty()){
+                        for (int k = 0; k < notMove.size(); k++) {
 
-                System.out.println("-------->" + x + " " + y);
+                            makeMove(fakeBoard.get(i).get(j), notMove.get(k));
+                            this.setCurrentPlayer(!this.getCurrentPlayer());
 
-                flag = false;
-                break;
+                            double curVal = maxofHard(--depth);
+                            fakeBoard.get(fakeBoard.get(i).get(j).getX()).get(fakeBoard.get(i).get(j).getY()).setPiece(notMove.get(k).getPiece());
+                            fakeBoard.get(notMove.get(k).getX()).get(notMove.get(k).getY()).setPiece(new NoPiece());
+                            if(curVal<v){
+                                v=curVal;
+                            }
+                        }
+                    }
+                    notMove.clear();
+                }
             }
         }
-        if(flag) {
-            Random randomGenerator = new Random();
-            int randomInt = randomGenerator.nextInt(trgtMove.size());
-            System.out.println("random: " + randomInt);
-            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
-            this.setCurrentPlayer(!this.getCurrentPlayer());
-        }
+        return v;
     }
     private double evaluate(){
         double total=0.0;
@@ -775,7 +803,46 @@ public class Game implements Serializable {
             color = true;
         }
     }
-
+    public void printFake(){
+        for(int j=7; j>=0; j--) {
+            for (int i = 0; i <= 7; i++) {
+                if (!fakeBoard.get(i).get(j).piece.getColor()) {
+                    //System.out.println("PrintBoard, false, siyah!!");
+                    if (fakeBoard.get(i).get(j).getPiece() instanceof Pawn) {
+                        System.out.print(" P");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Rook) {
+                        System.out.print(" K");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Knight) {
+                        System.out.print(" A");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Bishop) {
+                        System.out.print(" F");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof King) {
+                        System.out.print(" S");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Queen) {
+                        System.out.print(" V");
+                    } else
+                        System.out.print(" .");
+                } else if (fakeBoard.get(i).get(j).piece.getColor()) {
+                    //System.out.println("PrintBoard, true, beyaz!!");
+                    if (fakeBoard.get(i).get(j).getPiece() instanceof Pawn) {
+                        System.out.print("-P");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Rook) {
+                        System.out.print("-K");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Knight) {
+                        System.out.print("-A");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Bishop) {
+                        System.out.print("-F");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof King) {
+                        System.out.print("-S");
+                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Queen) {
+                        System.out.print("-V");
+                    } else
+                        System.out.print(" .");
+                }
+            }
+            System.out.println();
+        }
+    }
 
     public void printBoard(){
         for(int j=7; j>=0; j--) {
