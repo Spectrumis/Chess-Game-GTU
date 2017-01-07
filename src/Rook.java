@@ -73,7 +73,7 @@ public class Rook extends Pieces {
             else
                 break;
         }
-
+        
         //Kalenin her yone dogru oynayabilecegi hamleleri move listesine atadik ve donduruyoruz
         return moves;
     }
