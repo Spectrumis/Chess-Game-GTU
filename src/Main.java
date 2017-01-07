@@ -1,8 +1,6 @@
-import com.sun.glass.ui.CommonDialogs;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -12,12 +10,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.File;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,7 +32,7 @@ public class Main extends Application  {
     ExtendedButton[][] button=new ExtendedButton[8][];//boarddaki satranç tahtasını represent eder.
     Stack<Table> ListGame=new Stack<Table>();//oyunu geri alabilmek için stack oluşturuldu.
     List<Cell> tempMovesList = new ArrayList<Cell>();//Algoritma tarafından gelen geçerli hareketlerin olduğu arraydir.
-    int x=0, y=0, currentStatus = 0, a=0;
+    int x=0, y=0, currentStatus = 0, a;
     boolean startingStatusHandler = false;
     int markButton=0;
     Game game = new Game();
@@ -65,8 +61,8 @@ public class Main extends Application  {
             {
                 button[i][j]=new ExtendedButton();
                 button[i][j].setMinSize(60,60);
-                button[i][j].setStyle(" -fx-border-color: gray;  -fx-background-radius:0");
                 button[i][j].setCoor(new Coordinate(i,j));
+
                 a=i;
                 b=j;
 
@@ -114,7 +110,6 @@ public class Main extends Application  {
                             }
 
                     }
-
                     refreshTable();
                     CurrentButton=(ExtendedButton)e.getSource();
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
@@ -123,7 +118,7 @@ public class Main extends Application  {
 
                         System.out.print("Status:" + currentStatus + "\n");
 
-                        System.out.print("TempListCounter:" + a + "\n");
+                    //    System.out.print("TempListCounter:" + a + "\n");
                     }
                     if (game.getIsComputerOn() != 0 && (currentStatus == 2 || !startingStatusHandler)) {
                         tempMovesList.clear();
@@ -150,10 +145,10 @@ public class Main extends Application  {
                     if(currentStatus==1)
                     {
                         for (a = markButton; a < tempMovesList.size(); ++a) {
-                            markButton(button[tempMovesList.get(a).getX()][tempMovesList.get(a).getY()]);
+                            markButton(tempMovesList.get(a).getX(), tempMovesList.get(a).getY());
                         }
 
-                        markButton(CurrentButton);
+                        markButton(CurrentButton.getCoorX(), CurrentButton.getCoorY());
                     }
                     if(currentStatus==2)
                     {
@@ -178,7 +173,7 @@ public class Main extends Application  {
                 GridPane.setConstraints(button[i][j],7-i,7-j);
             }
         }
-        setButoons(button);//taşları boarda yerleştiriyorum.
+        setButtons(button);//taşları boarda yerleştiriyorum.
         //BU kısımdada boardı ekrana yerleştiriyorum.
         Label Space2=new Label();
         Space2.setText("       ");
@@ -297,7 +292,7 @@ public class Main extends Application  {
                     button[a][b].setDisable(false);
                 }
             }
-            setButoons(button);
+            setButtons(button);
             Restart.setDisable(true);
 
 
@@ -345,7 +340,7 @@ public class Main extends Application  {
         Open.OpenMenu(Start,button);
 
         Restart.setOnAction(e->{//geçerli olan oyunun yeniden başlaması yani sağdaki button olan restart.
-            setButoons(button);
+            setButtons(button);
             currentStatus = 0;
             game.restartGame();
         });
@@ -372,7 +367,7 @@ public class Main extends Application  {
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
                         button[m][n].setStyle(" -fx-border-color: gray;  -fx-background-radius:0");
-                setButoons(button);
+                setButtons(button);
 
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
@@ -540,48 +535,89 @@ public class Main extends Application  {
         }
 
     }
-    private void markButton(ExtendedButton button)
-    {
-        button.setStyle("-fx-border-color: lawngreen; -fx-border-width: 3; -fx-background-image: url('img/"+"" +
-                getPieces(button)+".png')");
+    private void markButton(int x, int y) {
+
+        int a,b;
+
+        button[x][y].setStyle("-fx-border-color: lawngreen; -fx-border-width: 3; -fx-background-image: url('img/"+"" +  getPieces(button[x][y])+".png')");
+        //duzeltilmesi gerek
+
+        /*for(a=0;a<8;++a) {
+            for(b=0;b<8;++b){
+                if(a%2==0){
+                    if(b%2==0){
+                        button[a][b].setStyle("-fx-background-color: #f4ca8b");
+                    }
+                    else{
+                        button[a][b].setStyle("-fx-background-color: #492e04");
+                    }
+                }
+                else{
+                    if(b%2!=0){
+                        button[a][b].setStyle("-fx-background-color: #f4ca8b");
+                    }
+                    else{
+                        button[a][b].setStyle("-fx-background-color: #492e04");
+                    }
+                }
+            }
+        }*/
     }
-    private void setButoons(ExtendedButton [][] button)
+    private void setButtons(ExtendedButton [][] button)
     {
         int i,a,b;
-        for(a=0;a<8;++a)
-        {
-            for(b=2;b<6;++b)
-            {
-                button[a][b].setStyle("-fx-border-color: gray;");
-            }
-        }
+
         for(i=0;i<8;++i)
         {
             button[i][6].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
 
         }
-        button[0][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-        button[7][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
-        button[1][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-        button[6][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
-        button[2][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-        button[5][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
-        button[4][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
-        button[3][7].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
-        button[0][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-        button[7][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
-        button[1][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-        button[6][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
-        button[2][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
-        button[5][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+        button[0][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wrook.png')");
+        button[7][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wrook.png')");
+        button[1][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wknight.png')");
+        button[6][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wknight.png')");
+        button[2][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wbishop.png')");
+        button[5][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wbishop.png')");
+        button[4][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wqueen.png')");
+        button[3][7].setStyle("-fx-border-color: gray;-fx-background-image: url('img/wking.png')");
+        button[0][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/rook.png')");
+        button[7][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/rook.png')");
+        button[1][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/knight.png')");
+        button[6][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/knight.png')");
+        button[2][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/bishop.png')");
+        button[5][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/bishop.png')");
         button[4][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
-        button[3][0].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+        button[3][0].setStyle("-fx-border-color: gray;-fx-background-image: url('img/king.png')");
         for(i=0;i<8;++i)
         {
             button[i][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
 
         }
-    }
+        /*for(a=0;a<8;++a)
+        {
+            for(b=0;b<8;++b)
+            {
+                if(a%2==0){
+                    if(b%2==0){
+                        button[a][b].setStyle("-fx-background-color: #f4ca8b, transparent");
+                    }
+                    else{
+                        button[a][b].setStyle("-fx-background-color: #492e04, transparent");
+                    }
+                }
+                else{
+                    if(b%2!=0){
+                        button[a][b].setStyle("-fx-background-color: #f4ca8b, transparent");
+                    }
+                    else{
+                        button[a][b].setStyle("-fx-background-color: #492e04, transparent");
+                    }
+                }
+                // button[a][b].setStyle("-fx-border-color: gray;");
+            }
+        }*/
+}
+
 
     /**
      * Created by Recep Sivri on 28.11.2016.
