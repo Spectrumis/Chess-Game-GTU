@@ -129,7 +129,7 @@ public class Game implements Serializable {
                         setCurrentPlayer(!getCurrentPlayer());
 
                     /*PAWN SON SATIRA ULASTI MI DIYE BAKIYORUZ, ULASTIYSA PAWN KALE OLUR!!*/
-                        checkPawn();
+                        //checkPawn();
 
                     /* ve 2 komutunu return ederek hamle yaptik diyoruz */
                         return 2;

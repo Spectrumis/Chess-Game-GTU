@@ -7,6 +7,8 @@ import java.util.List;
  * Implemented by AliEmreBuyukersoy on 15.11.2016.
  */
 public class Rook extends Pieces {
+    private boolean isMoved = false;
+
     @Override
     public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y) {
         List<Cell> moves = new LinkedList<>();
@@ -78,4 +80,5 @@ public class Rook extends Pieces {
         return moves;
     }
 
+    
 }
