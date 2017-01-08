@@ -293,7 +293,8 @@ public class Main extends Application  {
             }
             setButtons(button);
             Restart.setDisable(true);
-
+            //new game dendiginde oyun yeniden baslar, SIFIRDAN!!
+            game = new Game();
 
         });
         // --- Menu Edit
