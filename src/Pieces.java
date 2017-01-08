@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class Pieces implements Serializable{
 
     public boolean color; //tasin rengi true->beyaz false ->siyah oynayan kim
-
+    private boolean isMoved = false;
 
     public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y){
         return null;
@@ -35,4 +35,7 @@ public abstract class Pieces implements Serializable{
 
     public boolean inDanger(ArrayList<ArrayList<Cell>> board){ return false; }
     public boolean kingInList(List<Cell> moves){ return false; }
+    public void setIsMoved(boolean value){ isMoved = value; }
+
+    public boolean getIsMoved(){ return isMoved; }
 }

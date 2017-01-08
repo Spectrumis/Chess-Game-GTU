@@ -80,5 +80,11 @@ public class Rook extends Pieces {
         return moves;
     }
 
-    
+    public void setIsMoved(boolean value){
+        isMoved = value;
+    }
+
+    public boolean getIsMoved(){
+        return isMoved;
+    }
 }

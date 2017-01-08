@@ -180,6 +180,22 @@ public class Game implements Serializable {
      * @param target
      */
     public void makeMove(Cell source, Cell target){
+        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King){
+            if((source.getX()-target.getX()) == 2){
+                board.get(2).get(source.getY()).setPiece(board.get(0).get(source.getY()).getPiece());
+                Pieces piece2 = new NoPiece();
+                board.get(0).get(source.getY()).setPiece(piece2);
+            }
+            else if((source.getX()-target.getX()) == -2){
+                board.get(4).get(source.getY()).setPiece(board.get(7).get(source.getY()).getPiece());
+                Pieces piece3 = new NoPiece();
+                board.get(7).get(source.getY()).setPiece(piece3);
+            }
+        }
+
+        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King || board.get(source.getX()).get(source.getY()).getPiece() instanceof Rook){
+            board.get(source.getX()).get(source.getY()).getPiece().setIsMoved(true);
+        }
         //System.out.print("Movemakera girdi\n");
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
