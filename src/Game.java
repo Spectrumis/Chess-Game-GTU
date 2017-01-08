@@ -30,6 +30,7 @@ public class Game implements Serializable {
     private static final double QUEEN = 8.8;
     private static final double KING = Double.POSITIVE_INFINITY;
     private static int movementCounter = 0;
+    private static final int BIGDEPTH = 4;
 
 
     /**
@@ -207,6 +208,7 @@ public class Game implements Serializable {
 
         board.get(target.getX()).get(target.getY()).setPiece(board.get(source.getX()).get(source.getY()).getPiece());
         board.get(source.getX()).get(source.getY()).setPiece(new NoPiece());
+
     }
 
 
@@ -226,7 +228,7 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerEasy() {
-        System.out.println(getCurrentPlayer());
+        //System.out.println(getCurrentPlayer());
         List<Cell> canMove = new ArrayList<>();
         List<Cell> trgtMove = new ArrayList<>();
         List<Cell> srcMove = new ArrayList<>();
@@ -256,13 +258,13 @@ public class Game implements Serializable {
             int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
             if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
                     !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
-                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
-                System.out.println("-------->" + !this.getCurrentPlayer());
+                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                //System.out.println("-------->" + !this.getCurrentPlayer());
 
                 makeMove(srcMove.get(i), trgtMove.get(i));
                 this.setCurrentPlayer(!this.getCurrentPlayer());
 
-                System.out.println("-------->" + x + " " + y);
+                //System.out.println("-------->" + x + " " + y);
 
                 flag = false;
                 break;
@@ -271,7 +273,7 @@ public class Game implements Serializable {
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
-            System.out.println("random: " + randomInt);
+            //System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
             this.setCurrentPlayer(!this.getCurrentPlayer());
 
@@ -285,7 +287,7 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerMedium(){
-        System.out.println(getCurrentPlayer());
+        //System.out.println(getCurrentPlayer());
         List<Cell> canMove = new ArrayList<>();
         List<Cell> trgtMove = new ArrayList<>();
         List<Cell> srcMove = new ArrayList<>();
@@ -314,13 +316,13 @@ public class Game implements Serializable {
             int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
             if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
                     !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
-                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
-                System.out.println("-------->" + !this.getCurrentPlayer());
+                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                //System.out.println("-------->" + !this.getCurrentPlayer());
 
                 makeMove(srcMove.get(i), trgtMove.get(i));
                 this.setCurrentPlayer(!this.getCurrentPlayer());
 
-                System.out.println("-------->" + x + " " + y);
+                //System.out.println("-------->" + x + " " + y);
 
                 flag = false;
                 break;
@@ -329,7 +331,7 @@ public class Game implements Serializable {
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
-            System.out.println("random: " + randomInt);
+            //System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
             this.setCurrentPlayer(!this.getCurrentPlayer());
         }
@@ -341,19 +343,26 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerHard(){
-        int depth = 2;
+        int depth = BIGDEPTH;
+
+
         maxofHard(depth);
+
     }
     private double maxofHard(int depth){
         double v = Double.NEGATIVE_INFINITY;
         List<Cell> notMove = new LinkedList<>();
+        ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
+
         Cell src = null;
         Cell trgt = null;
         if(depth==0){
-            System.out.println("MAX BAK TAM OLARAK BURADA!");
+            //System.out.println("MAX BAK TAM OLARAK BURADA!");
 
             return evaluate();
         }
+        System.out.println("+++++++" + movementCounter);
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer() &&
@@ -363,18 +372,21 @@ public class Game implements Serializable {
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
                             ++movementCounter;
+                            fakeBoard.addAll(board);
                             makeMove(board.get(i).get(j), notMove.get(k));
-                            System.out.println("\nmax i " + i +"j " + j + "depth " + depth + " cell " + board.get(i).get(j).getPiece().toString()+ " player" + this.getCurrentPlayer());
+                            //System.out.println("\nmax i " + i +"j " + j + "depth " + depth + " cell " + board.get(i).get(j).getPiece().toString()+ " player" + this.getCurrentPlayer());
                             //printBoard();
                             //System.out.println("i " + i +"j " + j);
                             //System.out.println("----> " + board.get(i).get(j).toString());
                             double curVal = minofHard((depth-1));
 
                             undoMove(notMove.get(k), board.get(i).get(j));
+                            board.clear();
+                            board.addAll(fakeBoard);
                             //System.out.println("fake2 " + depth);
                             if(curVal>v){
                                 v=curVal;
-                                if(depth>= 2){
+                                if(depth>= BIGDEPTH){
                                     src = new Cell(board.get(i).get(j));
                                     trgt = new Cell(notMove.get(k));
                                 }
@@ -386,10 +398,10 @@ public class Game implements Serializable {
                 }
             }
         }
-        if(depth>=2) {
+        if(depth>=BIGDEPTH) {
+
             printBoard();
             makeMove(src, trgt);
-            System.out.println("+++++++" + movementCounter);
             this.setCurrentPlayer(!this.getCurrentPlayer());
         }
         return v;
@@ -402,6 +414,7 @@ public class Game implements Serializable {
     private double minofHard(int depth){
         double v = Double.POSITIVE_INFINITY;
         List<Cell> notMove = new LinkedList<>();
+        ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
         if(depth==0){
             System.out.println("MIN BAK TAM OLARAK BURADA!");
 
@@ -416,12 +429,14 @@ public class Game implements Serializable {
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
                             ++movementCounter;
+                            fakeBoard.addAll(board);
                             makeMove(board.get(i).get(j), notMove.get(k));
-                            System.out.println("\nmin i " + i +" j " + j + " depth " + depth + " cell " + board.get(i).get(j).getPiece().toString() + " player" + this.getCurrentPlayer());
+                            //System.out.println("\nmin i " + i +" j " + j + " depth " + depth + " cell " + board.get(i).get(j).getPiece().toString() + " player" + this.getCurrentPlayer());
                             //printBoard();
 
                             double curVal = maxofHard((depth-1));
-
+                            board.clear();
+                            board.addAll(fakeBoard);
                             undoMove(notMove.get(k), board.get(i).get(j));
                             if(curVal<v){
                                 v=curVal;
