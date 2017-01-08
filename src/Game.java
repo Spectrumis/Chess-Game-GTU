@@ -142,7 +142,7 @@ public class Game implements Serializable {
                         setCurrentPlayer(!getCurrentPlayer());
 
                     /*PAWN SON SATIRA ULASTI MI DIYE BAKIYORUZ, ULASTIYSA PAWN KALE OLUR!!*/
-                        checkPawn();
+                        //checkPawn();
 
                     /* ve 2 komutunu return ederek hamle yaptik diyoruz */
                         return 2;
@@ -193,6 +193,22 @@ public class Game implements Serializable {
      * @param target
      */
     public void makeMove(Cell source, Cell target){
+        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King){
+            if((source.getX()-target.getX()) == 2){
+                board.get(2).get(source.getY()).setPiece(board.get(0).get(source.getY()).getPiece());
+                Pieces piece2 = new NoPiece();
+                board.get(0).get(source.getY()).setPiece(piece2);
+            }
+            else if((source.getX()-target.getX()) == -2){
+                board.get(4).get(source.getY()).setPiece(board.get(7).get(source.getY()).getPiece());
+                Pieces piece3 = new NoPiece();
+                board.get(7).get(source.getY()).setPiece(piece3);
+            }
+        }
+
+        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King || board.get(source.getX()).get(source.getY()).getPiece() instanceof Rook){
+            board.get(source.getX()).get(source.getY()).getPiece().setIsMoved(true);
+        }
         //System.out.print("Movemakera girdi\n");
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
@@ -264,6 +280,13 @@ public class Game implements Serializable {
                 break;
             }
         }
+<<<<<<< HEAD
+=======
+
+        checkPawn();
+
+        printBoard();
+>>>>>>> master
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
@@ -660,16 +683,16 @@ public class Game implements Serializable {
     public void checkPawn(){
         //beyaz oynuyor ise en UST SATIR kontol edilir. ROW=0
         //siyah oynuyor ise en ALT SATIR kontrol edilir. ROW=7
-        int row = 7;
+        int j = 7;
         if(getCurrentPlayer())//true, beyaz
-            row = 0;
+            j = 0;
 
 
-        for(int j=0; j<8; j++)
-            if(board.get(row).get(j).getPiece() instanceof Pawn && board.get(row).get(j).getPiece().getColor() == getCurrentPlayer()){
+        for(int i=0; i<8; i++)
+            if(board.get(i).get(j).getPiece() instanceof Pawn && board.get(i).get(j).getPiece().getColor() == getCurrentPlayer()){
                 Pieces piece = new Rook();
                 piece.setColor(getCurrentPlayer()); //piece rengi oynayan oyuncunun rengi olur.
-                board.get(row).get(j).setCell(new Cell(row, j, piece));
+                board.get(i).get(j).setCell(new Cell(i, j, piece));
             }
     }
 

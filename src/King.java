@@ -8,6 +8,8 @@ import java.util.List;
  *
  */
 public class King extends Pieces {
+    private boolean isMoved = false;
+
     @Override
     public List<Cell> checkMove(ArrayList<ArrayList<Cell>> board, int x, int y) {
         List<Cell> moves = new LinkedList<>();
@@ -42,7 +44,25 @@ public class King extends Pieces {
         if(x+1 <= 7 && y+1 <= 7 && (board.get(x+1).get(y+1).getPiece() instanceof NoPiece || board.get(x+1).get(y+1).getPiece().getColor() != curColor))
             moves.add(new Cell(board.get(x+1).get(y+1)));
 
-
+        /* Rook hamlesi iÃ§in olan bolum */
+        if(!this.getIsMoved()){
+            if(board.get(x-1).get(y).getPiece() instanceof NoPiece){
+                if(board.get(x-2).get(y).getPiece() instanceof NoPiece){
+                    if((board.get(x-3).get(y).getPiece() instanceof Rook) && !board.get(x-3).get(y).getPiece().getIsMoved()){
+                        moves.add(new Cell(board.get(x-2).get(y)));
+                    }
+                }
+            }
+            if(board.get(x+1).get(y).getPiece() instanceof NoPiece){
+                if(board.get(x+2).get(y).getPiece() instanceof NoPiece){
+                    if(board.get(x+3).get(y).getPiece() instanceof NoPiece){
+                        if((board.get(x+4).get(y).getPiece() instanceof Rook) && !board.get(x+4).get(y).getPiece().getIsMoved()){
+                            moves.add(new Cell(board.get(x+2).get(y)));
+                        }
+                    }
+                }
+            }
+        }
 /*
         //Sol tarafina dogru hareket edebilirligine bakarak gidiyorum. Ilk bakacagim
         //yer olarak i ye x-1 atadim. Yani tasin hemen soluna bakicam ilk
@@ -62,7 +82,7 @@ public class King extends Pieces {
         }
 
         //Ayni islemleri saga dogru bakiyorum
-        i = x+1; // x+1, y -> SAÐ
+        i = x+1; // x+1, y -> SAï¿½
         if(i <= 7){
             if(board.get(i).get(y).getPiece() instanceof NoPiece || board.get(i).get(y).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(i).get(y)));
@@ -168,5 +188,13 @@ public class King extends Pieces {
         }
 
         return false;
+    }
+
+    public void setIsMoved(boolean value){
+        isMoved = value;
+    }
+
+    public boolean getIsMoved(){
+        return isMoved;
     }
 }
