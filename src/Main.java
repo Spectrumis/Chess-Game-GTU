@@ -592,29 +592,13 @@ public class Main extends Application  {
             button[i][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
 
         }
-        /*for(a=0;a<8;++a)
+        for(a=0;a<8;++a)
         {
-            for(b=0;b<8;++b)
+            for(b=2;b<6;++b)
             {
-                if(a%2==0){
-                    if(b%2==0){
-                        button[a][b].setStyle("-fx-background-color: #f4ca8b, transparent");
-                    }
-                    else{
-                        button[a][b].setStyle("-fx-background-color: #492e04, transparent");
-                    }
-                }
-                else{
-                    if(b%2!=0){
-                        button[a][b].setStyle("-fx-background-color: #f4ca8b, transparent");
-                    }
-                    else{
-                        button[a][b].setStyle("-fx-background-color: #492e04, transparent");
-                    }
-                }
-                // button[a][b].setStyle("-fx-border-color: gray;");
+                        button[a][b].setStyle("-fx-border-color: gray;");
             }
-        }*/
+        }
 }
 
 
