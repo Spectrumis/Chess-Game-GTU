@@ -7,6 +7,7 @@ import java.util.*;
  */
 public class Game implements Serializable {
 
+    private static int kingDangerStatus = 0; //king tehlike durum kontrolu icin
     private static int isComputerOn = 0; //oyuncu vs computer ilk basta kapalı
     /** Degerler soyle:
      *  0 = No Computer (player vs player)
@@ -17,7 +18,6 @@ public class Game implements Serializable {
     private static boolean currentPlayer = true; //true = beyaz beyaz baslar
     private Cell tempCell = new Cell(); //Bu obje play methodunun bir onceki tıklanan buttonu tutabilmesi icin var
     private ArrayList<ArrayList<Cell>> board;
-    private ArrayList<ArrayList<Cell>> fakeBoard;
 
     private Stack<Cell> removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
@@ -30,7 +30,8 @@ public class Game implements Serializable {
     private static final double ROOK = 5.1;
     private static final double QUEEN = 8.8;
     private static final double KING = Double.POSITIVE_INFINITY;
-
+    private static int movementCounter = 0;
+    private static final int BIGDEPTH = 4;
 
 
     /**
@@ -46,6 +47,7 @@ public class Game implements Serializable {
      *
      */
     public Game(){
+        kingDangerStatus = 0;
         removesss = new Stack<Cell>();
         for(int i =0; i < 64*2; ++i) {
             removesss.add(new Cell());
@@ -69,6 +71,7 @@ public class Game implements Serializable {
      * @param game
      */
     public Game(Game game){
+        kingDangerStatus = 0;
         board = new ArrayList<ArrayList<Cell>>(8);
         for(int i =0; i < 8; ++i){
             board.add(new ArrayList<Cell>());
@@ -89,7 +92,7 @@ public class Game implements Serializable {
         }
 
         for(int i=0; i<game.removesss.size()*2; i++){
-                removesss.get(i).setCell(game.removesss.get(i));
+            removesss.get(i).setCell(game.removesss.get(i));
         }
     }
 
@@ -106,6 +109,7 @@ public class Game implements Serializable {
      */
     public int playGame(int x, int y, List<Cell> TempMovesList){
         int status=0;
+
         try {
             Cell currentCell = new Cell(board.get(x).get(y));
             Cell emptyCell = new Cell();
@@ -117,11 +121,15 @@ public class Game implements Serializable {
                 return 3;
             }
             //burada sah tehlikedemi diye bakar
-            if(board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)){
+            if((board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)) && getKingDangerStatus() == 0){
                 if(x != king/10 || y != king-(king/10)*10){
                     return 0;
                 }
+                else{
+                    setKingDangerStatus(1);
+                }
             }
+
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
             if (currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer()) {
             /* ... ve daha once oynatabilecegimiz biseye tiklamadiysak sifir return edicez demektir*/
@@ -140,15 +148,15 @@ public class Game implements Serializable {
                         setTempCell(emptyCell);
                     /* suanki oyuncu degerini degistiriyoruz */
                         setCurrentPlayer(!getCurrentPlayer());
-
+                        setKingDangerStatus(0);
                     /*PAWN SON SATIRA ULASTI MI DIYE BAKIYORUZ, ULASTIYSA PAWN KALE OLUR!!*/
                         //checkPawn();
-
                     /* ve 2 komutunu return ederek hamle yaptik diyoruz */
                         return 2;
                     }
                 /* eger tiklanan yer listede yoksa TempMovesListesini temizleyip sifir return ediyoruz */
                     else {
+                        setKingDangerStatus(0);
                         System.out.print("debug3\n");
                         TempMovesList.clear();
                         setTempCell(emptyCell);
@@ -162,7 +170,6 @@ public class Game implements Serializable {
                 tempCell.setCell(currentCell);
                 TempMovesList.addAll(board.get(x).get(y).getPiece().checkMove(board, x, y));
                 return 1;
-
             }
         } catch (NullPointerException e){
             return -1;
@@ -179,11 +186,11 @@ public class Game implements Serializable {
      * @return
      */
     public boolean playUser(List<Cell> cellList, Cell cell ) {
-            int lengt = cellList.size();
-            for (int i = 0; i < lengt; ++i) {
-                if(cellList.get(i).equals(cell))
-                    return true;
-            }
+        int lengt = cellList.size();
+        for (int i = 0; i < lengt; ++i) {
+            if(cellList.get(i).equals(cell))
+                return true;
+        }
         return false;
     }
 
@@ -193,22 +200,6 @@ public class Game implements Serializable {
      * @param target
      */
     public void makeMove(Cell source, Cell target){
-        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King){
-            if((source.getX()-target.getX()) == 2){
-                board.get(2).get(source.getY()).setPiece(board.get(0).get(source.getY()).getPiece());
-                Pieces piece2 = new NoPiece();
-                board.get(0).get(source.getY()).setPiece(piece2);
-            }
-            else if((source.getX()-target.getX()) == -2){
-                board.get(4).get(source.getY()).setPiece(board.get(7).get(source.getY()).getPiece());
-                Pieces piece3 = new NoPiece();
-                board.get(7).get(source.getY()).setPiece(piece3);
-            }
-        }
-
-        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King || board.get(source.getX()).get(source.getY()).getPiece() instanceof Rook){
-            board.get(source.getX()).get(source.getY()).getPiece().setIsMoved(true);
-        }
         //System.out.print("Movemakera girdi\n");
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
@@ -221,6 +212,17 @@ public class Game implements Serializable {
 
     }
 
+    /**
+     * en son yapilan hamleyi geri alir
+     * @param source geri alinacak tasin bilgileri
+     * @param target boardda tasin koyulacagi yerin bilgileri
+     */
+    private void undoMove(Cell source, Cell target){
+
+        board.get(target.getX()).get(target.getY()).setPiece(board.get(source.getX()).get(source.getY()).getPiece());
+        board.get(source.getX()).get(source.getY()).setPiece(new NoPiece());
+
+    }
 
 
     /**
@@ -239,7 +241,7 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerEasy() {
-        System.out.println(getCurrentPlayer());
+        //System.out.println(getCurrentPlayer());
         List<Cell> canMove = new ArrayList<>();
         List<Cell> trgtMove = new ArrayList<>();
         List<Cell> srcMove = new ArrayList<>();
@@ -247,7 +249,8 @@ public class Game implements Serializable {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
-                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()){
+                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer())
+                {
                     //System.out.println("im in"+i + " "+ j);
                     canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
                     //System.out.println("CAN MOVE:\n"+canMove.toString());
@@ -268,31 +271,23 @@ public class Game implements Serializable {
             int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
             if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
                     !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
-                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
-                System.out.println("-------->" + !this.getCurrentPlayer());
+                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                //System.out.println("-------->" + !this.getCurrentPlayer());
 
                 makeMove(srcMove.get(i), trgtMove.get(i));
                 this.setCurrentPlayer(!this.getCurrentPlayer());
 
-                System.out.println("-------->" + x + " " + y);
+                //System.out.println("-------->" + x + " " + y);
 
                 flag = false;
                 break;
             }
         }
-<<<<<<< HEAD
-=======
-
-        checkPawn();
-
-        printBoard();
->>>>>>> master
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
-            System.out.println("random: " + randomInt);
+            //System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
-
             this.setCurrentPlayer(!this.getCurrentPlayer());
 
         }
@@ -305,7 +300,7 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerMedium(){
-        System.out.println(getCurrentPlayer());
+        //System.out.println(getCurrentPlayer());
         List<Cell> canMove = new ArrayList<>();
         List<Cell> trgtMove = new ArrayList<>();
         List<Cell> srcMove = new ArrayList<>();
@@ -334,13 +329,13 @@ public class Game implements Serializable {
             int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
             if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
                     !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
-                System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
-                System.out.println("-------->" + !this.getCurrentPlayer());
+                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                //System.out.println("-------->" + !this.getCurrentPlayer());
 
                 makeMove(srcMove.get(i), trgtMove.get(i));
                 this.setCurrentPlayer(!this.getCurrentPlayer());
 
-                System.out.println("-------->" + x + " " + y);
+                //System.out.println("-------->" + x + " " + y);
 
                 flag = false;
                 break;
@@ -349,7 +344,7 @@ public class Game implements Serializable {
         if(flag) {
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(trgtMove.size());
-            System.out.println("random: " + randomInt);
+            //System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
             this.setCurrentPlayer(!this.getCurrentPlayer());
         }
@@ -358,75 +353,152 @@ public class Game implements Serializable {
     /**
      * Computer icin , hard mod secildiginde bu fonksiyon cagrilacak
      * Method icinde currentPlayer degistirilir
-     * @return source ve targetin sirali olarak bulundugu bir cell listesi
+     * Bu computer oyunu icin minimax algoritmasi kullanildi
+     * bu method icerisinde yer alan ve maxofHard methoduna gonderilen
+     * depth degiskeni minimax algoritmasindaki agacin derinligini
+     * ifade ediyor
+     *
      */
     public void playComputerHard(){
-        fakeBoard = new ArrayList<ArrayList<Cell>>(getBoard());
-        int depth = 5;
+        int depth = BIGDEPTH;
         maxofHard(depth);
-    }
-    private double maxofHard(int depth){
-        double v = Double.NEGATIVE_INFINITY;
-        List<Cell> notMove = new LinkedList<>();
 
-        if(depth<=0){
+    }
+
+    /**
+     *
+     * @param depth minimax algoritmasindaki agacin derinligi
+     * @return boardin son halinde, yukarida taslara verilen degerlere
+     *          gore hesap edilen deger
+     */
+    private double maxofHard(int depth){
+        double v = Double.NEGATIVE_INFINITY; //evaluate methodu ile hesaplanan deger bu degiskene atilarak
+                                             //return edilecek
+
+        List<Cell> notMove = new LinkedList<>(); // o anki tasin olasi hamleleri
+        Cell src = null; //en son hesaplanan degerde oynanmasi gereken tasin source bilgileri buraya
+        Cell trgt = null; //target bilgileri buraya kopyalanacak
+        Cell enemyCell = null; //eger rakip tasi yendiyse enemyCell o tasin bilgilerini tutmak icin kullanilacak
+
+        //eger agacin en sonuna gelindiyse return edilerek bitirilir
+        if(depth==0){
             return evaluate();
         }
+        /**
+         *  bu algoritmada tum taslar uzerinde tek tek gezilir
+         *  computer ile aynı renk olan taslar bulunur ve hamle yapilip yapilmadigi kontrol edilerek,
+         *  eger hamle yapabiliyorlarsa bunlar notMove icine atilarak ve kac farkli yere hamle yapabildigi kontrol
+         *  edilerek, o yer adedince hamle yapilir.
+         *  eger hamle yapilan yerde user tasi varsa bu tasin bilgileri enemyCell icine kopyalanir.
+         *  daha sonra user icin hamle yapacak minofHard methodu cagirilir.
+         *  bu methoddan alinan return degeriyle eldeki v degeri karsilastirilir.eger v kucukse swap yapilir.
+         *  cunku bu computerin oynayabilecegi daha iyi bir hamle oldugu anlamına gelir.
+         *  bu hamlenin bilgileri src ve trgt isimli iki celle kopyalanir.
+         *
+         */
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (fakeBoard.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer() &&
-                        !(fakeBoard.get(i).get(j).getPiece() instanceof NoPiece)){
-                    notMove.addAll(fakeBoard.get(i).get(j).getPiece().checkMove(fakeBoard, i, j));
+                if (board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer() &&
+                        !(board.get(i).get(j).getPiece() instanceof NoPiece)){
+                    notMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
 
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
-                            makeMove(fakeBoard.get(i).get(j), notMove.get(k));
-                            this.setCurrentPlayer(!this.getCurrentPlayer());
-                            System.out.println("fake1 " + depth);
-                            printFake();
-                            double curVal = minofHard(--depth);
-                            fakeBoard.get(fakeBoard.get(i).get(j).getX()).get(fakeBoard.get(i).get(j).getY()).setPiece(notMove.get(k).getPiece());
-                            fakeBoard.get(notMove.get(k).getX()).get(notMove.get(k).getY()).setPiece(new NoPiece());
-                            System.out.println("fake2 " + depth);
-                            printFake();
+                            ++movementCounter;
+                            System.out.println(movementCounter + " ");
+
+                            if (!(notMove.get(k).getPiece() instanceof NoPiece)) {
+                                enemyCell = new Cell(notMove.get(k));
+                            }
+                            makeMove(board.get(i).get(j), notMove.get(k));
+
+                            double curVal = minofHard((depth - 1));
+
+                            undoMove(notMove.get(k), board.get(i).get(j));
+                            if(enemyCell != null){
+                                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+                                enemyCell = null;
+
+                            }
                             if(curVal>v){
                                 v=curVal;
+                                if(depth>= BIGDEPTH){
+                                    src = new Cell(board.get(i).get(j));
+                                    trgt = new Cell(notMove.get(k));
+                                }
                             }
-
                         }
                     }
                     notMove.clear();
                 }
             }
         }
+        /**
+         *  bu method recursive oldugu icin eger ilk girdigimizin icindeysek hamle yapmamız gerekiyor
+         *  bitirmeden once.burada o hamleyi yapilir
+         */
+        if(depth>=BIGDEPTH) {
+
+            //printBoard();
+            makeMove(src, trgt);
+            this.setCurrentPlayer(!this.getCurrentPlayer());
+        }
         return v;
     }
     /**
-     * Computer icin minimax algoritmasindaki min methodu
-     * bu method user icin en mantikli olmayan hamleyi oynayacak
-     * @return source ve targetin icinde bulundugu bir liste
+     *
+     * @param depth minimax algoritmasindaki agacin derinligi
+     * @return boardin son halinde, yukarida taslara verilen degerlere
+     *          gore hesap edilen deger
      */
     private double minofHard(int depth){
-        double v = Double.POSITIVE_INFINITY;
-        List<Cell> notMove = new LinkedList<>();
-        if(depth<=0){
+        double v = Double.POSITIVE_INFINITY; //evaluate methodu ile hesaplanan deger bu degiskene atilarak
+                                                //return edilecek
+
+        List<Cell> notMove = new LinkedList<>(); // o anki tasin olasi hamleleri
+        Cell enemyCell = null;  //eger rakip tasi yendiyse enemyCell o tasin bilgilerini tutmak icin kullanilacak
+
+        //eger agacin en sonuna gelindiyse return edilerek bitirilir
+        if(depth==0){
             return evaluate();
         }
+        /**
+         *  bu algoritmada tum taslar uzerinde tek tek gezilir
+         *  user ile aynı renk olan taslar bulunur ve hamle yapilip yapilmadigi kontrol edilerek,
+         *  eger hamle yapabiliyorlarsa bunlar notMove icine atilarak ve kac farkli yere hamle yapabildigi kontrol
+         *  edilerek, o yer adedince hamle yapilir.
+         *  eger hamle yapilan yerde computer tasi varsa bu tasin bilgileri enemyCell icine kopyalanir.
+         *  daha sonra user icin hamle yapacak maxofHard methodu cagirilir.
+         *  bu methoddan alinan return degeriyle eldeki v degeri karsilastirilir.eger v kucukse swap yapilir.
+         *  cunku bu userin oynayabilecegi daha kotu bir hamle oldugu anlamına gelir.
+         *  bu hamlenin bilgileri src ve trgt isimli iki celle kopyalanir.
+         *
+         */
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (fakeBoard.get(i).get(j).getPiece().getColor() == !this.getCurrentPlayer() &&
-                        !(fakeBoard.get(i).get(j).getPiece() instanceof NoPiece)){
-                    notMove.addAll(fakeBoard.get(i).get(j).getPiece().checkMove(fakeBoard, i, j));
+                if (board.get(i).get(j).getPiece().getColor() == !(this.getCurrentPlayer()) &&
+                        !(board.get(i).get(j).getPiece() instanceof NoPiece)){
+                    notMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
 
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
+                            ++movementCounter;
+                            //fakeBoard.addAll(board);
+                            if(!(notMove.get(k).getPiece() instanceof NoPiece)){
+                                enemyCell = new Cell(notMove.get(k));
+                            }
+                            makeMove(board.get(i).get(j), notMove.get(k));
+                            //System.out.println("\nmin i " + i +" j " + j + " depth " + depth + " cell " + board.get(i).get(j).getPiece().toString() + " player" + this.getCurrentPlayer());
+                            //printBoard();
 
-                            makeMove(fakeBoard.get(i).get(j), notMove.get(k));
-                            this.setCurrentPlayer(!this.getCurrentPlayer());
+                            double curVal = maxofHard((depth-1));
 
-                            double curVal = maxofHard(--depth);
-                            fakeBoard.get(fakeBoard.get(i).get(j).getX()).get(fakeBoard.get(i).get(j).getY()).setPiece(notMove.get(k).getPiece());
-                            fakeBoard.get(notMove.get(k).getX()).get(notMove.get(k).getY()).setPiece(new NoPiece());
+                            undoMove(notMove.get(k), board.get(i).get(j));
+                            if(enemyCell != null){
+                                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+                                enemyCell = null;
+
+                            }
                             if(curVal<v){
                                 v=curVal;
                             }
@@ -438,41 +510,119 @@ public class Game implements Serializable {
         }
         return v;
     }
+
+    /**
+     * bu method memoryi daha az tukettigi icin
+     * denenmek uzere implement edildi
+     *
+     */
+
+    private double helperMinofHard(int depth){
+        Cell enemyCell = null;
+        double v=0;
+        //System.out.println(getCurrentPlayer());
+        List<Cell> canMove = new ArrayList<>();
+        List<Cell> trgtMove = new ArrayList<>();
+        List<Cell> srcMove = new ArrayList<>();
+        boolean flag = true;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
+                        board.get(i).get(j).getPiece().getColor() != (this.getCurrentPlayer())){
+                    //System.out.println("im in"+i + " "+ j);
+                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
+                    //System.out.println("CAN MOVE:\n"+canMove.toString());
+                    //System.out.println("player" + this.getCurrentPlayer());
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
+                    }
+                    trgtMove.addAll(canMove);
+                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
+
+                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
+
+                    canMove.clear();
+                }
+            }
+        }
+        for(int i=0 ; i<trgtMove.size() ; ++i) {
+            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
+            if (board.get(x).get(y).getPiece().getColor() == this.getCurrentPlayer() &&
+                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
+                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                //System.out.println("-------->" + !this.getCurrentPlayer());
+                enemyCell = new Cell(trgtMove.get(i));
+
+                makeMove(srcMove.get(i), trgtMove.get(i));
+                v=evaluate();
+
+                maxofHard((depth-1));
+
+                undoMove(trgtMove.get(i), srcMove.get(i));
+                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+
+
+                //System.out.println("-------->" + x + " " + y);
+
+                flag = false;
+                break;
+            }
+        }
+        if(flag) {
+            Random randomGenerator = new Random();
+            int randomInt = randomGenerator.nextInt(trgtMove.size());
+            //System.out.println("random: " + randomInt);
+            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+
+            v=evaluate();
+            maxofHard((depth-1));
+
+            undoMove(trgtMove.get(randomInt), srcMove.get(randomInt));
+
+        }
+
+
+        return v;
+    }
+
+    /**
+     * tum taslarin uzerinde gezilerek, onceden taslara tanimlanmis degerlere gore toplanarak return edilir
+     * @return o an boardda bulunan taslarin degerlerinin toplami
+     */
     private double evaluate(){
         double total=0.0;
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(!(fakeBoard.get(i).get(j).getPiece() instanceof NoPiece)) {
-                    if (fakeBoard.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()) {
-                        System.out.println("i- "+i+"j- "+j);
+                if(!(board.get(i).get(j).getPiece() instanceof NoPiece)) {
+                    if (board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()) {
 
-                        if(fakeBoard.get(i).get(j).getPiece() instanceof Pawn)
+                        if(board.get(i).get(j).getPiece() instanceof Pawn)
                             total += PAWN;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Knight)
+                        else if(board.get(i).get(j).getPiece() instanceof Knight)
                             total += KNIGHT;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Bishop)
+                        else if(board.get(i).get(j).getPiece() instanceof Bishop)
                             total += BISHOP;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Rook)
+                        else if(board.get(i).get(j).getPiece() instanceof Rook)
                             total += ROOK;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Queen)
+                        else if(board.get(i).get(j).getPiece() instanceof Queen)
                             total += QUEEN;
-/*                        else if(fakeBoard.get(i).get(j).getPiece() instanceof King)
+/*                        else if(board.get(i).get(j).getPiece() instanceof King)
                             total += KING;
 */
                     }
                     else{
-                        if(fakeBoard.get(i).get(j).getPiece() instanceof Pawn)
+                        if(board.get(i).get(j).getPiece() instanceof Pawn)
                             total -= PAWN;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Knight)
+                        else if(board.get(i).get(j).getPiece() instanceof Knight)
                             total -= KNIGHT;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Bishop)
+                        else if(board.get(i).get(j).getPiece() instanceof Bishop)
                             total -= BISHOP;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Rook)
+                        else if(board.get(i).get(j).getPiece() instanceof Rook)
                             total -= ROOK;
-                        else if(fakeBoard.get(i).get(j).getPiece() instanceof Queen)
+                        else if(board.get(i).get(j).getPiece() instanceof Queen)
                             total -= QUEEN;
-/*                        else if(fakeBoard.get(i).get(j).getPiece() instanceof King)
+/*                        else if(board.get(i).get(j).getPiece() instanceof King)
                             total -= KING;
 */
                     }
@@ -480,7 +630,6 @@ public class Game implements Serializable {
                 }
             }
         }
-        System.out.println("total-------- "+total);
         return total;
     }
     /**
@@ -683,16 +832,16 @@ public class Game implements Serializable {
     public void checkPawn(){
         //beyaz oynuyor ise en UST SATIR kontol edilir. ROW=0
         //siyah oynuyor ise en ALT SATIR kontrol edilir. ROW=7
-        int j = 7;
+        int row = 7;
         if(getCurrentPlayer())//true, beyaz
-            j = 0;
+            row = 0;
 
 
-        for(int i=0; i<8; i++)
-            if(board.get(i).get(j).getPiece() instanceof Pawn && board.get(i).get(j).getPiece().getColor() == getCurrentPlayer()){
+        for(int j=0; j<8; j++)
+            if(board.get(row).get(j).getPiece() instanceof Pawn && board.get(row).get(j).getPiece().getColor() == getCurrentPlayer()){
                 Pieces piece = new Rook();
                 piece.setColor(getCurrentPlayer()); //piece rengi oynayan oyuncunun rengi olur.
-                board.get(i).get(j).setCell(new Cell(i, j, piece));
+                board.get(row).get(j).setCell(new Cell(row, j, piece));
             }
     }
 
@@ -826,46 +975,7 @@ public class Game implements Serializable {
             color = true;
         }
     }
-    public void printFake(){
-        for(int j=7; j>=0; j--) {
-            for (int i = 0; i <= 7; i++) {
-                if (!fakeBoard.get(i).get(j).piece.getColor()) {
-                    //System.out.println("PrintBoard, false, siyah!!");
-                    if (fakeBoard.get(i).get(j).getPiece() instanceof Pawn) {
-                        System.out.print(" P");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Rook) {
-                        System.out.print(" K");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Knight) {
-                        System.out.print(" A");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Bishop) {
-                        System.out.print(" F");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof King) {
-                        System.out.print(" S");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Queen) {
-                        System.out.print(" V");
-                    } else
-                        System.out.print(" .");
-                } else if (fakeBoard.get(i).get(j).piece.getColor()) {
-                    //System.out.println("PrintBoard, true, beyaz!!");
-                    if (fakeBoard.get(i).get(j).getPiece() instanceof Pawn) {
-                        System.out.print("-P");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Rook) {
-                        System.out.print("-K");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Knight) {
-                        System.out.print("-A");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Bishop) {
-                        System.out.print("-F");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof King) {
-                        System.out.print("-S");
-                    } else if (fakeBoard.get(i).get(j).getPiece() instanceof Queen) {
-                        System.out.print("-V");
-                    } else
-                        System.out.print(" .");
-                }
-            }
-            System.out.println();
-        }
-    }
+
 
     public void printBoard(){
         for(int j=7; j>=0; j--) {
@@ -945,4 +1055,7 @@ public class Game implements Serializable {
 
     public void setTempCell( Cell target ) { tempCell.setCell(target); }
     public Cell getTempCell() { return tempCell; }
+
+    public void setKingDangerStatus(int value){ kingDangerStatus = value; }
+    public int getKingDangerStatus(){ return kingDangerStatus; }
 }

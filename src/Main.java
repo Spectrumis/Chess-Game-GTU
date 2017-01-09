@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static java.lang.Thread.sleep;
+
 public class Main extends Application  {
 
     Stage window;
@@ -70,6 +72,7 @@ public class Main extends Application  {
 
                     ArrayList<ArrayList<Cell>> board=game.getBoard();
                     int a,b;
+                    CurrentButton=(ExtendedButton)e.getSource();
                     for(a=0;a<board.size();++a)
                     {
                         for(b=0;b<board.get(a).size();++b)
@@ -110,7 +113,7 @@ public class Main extends Application  {
 
                     }
                     refreshTable();
-                    CurrentButton=(ExtendedButton)e.getSource();
+
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                         currentStatus = game.playGame(CurrentButton.getCoorX(), CurrentButton.getCoorY(), tempMovesList);
@@ -118,6 +121,96 @@ public class Main extends Application  {
                         System.out.print("Status:" + currentStatus + "\n");
 
                     //    System.out.print("TempListCounter:" + a + "\n");
+                    }
+                    if (game.getIsComputerOn() != 0 && (currentStatus == 2 || !startingStatusHandler)) {
+                        tempMovesList.clear();
+                        switch (game.getIsComputerOn()) {
+                            case 1:
+                                game.playComputerEasy();
+                                refreshTable();
+                                break;
+                            case 2:
+                                game.playComputerMedium();
+                                refreshTable();
+                                break;
+                            case 3:
+                                game.playComputerHard();
+                                refreshTable();
+                                break;
+                            default:
+                                System.out.println("ComputerOn degeri yanlis\n");
+                                break;
+                        }
+                        tempMovesList.clear();
+                    }
+                    startingStatusHandler = true;
+                    if(currentStatus==1)
+                    {
+                        for (a = markButton; a < tempMovesList.size(); ++a) {
+                            markButton(tempMovesList.get(a).getX(), tempMovesList.get(a).getY());
+                        }
+
+                        markButton(CurrentButton.getCoorX(), CurrentButton.getCoorY());
+                    }
+                    if(currentStatus==2)
+                    {
+                        button[CurrentButton.getCoorX()][CurrentButton.getCoorY()].setStyle(button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].getStyle());
+                        button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].setStyle("-fx-border-color: gray; )");
+                    }
+                    if(currentStatus==3){
+                        Platform.exit();
+                    }
+
+                    //Bilgisayarın oynama kısımı
+
+                    for(a=0;a<board.size();++a)
+                    {
+                        for(b=0;b<board.get(a).size();++b)
+                            if (!board.get(a).get(b).piece.getColor()) {
+                                //System.out.println("PrintBoard, false, siyah!!");
+                                if (board.get(a).get(b).getPiece() instanceof Pawn) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Rook) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Knight) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Bishop) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof King) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Queen) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                                } else
+                                    button[a][b].setStyle("-fx-border-color: gray;");
+                            }
+                            else
+                            {
+                                if (board.get(a).get(b).getPiece() instanceof Pawn) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Rook) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Knight) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Bishop) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof King) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                                } else if (board.get(a).get(b).getPiece() instanceof Queen) {
+                                    button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                                } else
+                                    button[a][b].setStyle("-fx-border-color: gray;");
+                            }
+
+                    }
+                    refreshTable();
+
+                    if (startingStatusHandler || game.getIsComputerOn() == 0) {
+
+                        currentStatus = game.playGame(CurrentButton.getCoorX(), CurrentButton.getCoorY(), tempMovesList);
+
+                        System.out.print("Status:" + currentStatus + "\n");
+
+                        //    System.out.print("TempListCounter:" + a + "\n");
                     }
                     if (game.getIsComputerOn() != 0 && (currentStatus == 2 || !startingStatusHandler)) {
                         tempMovesList.clear();
@@ -293,7 +386,8 @@ public class Main extends Application  {
             }
             setButtons(button);
             Restart.setDisable(true);
-
+            //new game dendiginde oyun yeniden baslar, SIFIRDAN!!
+            game = new Game();
 
         });
         // --- Menu Edit
@@ -592,29 +686,13 @@ public class Main extends Application  {
             button[i][1].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
 
         }
-        /*for(a=0;a<8;++a)
+        for(a=0;a<8;++a)
         {
-            for(b=0;b<8;++b)
+            for(b=2;b<6;++b)
             {
-                if(a%2==0){
-                    if(b%2==0){
-                        button[a][b].setStyle("-fx-background-color: #f4ca8b, transparent");
-                    }
-                    else{
-                        button[a][b].setStyle("-fx-background-color: #492e04, transparent");
-                    }
-                }
-                else{
-                    if(b%2!=0){
-                        button[a][b].setStyle("-fx-background-color: #f4ca8b, transparent");
-                    }
-                    else{
-                        button[a][b].setStyle("-fx-background-color: #492e04, transparent");
-                    }
-                }
-                // button[a][b].setStyle("-fx-border-color: gray;");
+                        button[a][b].setStyle("-fx-border-color: gray;");
             }
-        }*/
+        }
 }
 
 
