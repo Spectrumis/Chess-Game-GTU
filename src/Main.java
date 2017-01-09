@@ -162,12 +162,6 @@ public class Main extends Application  {
                     }
 
                     //Bilgisayarın oynama kısımı
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-
 
                     for(a=0;a<board.size();++a)
                     {
