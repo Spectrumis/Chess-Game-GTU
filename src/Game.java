@@ -841,7 +841,7 @@ public class Game implements Serializable {
 
             //index son eleman, index-1 bir önceki; son eleman target(new source), önceki eleman source(new target)!
             //geri almak icin target source'a tasinir
-            board.get(targetCell.getX()).get(targetCell.getY()).setCell(board.get(sourceCell.getX()).get(sourceCell.getY()));
+            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
             board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
 
             counterRemovess++;
