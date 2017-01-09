@@ -204,7 +204,13 @@ public class Game implements Serializable {
         removesss.push(new Cell(target));
 
     }
-    public void undoMove(Cell source, Cell target){
+
+    /**
+     * en son yapilan hamleyi geri alir
+     * @param source geri alinacak tasin bilgileri
+     * @param target boardda tasin koyulacagi yerin bilgileri
+     */
+    private void undoMove(Cell source, Cell target){
 
         board.get(target.getX()).get(target.getY()).setPiece(board.get(source.getX()).get(source.getY()).getPiece());
         board.get(source.getX()).get(source.getY()).setPiece(new NoPiece());
@@ -340,30 +346,49 @@ public class Game implements Serializable {
     /**
      * Computer icin , hard mod secildiginde bu fonksiyon cagrilacak
      * Method icinde currentPlayer degistirilir
-     * @return source ve targetin sirali olarak bulundugu bir cell listesi
+     * Bu computer oyunu icin minimax algoritmasi kullanildi
+     * bu method icerisinde yer alan ve maxofHard methoduna gonderilen
+     * depth degiskeni minimax algoritmasindaki agacin derinligini
+     * ifade ediyor
+     *
      */
     public void playComputerHard(){
         int depth = BIGDEPTH;
-
-
         maxofHard(depth);
 
     }
+
+    /**
+     *
+     * @param depth minimax algoritmasindaki agacin derinligi
+     * @return boardin son halinde, yukarida taslara verilen degerlere
+     *          gore hesap edilen deger
+     */
     private double maxofHard(int depth){
-        double v = Double.NEGATIVE_INFINITY;
-        List<Cell> notMove = new LinkedList<>();
-        //ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
+        double v = Double.NEGATIVE_INFINITY; //evaluate methodu ile hesaplanan deger bu degiskene atilarak
+                                             //return edilecek
 
-        Cell src = null;
-        Cell trgt = null;
-        Cell enemyCell = null;
+        List<Cell> notMove = new LinkedList<>(); // o anki tasin olasi hamleleri
+        Cell src = null; //en son hesaplanan degerde oynanmasi gereken tasin source bilgileri buraya
+        Cell trgt = null; //target bilgileri buraya kopyalanacak
+        Cell enemyCell = null; //eger rakip tasi yendiyse enemyCell o tasin bilgilerini tutmak icin kullanilacak
+
+        //eger agacin en sonuna gelindiyse return edilerek bitirilir
         if(depth==0){
-            //System.out.println("MAX BAK TAM OLARAK BURADA!");
-
             return evaluate();
         }
-        //System.out.println("+++++++" + movementCounter);
-
+        /**
+         *  bu algoritmada tum taslar uzerinde tek tek gezilir
+         *  computer ile aynı renk olan taslar bulunur ve hamle yapilip yapilmadigi kontrol edilerek,
+         *  eger hamle yapabiliyorlarsa bunlar notMove icine atilarak ve kac farkli yere hamle yapabildigi kontrol
+         *  edilerek, o yer adedince hamle yapilir.
+         *  eger hamle yapilan yerde user tasi varsa bu tasin bilgileri enemyCell icine kopyalanir.
+         *  daha sonra user icin hamle yapacak minofHard methodu cagirilir.
+         *  bu methoddan alinan return degeriyle eldeki v degeri karsilastirilir.eger v kucukse swap yapilir.
+         *  cunku bu computerin oynayabilecegi daha iyi bir hamle oldugu anlamına gelir.
+         *  bu hamlenin bilgileri src ve trgt isimli iki celle kopyalanir.
+         *
+         */
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer() &&
@@ -373,17 +398,13 @@ public class Game implements Serializable {
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
                             ++movementCounter;
-                            //fakeBoard.addAll(board);
+                            System.out.println(movementCounter + " ");
+
                             if (!(notMove.get(k).getPiece() instanceof NoPiece)) {
                                 enemyCell = new Cell(notMove.get(k));
                             }
                             makeMove(board.get(i).get(j), notMove.get(k));
 
-                            //printBoard();
-                            //System.out.println("\nmax i " + i +"j " + j + "depth " + depth + " cell " + board.get(i).get(j).getPiece().toString()+ " player" + this.getCurrentPlayer());
-                            //printBoard();
-                            //System.out.println("i " + i +"j " + j);
-                            //System.out.println("----> " + board.get(i).get(j).toString());
                             double curVal = minofHard((depth - 1));
 
                             undoMove(notMove.get(k), board.get(i).get(j));
@@ -392,10 +413,6 @@ public class Game implements Serializable {
                                 enemyCell = null;
 
                             }
-                            //printBoard();
-                            //board.clear();
-                            //board.addAll(fakeBoard);
-                            //System.out.println("fake2 " + depth);
                             if(curVal>v){
                                 v=curVal;
                                 if(depth>= BIGDEPTH){
@@ -403,13 +420,16 @@ public class Game implements Serializable {
                                     trgt = new Cell(notMove.get(k));
                                 }
                             }
-
                         }
                     }
                     notMove.clear();
                 }
             }
         }
+        /**
+         *  bu method recursive oldugu icin eger ilk girdigimizin icindeysek hamle yapmamız gerekiyor
+         *  bitirmeden once.burada o hamleyi yapilir
+         */
         if(depth>=BIGDEPTH) {
 
             //printBoard();
@@ -419,20 +439,34 @@ public class Game implements Serializable {
         return v;
     }
     /**
-     * Computer icin minimax algoritmasindaki min methodu
-     * bu method user icin en mantikli olmayan hamleyi oynayacak
-     * @return source ve targetin icinde bulundugu bir liste
+     *
+     * @param depth minimax algoritmasindaki agacin derinligi
+     * @return boardin son halinde, yukarida taslara verilen degerlere
+     *          gore hesap edilen deger
      */
     private double minofHard(int depth){
-        double v = Double.POSITIVE_INFINITY;
-        List<Cell> notMove = new LinkedList<>();
-        //ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
-        Cell enemyCell = null;
-        if(depth==0){
-            System.out.println("MIN BAK TAM OLARAK BURADA!");
+        double v = Double.POSITIVE_INFINITY; //evaluate methodu ile hesaplanan deger bu degiskene atilarak
+                                                //return edilecek
 
+        List<Cell> notMove = new LinkedList<>(); // o anki tasin olasi hamleleri
+        Cell enemyCell = null;  //eger rakip tasi yendiyse enemyCell o tasin bilgilerini tutmak icin kullanilacak
+
+        //eger agacin en sonuna gelindiyse return edilerek bitirilir
+        if(depth==0){
             return evaluate();
         }
+        /**
+         *  bu algoritmada tum taslar uzerinde tek tek gezilir
+         *  user ile aynı renk olan taslar bulunur ve hamle yapilip yapilmadigi kontrol edilerek,
+         *  eger hamle yapabiliyorlarsa bunlar notMove icine atilarak ve kac farkli yere hamle yapabildigi kontrol
+         *  edilerek, o yer adedince hamle yapilir.
+         *  eger hamle yapilan yerde computer tasi varsa bu tasin bilgileri enemyCell icine kopyalanir.
+         *  daha sonra user icin hamle yapacak maxofHard methodu cagirilir.
+         *  bu methoddan alinan return degeriyle eldeki v degeri karsilastirilir.eger v kucukse swap yapilir.
+         *  cunku bu userin oynayabilecegi daha kotu bir hamle oldugu anlamına gelir.
+         *  bu hamlenin bilgileri src ve trgt isimli iki celle kopyalanir.
+         *
+         */
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.get(i).get(j).getPiece().getColor() == !(this.getCurrentPlayer()) &&
@@ -469,6 +503,85 @@ public class Game implements Serializable {
         }
         return v;
     }
+
+    /**
+     * bu method memoryi daha az tukettigi icin
+     * denenmek uzere implement edildi
+     *
+     */
+
+    private double helperMinofHard(int depth){
+        Cell enemyCell = null;
+        double v=0;
+        //System.out.println(getCurrentPlayer());
+        List<Cell> canMove = new ArrayList<>();
+        List<Cell> trgtMove = new ArrayList<>();
+        List<Cell> srcMove = new ArrayList<>();
+        boolean flag = true;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
+                        board.get(i).get(j).getPiece().getColor() != (this.getCurrentPlayer())){
+                    //System.out.println("im in"+i + " "+ j);
+                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
+                    //System.out.println("CAN MOVE:\n"+canMove.toString());
+                    //System.out.println("player" + this.getCurrentPlayer());
+                    for (int k = 0; k < canMove.size(); k++) {
+                        srcMove.add(new Cell(board.get(i).get(j)));
+                    }
+                    trgtMove.addAll(canMove);
+                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
+
+                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
+
+                    canMove.clear();
+                }
+            }
+        }
+        for(int i=0 ; i<trgtMove.size() ; ++i) {
+            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
+            if (board.get(x).get(y).getPiece().getColor() == this.getCurrentPlayer() &&
+                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
+                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
+                //System.out.println("-------->" + !this.getCurrentPlayer());
+                enemyCell = new Cell(trgtMove.get(i));
+
+                makeMove(srcMove.get(i), trgtMove.get(i));
+                v=evaluate();
+
+                maxofHard((depth-1));
+
+                undoMove(trgtMove.get(i), srcMove.get(i));
+                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+
+
+                //System.out.println("-------->" + x + " " + y);
+
+                flag = false;
+                break;
+            }
+        }
+        if(flag) {
+            Random randomGenerator = new Random();
+            int randomInt = randomGenerator.nextInt(trgtMove.size());
+            //System.out.println("random: " + randomInt);
+            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+
+            v=evaluate();
+            maxofHard((depth-1));
+
+            undoMove(trgtMove.get(randomInt), srcMove.get(randomInt));
+
+        }
+
+
+        return v;
+    }
+
+    /**
+     * tum taslarin uzerinde gezilerek, onceden taslara tanimlanmis degerlere gore toplanarak return edilir
+     * @return o an boardda bulunan taslarin degerlerinin toplami
+     */
     private double evaluate(){
         double total=0.0;
 
@@ -510,7 +623,6 @@ public class Game implements Serializable {
                 }
             }
         }
-        //System.out.println("total-------- "+total);
         return total;
     }
     /**
