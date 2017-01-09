@@ -54,7 +54,7 @@ public class Rook extends Pieces {
             if(board.get(x).get(i).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(x).get(i)));
             }
-            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+            else if(board.get(x).get(i).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(x).get(i)));
                 break;
             }
@@ -68,7 +68,7 @@ public class Rook extends Pieces {
             if(board.get(x).get(i).getPiece() instanceof NoPiece){
                 moves.add(new Cell(board.get(x).get(i)));
             }
-            else if(board.get(i).get(y).getPiece().getColor() != curColor){
+            else if(board.get(x).get(i).getPiece().getColor() != curColor){
                 moves.add(new Cell(board.get(x).get(i)));
                 break;
             }
