@@ -124,6 +124,11 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
                 easy.setSelected(false);
                 Medium.setSelected(false);
                 Hard.setSelected(false);
+                p1.setSelected(false);
+                p2.setSelected(false);
+                p1.setDisable(true);
+                p2.setDisable(true);
+                Start.setDisable(false);
                 LevelOfGame=0;
             }
             else
@@ -143,6 +148,8 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
                 Medium.setDisable(false);
                 Hard.setDisable(false);
                 Start.setDisable(true);
+                p1.setDisable(false);
+                p2.setDisable(false);
                 LevelOfGame=0;
             }
             else
@@ -166,9 +173,11 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
                 Hard.setSelected(false);
                 LevelOfGame=-1;
             }
-            if ((comp.isSelected() && (easy.isSelected() || Medium.isSelected() || Hard.isSelected())) || vs.isSelected() && (p1.isSelected()||p2.isSelected())){
+            if (comp.isSelected() && (easy.isSelected() || Medium.isSelected() || Hard.isSelected())&& (p1.isSelected()||p2.isSelected())){
                 Start.setDisable(false);
             }
+            else if(vs.isSelected())
+                Start.setDisable(false);
             else
                 Start.setDisable(true);
         });
@@ -184,9 +193,11 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
                 Hard.setSelected(false);
                 LevelOfGame=-1;
             }
-            if ((comp.isSelected() && (easy.isSelected()||Medium.isSelected()||Hard.isSelected())) || vs.isSelected() && (p1.isSelected()||p2.isSelected())){
+            if (comp.isSelected() && (easy.isSelected() || Medium.isSelected() || Hard.isSelected())&& (p1.isSelected()||p2.isSelected())){
                 Start.setDisable(false);
             }
+            else if(vs.isSelected())
+                Start.setDisable(false);
             else
                 Start.setDisable(true);
         });
@@ -202,9 +213,11 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
                 Medium.setSelected(false);
                 LevelOfGame=-1;
             }
-            if ((comp.isSelected() && (easy.isSelected()||Medium.isSelected()||Hard.isSelected())) || vs.isSelected() && (p1.isSelected()||p2.isSelected())){
+            if (comp.isSelected() && (easy.isSelected() || Medium.isSelected() || Hard.isSelected())&& (p1.isSelected()||p2.isSelected())){
                 Start.setDisable(false);
             }
+            else if(vs.isSelected())
+                Start.setDisable(false);
             else
                 Start.setDisable(true);
         });
@@ -218,9 +231,11 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
                 p2.setSelected(false);
                 Color=-1;
             }
-            if ((comp.isSelected() && (easy.isSelected()||Medium.isSelected()||Hard.isSelected())) || vs.isSelected() && (p1.isSelected()||p2.isSelected())){
+            if (comp.isSelected() && (easy.isSelected() || Medium.isSelected() || Hard.isSelected())&& (p1.isSelected()||p2.isSelected())){
                 Start.setDisable(false);
             }
+            else if(vs.isSelected())
+                Start.setDisable(false);
             else
                 Start.setDisable(true);
 
@@ -234,9 +249,11 @@ public class OpenDialogue {//oyun açılış ekranı için implement edilmiş bi
             if(!p2.isSelected()) {
                 Color=-1;
             }
-            if ((comp.isSelected() && (easy.isSelected()||Medium.isSelected()||Hard.isSelected())) || vs.isSelected() && (p1.isSelected()||p2.isSelected())){
+            if (comp.isSelected() && (easy.isSelected() || Medium.isSelected() || Hard.isSelected())&& (p1.isSelected()||p2.isSelected())){
                 Start.setDisable(false);
             }
+            else if(vs.isSelected())
+                Start.setDisable(false);
             else
                 Start.setDisable(true);
         });
