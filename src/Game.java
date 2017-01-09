@@ -89,7 +89,7 @@ public class Game implements Serializable {
         }
 
         for(int i=0; i<game.removesss.size()*2; i++){
-                removesss.get(i).setCell(game.removesss.get(i));
+            removesss.get(i).setCell(game.removesss.get(i));
         }
     }
 
@@ -179,11 +179,11 @@ public class Game implements Serializable {
      * @return
      */
     public boolean playUser(List<Cell> cellList, Cell cell ) {
-            int lengt = cellList.size();
-            for (int i = 0; i < lengt; ++i) {
-                if(cellList.get(i).equals(cell))
-                    return true;
-            }
+        int lengt = cellList.size();
+        for (int i = 0; i < lengt; ++i) {
+            if(cellList.get(i).equals(cell))
+                return true;
+        }
         return false;
     }
 
@@ -352,16 +352,17 @@ public class Game implements Serializable {
     private double maxofHard(int depth){
         double v = Double.NEGATIVE_INFINITY;
         List<Cell> notMove = new LinkedList<>();
-        ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
+        //ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
 
         Cell src = null;
         Cell trgt = null;
+        Cell enemyCell = null;
         if(depth==0){
             //System.out.println("MAX BAK TAM OLARAK BURADA!");
 
             return evaluate();
         }
-        System.out.println("+++++++" + movementCounter);
+        //System.out.println("+++++++" + movementCounter);
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -372,17 +373,28 @@ public class Game implements Serializable {
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
                             ++movementCounter;
-                            fakeBoard.addAll(board);
+                            //fakeBoard.addAll(board);
+                            if (!(notMove.get(k).getPiece() instanceof NoPiece)) {
+                                enemyCell = new Cell(notMove.get(k));
+                            }
                             makeMove(board.get(i).get(j), notMove.get(k));
+
+                            //printBoard();
                             //System.out.println("\nmax i " + i +"j " + j + "depth " + depth + " cell " + board.get(i).get(j).getPiece().toString()+ " player" + this.getCurrentPlayer());
                             //printBoard();
                             //System.out.println("i " + i +"j " + j);
                             //System.out.println("----> " + board.get(i).get(j).toString());
-                            double curVal = minofHard((depth-1));
+                            double curVal = minofHard((depth - 1));
 
                             undoMove(notMove.get(k), board.get(i).get(j));
-                            board.clear();
-                            board.addAll(fakeBoard);
+                            if(enemyCell != null){
+                                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+                                enemyCell = null;
+
+                            }
+                            //printBoard();
+                            //board.clear();
+                            //board.addAll(fakeBoard);
                             //System.out.println("fake2 " + depth);
                             if(curVal>v){
                                 v=curVal;
@@ -400,7 +412,7 @@ public class Game implements Serializable {
         }
         if(depth>=BIGDEPTH) {
 
-            printBoard();
+            //printBoard();
             makeMove(src, trgt);
             this.setCurrentPlayer(!this.getCurrentPlayer());
         }
@@ -414,7 +426,8 @@ public class Game implements Serializable {
     private double minofHard(int depth){
         double v = Double.POSITIVE_INFINITY;
         List<Cell> notMove = new LinkedList<>();
-        ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
+        //ArrayList<ArrayList<Cell>> fakeBoard = new ArrayList<ArrayList<Cell>>(8);
+        Cell enemyCell = null;
         if(depth==0){
             System.out.println("MIN BAK TAM OLARAK BURADA!");
 
@@ -429,15 +442,22 @@ public class Game implements Serializable {
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
                             ++movementCounter;
-                            fakeBoard.addAll(board);
+                            //fakeBoard.addAll(board);
+                            if(!(notMove.get(k).getPiece() instanceof NoPiece)){
+                                enemyCell = new Cell(notMove.get(k));
+                            }
                             makeMove(board.get(i).get(j), notMove.get(k));
                             //System.out.println("\nmin i " + i +" j " + j + " depth " + depth + " cell " + board.get(i).get(j).getPiece().toString() + " player" + this.getCurrentPlayer());
                             //printBoard();
 
                             double curVal = maxofHard((depth-1));
-                            board.clear();
-                            board.addAll(fakeBoard);
+
                             undoMove(notMove.get(k), board.get(i).get(j));
+                            if(enemyCell != null){
+                                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+                                enemyCell = null;
+
+                            }
                             if(curVal<v){
                                 v=curVal;
                             }
