@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static java.lang.Thread.sleep;
+
 public class Main extends Application  {
 
     Stage window;
@@ -158,6 +160,15 @@ public class Main extends Application  {
                     if(currentStatus==3){
                         Platform.exit();
                     }
+
+                    //Bilgisayarın oynama kısımı
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
+
                     for(a=0;a<board.size();++a)
                     {
                         for(b=0;b<board.get(a).size();++b)
