@@ -437,11 +437,20 @@ public class Main extends Application  {
             currentStatus = 0;
             game.restartGame();
         });
-        Previous.setOnAction(e->{//undo yani geri alma buttonunun event handleri.
+        Previous.setOnAction(e->{//undo yani geri alma buttonunun event handleri
+
+            /*
+            if(game.getCounterRemoves() < 5)
+                game.recallMove();
+            else
+                Previous.setDisable(true);
+
+            setButtons(botton);
+            */
             Table temp=  ListGame.peek();
             int m,n;
 
-            if(temp!=null && game.getCounterRemovess() <=5) {
+            if(temp!=null) {
                 game.recallMove();
                 ListGame.pop();
                 for (m = 0; m < 8; ++m) {
@@ -471,7 +480,7 @@ public class Main extends Application  {
             }
                 });
         Project.setOnAction(e->{ //About için event handler.
-            System.out.println("asdsad");
+            //System.out.println("asdsad");
             Stage window2=new Stage();
             window2.initModality(Modality.APPLICATION_MODAL);
             window2.setTitle("About GTUChess");

@@ -832,7 +832,7 @@ public class Game implements Serializable {
     public void recallMove(){
         //removesss.size 0 dan buyuk olmalı cunku en az bir hamle yapılmadan geri alma işemi gerçekleştirilemez
         //yani oyunun başında bu buton calismaz!!!
-        if(counterRemovess <= 5 && removesss.size() > 0){
+        if(counterRemovess < 5 && removesss.size() > 0){
             Cell sourceCell = new Cell();
             Cell targetCell = new Cell();
 
@@ -842,7 +842,7 @@ public class Game implements Serializable {
 
             //index son eleman, index-1 bir önceki; son eleman target(new source), önceki eleman source(new target)!
             //geri almak icin target source'a tasinir
-            board.get(targetCell.getX()).get(targetCell.getY()).setCell(board.get(sourceCell.getX()).get(sourceCell.getY()));
+            //board.get(targetCell.getX()).get(targetCell.getY()).setCell(board.get(sourceCell.getX()).get(sourceCell.getY()));
             board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
 
             counterRemovess++;
