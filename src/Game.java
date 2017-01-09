@@ -96,6 +96,7 @@ public class Game implements Serializable {
         }
     }
 
+
     /**
      * Kullanicinin son tiklamasini alir ve eger depolanmis bisey yoksa ve tiklamasi bos veya karsi takimin tasiysa
      * 0 return eder. Eger bi tasa tiklandiysa 1 return eder ve gidebilecegi yerleri TempMovesList'de depolar
@@ -841,7 +842,7 @@ public class Game implements Serializable {
 
             //index son eleman, index-1 bir önceki; son eleman target(new source), önceki eleman source(new target)!
             //geri almak icin target source'a tasinir
-            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
+            board.get(targetCell.getX()).get(targetCell.getY()).setCell(board.get(sourceCell.getX()).get(sourceCell.getY()));
             board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
 
             counterRemovess++;
@@ -1070,6 +1071,8 @@ public class Game implements Serializable {
         System.out.print("KingPosition hatası\n");
         return -1;
     }
+
+    public int getCounterRemovess(){return counterRemovess;}
 
     public static void setCurrentPlayer( boolean cPlayer ) { currentPlayer = cPlayer; }
     public static boolean getCurrentPlayer() { return currentPlayer; }

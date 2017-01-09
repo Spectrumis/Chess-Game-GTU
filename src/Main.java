@@ -441,7 +441,7 @@ public class Main extends Application  {
             Table temp=  ListGame.peek();
             int m,n;
 
-            if(temp!=null) {
+            if(temp!=null && game.getCounterRemovess() <=5) {
                 game.recallMove();
                 ListGame.pop();
                 for (m = 0; m < 8; ++m) {
