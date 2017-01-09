@@ -7,6 +7,7 @@ import java.util.*;
  */
 public class Game implements Serializable {
 
+    private static int kingDangerStatus = 0; //king tehlike durum kontrolu icin
     private static int isComputerOn = 0; //oyuncu vs computer ilk basta kapalı
     /** Degerler soyle:
      *  0 = No Computer (player vs player)
@@ -45,6 +46,7 @@ public class Game implements Serializable {
      *
      */
     public Game(){
+        kingDangerStatus = 0;
         removesss = new Stack<Cell>();
         for(int i =0; i < 64*2; ++i) {
             removesss.add(new Cell());
@@ -68,6 +70,7 @@ public class Game implements Serializable {
      * @param game
      */
     public Game(Game game){
+        kingDangerStatus = 0;
         board = new ArrayList<ArrayList<Cell>>(8);
         for(int i =0; i < 8; ++i){
             board.add(new ArrayList<Cell>());
@@ -105,6 +108,7 @@ public class Game implements Serializable {
      */
     public int playGame(int x, int y, List<Cell> TempMovesList){
         int status=0;
+
         try {
             Cell currentCell = new Cell(board.get(x).get(y));
             Cell emptyCell = new Cell();
@@ -116,11 +120,15 @@ public class Game implements Serializable {
                 return 3;
             }
             //burada sah tehlikedemi diye bakar
-            if(board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)){
+            if((board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)) && getKingDangerStatus() == 0){
                 if(x != king/10 || y != king-(king/10)*10){
                     return 0;
                 }
+                else{
+                    setKingDangerStatus(1);
+                }
             }
+
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
             if (currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer()) {
             /* ... ve daha once oynatabilecegimiz biseye tiklamadiysak sifir return edicez demektir*/
@@ -139,15 +147,15 @@ public class Game implements Serializable {
                         setTempCell(emptyCell);
                     /* suanki oyuncu degerini degistiriyoruz */
                         setCurrentPlayer(!getCurrentPlayer());
-
+                        setKingDangerStatus(0);
                     /*PAWN SON SATIRA ULASTI MI DIYE BAKIYORUZ, ULASTIYSA PAWN KALE OLUR!!*/
                         //checkPawn();
-
                     /* ve 2 komutunu return ederek hamle yaptik diyoruz */
                         return 2;
                     }
                 /* eger tiklanan yer listede yoksa TempMovesListesini temizleyip sifir return ediyoruz */
                     else {
+                        setKingDangerStatus(0);
                         System.out.print("debug3\n");
                         TempMovesList.clear();
                         setTempCell(emptyCell);
@@ -161,7 +169,6 @@ public class Game implements Serializable {
                 tempCell.setCell(currentCell);
                 TempMovesList.addAll(board.get(x).get(y).getPiece().checkMove(board, x, y));
                 return 1;
-
             }
         } catch (NullPointerException e){
             return -1;
@@ -901,4 +908,7 @@ public class Game implements Serializable {
 
     public void setTempCell( Cell target ) { tempCell.setCell(target); }
     public Cell getTempCell() { return tempCell; }
+
+    public void setKingDangerStatus(int value){ kingDangerStatus = value; }
+    public int getKingDangerStatus(){ return kingDangerStatus; }
 }
