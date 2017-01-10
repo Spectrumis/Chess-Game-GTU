@@ -76,7 +76,6 @@ public class Cell implements Serializable{
     public boolean equals(Cell obj) {
         if (obj == this)
             return true;
-
         if(((Cell) obj).getX() == this.getX()){
             if(((Cell) obj).getY() == this.getY()){
                 if(((Cell) obj).getPiece() == this.getPiece())
