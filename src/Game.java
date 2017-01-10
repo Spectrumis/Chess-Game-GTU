@@ -31,7 +31,7 @@ public class Game implements Serializable {
     private static final double QUEEN = 8.8;
     private static final double KING = 1000.0;
     private static int movementCounter = 0;
-    private static final int BIGDEPTH = 4;
+    private static final int BIGDEPTH = 6;
 
 
     /**
@@ -414,6 +414,7 @@ public class Game implements Serializable {
          *
          */
         Cell memCell = null;
+        Cell targetCell = null;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 memCell = new Cell(board.get(i).get(j));
@@ -423,17 +424,21 @@ public class Game implements Serializable {
 
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
+                            targetCell = new Cell(notMove.get(k));
                             ++movementCounter;
                             //System.out.println(movementCounter + " ");
 
-                            if (!(notMove.get(k).getPiece() instanceof NoPiece)) {
+                            if (! (targetCell.getPiece() instanceof NoPiece)) {
                                 enemyCell = new Cell(notMove.get(k));
                             }
-                            makeMove(memCell, notMove.get(k));
-
+                            // makeMove
+                            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(memCell.getPiece());
+                            board.get(memCell.getX()).get(memCell.getY()).setPiece(new NoPiece());
                             double curVal = minofHard((depth - 1));
 
-                            undoMove(notMove.get(k), memCell);
+                            //undoMove
+                            board.get(memCell.getX()).get(memCell.getY()).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
+                            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(new NoPiece());
                             if(enemyCell != null){
                                 board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
                                 enemyCell = null;
@@ -494,6 +499,8 @@ public class Game implements Serializable {
          *
          */
         Cell memCell = null;
+        Cell targetCell = null;
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 memCell = new Cell(board.get(i).get(j));
@@ -503,20 +510,23 @@ public class Game implements Serializable {
 
                     if(!notMove.isEmpty()){
                         for (int k = 0; k < notMove.size(); k++) {
+                            targetCell = new Cell(notMove.get(k));
+
                             ++movementCounter;
                             //System.out.println(movementCounter + " ");
 
                             //fakeBoard.addAll(board);
-                            if(!(notMove.get(k).getPiece() instanceof NoPiece)){
+                            if (! (targetCell.getPiece() instanceof NoPiece)) {
                                 enemyCell = new Cell(notMove.get(k));
                             }
-                            makeMove(memCell, notMove.get(k));
-                            //System.out.println("\nmin i " + i +" j " + j + " depth " + depth + " cell " + board.get(i).get(j).getPiece().toString() + " player" + this.getCurrentPlayer());
-                            //printBoard();
+                            //makemove
+                            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(memCell.getPiece());
+                            board.get(memCell.getX()).get(memCell.getY()).setPiece(new NoPiece());
+                            double curVal = maxofHard((depth - 1));
 
-                            double curVal = maxofHard((depth-1));
-
-                            undoMove(notMove.get(k), board.get(i).get(j));
+                            //undoMove
+                            board.get(memCell.getX()).get(memCell.getY()).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
+                            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(new NoPiece());
                             if(enemyCell != null){
                                 board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
                                 enemyCell = null;
