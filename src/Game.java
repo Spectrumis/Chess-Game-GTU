@@ -32,7 +32,9 @@ public class Game implements Serializable {
     private static final double KING = 1000.0;
     private static int movementCounter = 0;
     private static final int BIGDEPTH = 4;
-
+    public int source_x, source_y, target_x, target_y;
+    public int source_x1, source_y1, target_x1, target_y1;
+    public String _piece = "";
 
     /**
      *
@@ -145,6 +147,10 @@ public class Game implements Serializable {
                     if (playUser(TempMovesList, currentCell)) {
                         System.out.print("debug2\n");
                         makeMove(getTempCell(), currentCell);
+                        source_x1 = 8-getTempCell().getCell().getX();
+                        source_y1 = 8-getTempCell().getCell().getY();
+                        target_x1 = 8-currentCell.getCell().getX();
+                        target_y1 = 8-currentCell.getCell().getY();
                         TempMovesList.clear();
                         setTempCell(emptyCell);
                     /* suanki oyuncu degerini degistiriyoruz */
@@ -221,8 +227,31 @@ public class Game implements Serializable {
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
         Pieces piece = new NoPiece();
+        if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Pawn) {
+            //  System.out.println("----pawn----");
+            _piece = "pawn";
+        }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Bishop){
+           // System.out.println("----bishop----");
+            _piece = "bishop";
+        }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Knight){
+           // System.out.println("----knight---");
+            _piece = "knight";
+        }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King){
+        //    System.out.println("----king----");
+            _piece = "king";
+        }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Queen){
+         //   System.out.println("----queen----");
+            _piece = "queen";
+        }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Rook){
+          //  System.out.println("----rook----");
+            _piece = "rook";
+        }
         board.get(source.getX()).get(source.getY()).setPiece(piece);
-
+        source_x = 8-source.getCell().getX();
+        source_y = 8-source.getCell().getY();
+        target_x = 8-target.getCell().getX();
+        target_y = 8-target.getCell().getY();
+       // System.out.printf("piece: %s, source_x: %d, source_y: %d, target_x:%d, target_y%d\n", board.get(source.getX()).get(source.getY()).getPiece().toString(), 8-source.getCell().getX(), 8-source.getCell().getY(), 8-target.getCell().getX(), 8-target.getCell().getY());
         //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
         removesss.push(new Cell(source));
         removesss.push(new Cell(target));
@@ -305,6 +334,7 @@ public class Game implements Serializable {
             int randomInt = randomGenerator.nextInt(trgtMove.size());
             //System.out.println("random: " + randomInt);
             makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
+
             this.setCurrentPlayer(!this.getCurrentPlayer());
 
         }

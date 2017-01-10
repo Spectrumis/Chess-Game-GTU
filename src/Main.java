@@ -1,15 +1,16 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.GroupBuilder;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -39,6 +40,12 @@ public class Main extends Application  {
     int markButton=0;
     Game game = new Game();
     int b;
+    private Group myGroup;
+    private Text textMoves;
+    private String moves = "";
+    private BorderPane pane;
+    private int userColor;
+    int counter = 0;
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -67,18 +74,21 @@ public class Main extends Application  {
 
                 a=i;
                 b=j;
-
                 button[i][j].setOnAction(e->{
 
                     ArrayList<ArrayList<Cell>> board=game.getBoard();
                     int a,b;
                     CurrentButton=(ExtendedButton)e.getSource();
+                   // System.out.println(CurrentButton.get);
                     for(a=0;a<board.size();++a)
                     {
                         for(b=0;b<board.get(a).size();++b)
                             if (!board.get(a).get(b).piece.getColor()) {
                                 //System.out.println("PrintBoard, false, siyah!!");
+                             //   System.out.print("getPiece1: ");
+                             //   System.out.println(board.get(a).get(b).getPiece());
                                 if (board.get(a).get(b).getPiece() instanceof Pawn) {
+
                                     button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
                                 } else if (board.get(a).get(b).getPiece() instanceof Rook) {
                                     button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
@@ -95,6 +105,8 @@ public class Main extends Application  {
                             }
                             else
                             {
+                             //   System.out.print("getPiece2: ");
+                              // /// System.out.println(board.get(a).get(b).getPiece());
                                 if (board.get(a).get(b).getPiece() instanceof Pawn) {
                                     button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
                                 } else if (board.get(a).get(b).getPiece() instanceof Rook) {
@@ -117,8 +129,9 @@ public class Main extends Application  {
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                         currentStatus = game.playGame(CurrentButton.getCoorX(), CurrentButton.getCoorY(), tempMovesList);
+                    //    System.out.printf("4 - > x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
 
-                        System.out.print("Status:" + currentStatus + "\n");
+                    //    System.out.print("Status:" + currentStatus + "\n");
 
                     //    System.out.print("TempListCounter:" + a + "\n");
                     }
@@ -142,6 +155,29 @@ public class Main extends Application  {
                                 break;
                         }
                         tempMovesList.clear();
+
+                        int k = game.source_x + '@' ;
+                        int l = game.target_x + '@' ;
+                        if(userColor==1)
+                            moves += "W: ";
+                        else
+                            moves += "B: \n";
+                        if(game._piece.equals("bishop"))
+                            moves += "♗ " + " ";
+                        else if(game._piece.equals("pawn"))
+                            moves += "♙ " + " ";
+                        else if(game._piece.equals("king"))
+                            moves += "♔ " + " ";
+                        else if(game._piece.equals("queen"))
+                            moves += "♕ " + " ";
+                        else if(game._piece.equals("rook"))
+                            moves += "♖ " + " ";
+                        else if(game._piece.equals("knight"))
+                            moves += "♘ " + " ";
+
+                        moves += Character.toUpperCase((char)k);
+                        moves += game.source_y + " -> " + Character.toUpperCase((char)l) +  game.target_y + "\n";
+                        System.out.printf("x1: %c, x2: %d, y1: %c, y2: %d\n", k, game.source_y, l, game.target_y);
                     }
                     startingStatusHandler = true;
                     if(currentStatus==1)
@@ -149,11 +185,12 @@ public class Main extends Application  {
                         for (a = markButton; a < tempMovesList.size(); ++a) {
                             markButton(tempMovesList.get(a).getX(), tempMovesList.get(a).getY());
                         }
-
                         markButton(CurrentButton.getCoorX(), CurrentButton.getCoorY());
+                        //System.out.printf("1player -> x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
                     }
                     if(currentStatus==2)
                     {
+                     //   System.out.printf("2player -> x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
                         button[CurrentButton.getCoorX()][CurrentButton.getCoorY()].setStyle(button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].getStyle());
                         button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].setStyle("-fx-border-color: gray; )");
                     }
@@ -162,6 +199,9 @@ public class Main extends Application  {
                     }
 
                     //Bilgisayarın oynama kısımı
+
+                //    System.out.println("computerrrrrrrrrrr");
+
 
                     for(a=0;a<board.size();++a)
                     {
@@ -202,13 +242,16 @@ public class Main extends Application  {
                             }
 
                     }
+
                     refreshTable();
+                    textMoves.setText(moves);
 
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                         currentStatus = game.playGame(CurrentButton.getCoorX(), CurrentButton.getCoorY(), tempMovesList);
+                     //   System.out.printf("3- > x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
 
-                        System.out.print("Status:" + currentStatus + "\n");
+                     //   System.out.print("Status:" + currentStatus + "\n");
 
                         //    System.out.print("TempListCounter:" + a + "\n");
                     }
@@ -233,31 +276,49 @@ public class Main extends Application  {
                         }
                         tempMovesList.clear();
                     }
+                   /* ++counter;
+                    System.out.printf("x: %d, y: %d, button: %s\n", CurrentButton.getCoorX(),  CurrentButton.getCoorY(), getPieces(CurrentButton).toString());
+                    if(!getPieces(CurrentButton).equals("null")){
+                        System.out.printf("MOVE3 - > counter: %d, x1: %d, x2: %d, y1: %d, y2: %d\n", counter, game.source_x1, game.source_y1, game.target_x1, game.target_y1);
+                        int k = game.source_x1 + '@' ;
+                        int l = game.target_x1 + '@' ;
+                        if(userColor==0)
+                            moves += "W: ";
+                        else
+                            moves += "B: ";
+                        moves += Character.toUpperCase((char)k);
+                        moves += game.source_y1 + " -> " + Character.toUpperCase((char)l) +  game.target_y1 + "\n";
+                        counter = 0;
+                    }*/
                     startingStatusHandler = true;
                     if(currentStatus==1)
                     {
                         for (a = markButton; a < tempMovesList.size(); ++a) {
                             markButton(tempMovesList.get(a).getX(), tempMovesList.get(a).getY());
                         }
-
                         markButton(CurrentButton.getCoorX(), CurrentButton.getCoorY());
+                      //  System.out.printf("MOVE2 - > x1: %d, x2: %d, y1: %d, y2: %d\n", game.source_x, game.source_y, game.target_x, game.target_y);
                     }
                     if(currentStatus==2)
                     {
                         button[CurrentButton.getCoorX()][CurrentButton.getCoorY()].setStyle(button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].getStyle());
                         button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].setStyle("-fx-border-color: gray; )");
+                       // System.out.printf("1computer - > x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
                     }
                     if(currentStatus==3){
                         Platform.exit();
                     }
                     markButton=tempMovesList.size();
                     currentPoint.add(new Coordinate(CurrentButton.getCoorX(),CurrentButton.getCoorY()));
+                 //   System.out.printf("MOVE1 - > x1: %c, x2: %d, y1: %c, y2: %d\n", k, game.source_y1, l, game.target_y1);
+                    //System.out.printf("5 - > x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
+                 //
                     Table temp=new Table(button);//oyunun her bir anı kayıt edilmektedir geri alabilmek için.
                     ListGame.add(temp);//stacke kayıtlanmaktadır.
-
                 });
             }
         }
+
         for(i=7;i>=0;--i)
         {
             for(j=7;j>=0;--j)
@@ -265,14 +326,18 @@ public class Main extends Application  {
                 GridPane.setConstraints(button[i][j],7-i,7-j);
             }
         }
+        pane=new BorderPane();
+        pane.setLeft(grid);
+        Scene scene=new Scene(pane,680,520);
         setButtons(button);//taşları boarda yerleştiriyorum.
         //BU kısımdada boardı ekrana yerleştiriyorum.
         Label Space2=new Label();
         Space2.setText("       ");
-        GridPane.setConstraints(Restart,10,2);
-        GridPane.setConstraints(Space,9,2);
-        GridPane.setConstraints(Previous,10,4);
-        GridPane.setConstraints(Space2,9,4);
+        GridPane.setConstraints(Space2,9,1);
+        GridPane.setConstraints(Restart,10,1);
+        GridPane.setConstraints(Space,11,1);
+        GridPane.setConstraints(Previous,12,1);
+     //   GridPane.setConstraints(Space2,9,4);
         Restart.setDisable(true);
         for(i=7;i>=0;--i)
         {
@@ -291,10 +356,8 @@ public class Main extends Application  {
                 button[i][j].setDisable(true);
             }
         }
-        BorderPane pane=new BorderPane();
-        pane.setLeft(grid);
-        Scene scene=new Scene(pane,600,520);
         MenuBar menuBar = new MenuBar();
+
         // --- Menu File yani menu kısmını oluşturduğum bölüm
         Menu menuFile = new Menu("Game");
         MenuItem restart=new MenuItem("New Game");
@@ -367,6 +430,7 @@ public class Main extends Application  {
         });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
+            moves = "";
             Open.OpenMenu(Start,button);
             if(Open.Color==1)
             {
@@ -385,6 +449,8 @@ public class Main extends Application  {
                 }
             }
             setButtons(button);
+
+
             Restart.setDisable(true);
             //new game dendiginde oyun yeniden baslar, SIFIRDAN!!
             game = new Game();
@@ -431,6 +497,7 @@ public class Main extends Application  {
         window.show();
         Open.initialWindow();
         Open.OpenMenu(Start,button);
+
 
         Restart.setOnAction(e->{//geçerli olan oyunun yeniden başlaması yani sağdaki button olan restart.
             setButtons(button);
@@ -532,6 +599,8 @@ public class Main extends Application  {
             Open.window.close();
             System.out.println(Open.LevelOfGame);
             Game.setIsComputerOn(Open.LevelOfGame);
+            userColor = Open.Color;
+            System.out.printf("userColor: %d\n", userColor);
             if(Open.Color==1)
             {
                 startingStatusHandler=false;
@@ -631,6 +700,7 @@ public class Main extends Application  {
         for(a=0;a<8;++a) {
             for(b=0;b<8;++b) {
                 ButtonBorders[a][b]=new String(button[a][b].getStyle().toString().split(" ")[1]);
+             //  System.out.printf("getPieces: %s\n",getPieces(button[a][b]));
                 button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/" + "" +
                         getPieces(button[a][b]) + ".png')");
             }
@@ -665,8 +735,7 @@ public class Main extends Application  {
             }
         }*/
     }
-    private void setButtons(ExtendedButton [][] button)
-    {
+    private void setButtons(ExtendedButton [][] button) {
         int i,a,b;
 
         for(i=0;i<8;++i)
@@ -702,8 +771,24 @@ public class Main extends Application  {
                         button[a][b].setStyle("-fx-border-color: gray;");
             }
         }
+        textMoves = TextBuilder.create()
+                .text(moves)
+                .textAlignment(TextAlignment.LEFT)
+                .build();
+        textMoves.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+        myGroup = GroupBuilder.create()
+                .children(
+                        ScrollPaneBuilder.create().layoutX(525).layoutY(140)
+                                .prefWidth(140)
+                                .prefHeight(350)
+                                .content(textMoves)
+                                .build()
+                )
+                .build();
+        Text text = new Text(525,130, "  Game Record");
+        text.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+        pane.getChildren().addAll(myGroup, text);
 }
-
 
     /**
      * Created by Recep Sivri on 28.11.2016.
