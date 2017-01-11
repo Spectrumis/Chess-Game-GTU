@@ -426,7 +426,7 @@ public class Game implements Serializable {
         Cell src = null; //en son hesaplanan degerde oynanmasi gereken tasin source bilgileri buraya
         Cell trgt = null; //target bilgileri buraya kopyalanacak
         Cell enemyCell = null; //eger rakip tasi yendiyse enemyCell o tasin bilgilerini tutmak icin kullanilacak
-
+        double curVal, eval;
         //eger agacin en sonuna gelindiyse return edilerek bitirilir
         if(depth==0){
             return evaluate();
@@ -443,8 +443,8 @@ public class Game implements Serializable {
          *  bu hamlenin bilgileri src ve trgt isimli iki celle kopyalanir.
          *
          */
+
         Cell memCell = null;
-        Cell targetCell = null;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 memCell = new Cell(board.get(i).get(j));
@@ -453,21 +453,27 @@ public class Game implements Serializable {
                     notMove.addAll(memCell.getPiece().checkMove(board, i, j));
 
                     if(!notMove.isEmpty()){
-                        for (int k = 0; k < notMove.size(); k++) {
-                            targetCell = new Cell(notMove.get(k));
-                            ++movementCounter;
-                            //System.out.println(movementCounter + " ");
+                        for (Cell targetCell : notMove) {
 
                             if (! (targetCell.getPiece() instanceof NoPiece)) {
-                                enemyCell = new Cell(notMove.get(k));
+                                enemyCell = new Cell(targetCell);
+
                             }
                             // makeMove
                             board.get(targetCell.getX()).get(targetCell.getY()).setPiece(memCell.getPiece());
-                            board.get(memCell.getX()).get(memCell.getY()).setPiece(new NoPiece());
-                            double curVal = minofHard((depth - 1));
+                            board.get(i).get(j).setPiece(new NoPiece());
+                            if(enemyCell != null && enemyCell.getPiece() instanceof King) {
+                                eval = evaluate();
+                                board.get(i).get(j).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
+                                board.get(targetCell.getX()).get(targetCell.getY()).setPiece(new NoPiece());
+                                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+                                enemyCell = null;
+                                return eval;
+                            }
+                            curVal = minofHard((depth - 1));
 
                             //undoMove
-                            board.get(memCell.getX()).get(memCell.getY()).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
+                            board.get(i).get(j).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
                             board.get(targetCell.getX()).get(targetCell.getY()).setPiece(new NoPiece());
                             if(enemyCell != null){
                                 board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
@@ -478,7 +484,7 @@ public class Game implements Serializable {
                                 v=curVal;
                                 if(depth>= BIGDEPTH){
                                     src = new Cell(memCell);
-                                    trgt = new Cell(notMove.get(k));
+                                    trgt = new Cell(targetCell);
                                 }
                             }
                         }
@@ -511,7 +517,7 @@ public class Game implements Serializable {
 
         List<Cell> notMove = new LinkedList<>(); // o anki tasin olasi hamleleri
         Cell enemyCell = null;  //eger rakip tasi yendiyse enemyCell o tasin bilgilerini tutmak icin kullanilacak
-
+        double eval;
         //eger agacin en sonuna gelindiyse return edilerek bitirilir
         if(depth==0){
             return evaluate();
@@ -529,7 +535,6 @@ public class Game implements Serializable {
          *
          */
         Cell memCell = null;
-        Cell targetCell = null;
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -539,19 +544,23 @@ public class Game implements Serializable {
                     notMove.addAll(memCell.getPiece().checkMove(board, i, j));
 
                     if(!notMove.isEmpty()){
-                        for (int k = 0; k < notMove.size(); k++) {
-                            targetCell = new Cell(notMove.get(k));
-
-                            ++movementCounter;
-                            //System.out.println(movementCounter + " ");
+                        for (Cell targetCell : notMove) {
 
                             //fakeBoard.addAll(board);
                             if (! (targetCell.getPiece() instanceof NoPiece)) {
-                                enemyCell = new Cell(notMove.get(k));
+                                enemyCell = new Cell(targetCell);
                             }
                             //makemove
                             board.get(targetCell.getX()).get(targetCell.getY()).setPiece(memCell.getPiece());
                             board.get(memCell.getX()).get(memCell.getY()).setPiece(new NoPiece());
+                            if(enemyCell != null && enemyCell.getPiece() instanceof King) {
+                                eval = evaluate();
+                                board.get(memCell.getX()).get(memCell.getY()).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
+                                board.get(targetCell.getX()).get(targetCell.getY()).setPiece(new NoPiece());
+                                board.get(enemyCell.getX()).get(enemyCell.getY()).setPiece(enemyCell.getPiece());
+                                enemyCell = null;
+                                return eval;
+                            }
                             double curVal = maxofHard((depth - 1));
 
                             //undoMove
@@ -654,38 +663,40 @@ public class Game implements Serializable {
      */
     private double evaluate(){
         double total=0.0;
-        //System.out.println("----------");
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if(!(board.get(i).get(j).getPiece() instanceof NoPiece)) {
-                    if (board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()) {
+        //++movementCounter;
+        //System.out.println(movementCounter);
 
-                        if(board.get(i).get(j).getPiece() instanceof Pawn)
+        for (int i = 0; i < 8; i++) {
+            for (Cell memCell : board.get(i)) {
+                if(!(memCell.getPiece() instanceof NoPiece)) {
+                    if (memCell.getPiece().getColor() == this.getCurrentPlayer()) {
+
+                        if(memCell.getPiece() instanceof Pawn)
                             total += PAWN;
-                        else if(board.get(i).get(j).getPiece() instanceof Knight)
+                        else if(memCell.getPiece() instanceof Knight)
                             total += KNIGHT;
-                        else if(board.get(i).get(j).getPiece() instanceof Bishop)
+                        else if(memCell.getPiece() instanceof Bishop)
                             total += BISHOP;
-                        else if(board.get(i).get(j).getPiece() instanceof Rook)
+                        else if(memCell.getPiece() instanceof Rook)
                             total += ROOK;
-                        else if(board.get(i).get(j).getPiece() instanceof Queen)
+                        else if(memCell.getPiece() instanceof Queen)
                             total += QUEEN;
-                        else if(board.get(i).get(j).getPiece() instanceof King)
+                        else if(memCell.getPiece() instanceof King)
                             total += KING;
 
                     }
                     else{
-                        if(board.get(i).get(j).getPiece() instanceof Pawn)
+                        if(memCell.getPiece() instanceof Pawn)
                             total -= PAWN;
-                        else if(board.get(i).get(j).getPiece() instanceof Knight)
+                        else if(memCell.getPiece() instanceof Knight)
                             total -= KNIGHT;
-                        else if(board.get(i).get(j).getPiece() instanceof Bishop)
+                        else if(memCell.getPiece() instanceof Bishop)
                             total -= BISHOP;
-                        else if(board.get(i).get(j).getPiece() instanceof Rook)
+                        else if(memCell.getPiece() instanceof Rook)
                             total -= ROOK;
-                        else if(board.get(i).get(j).getPiece() instanceof Queen)
+                        else if(memCell.getPiece() instanceof Queen)
                             total -= QUEEN;
-                        else if(board.get(i).get(j).getPiece() instanceof King)
+                        else if(memCell.getPiece() instanceof King)
                             total -= KING;
 
                     }
