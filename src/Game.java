@@ -34,7 +34,8 @@ public class Game implements Serializable {
     private static final int BIGDEPTH = 4;
     public int source_x, source_y, target_x, target_y;
     public int source_x1, source_y1, target_x1, target_y1;
-    public String _piece = "";
+    public String pieceComp = "";
+    public String piecePl = "";
 
     /**
      *
@@ -146,6 +147,25 @@ public class Game implements Serializable {
                 /* eger var ise hamlemizi yapiyoruz ve listemizi temizleyip icine hamle source ve targetini atiyoruz*/
                     if (playUser(TempMovesList, currentCell)) {
                         System.out.print("debug2\n");
+                        if(board.get(getTempCell().getX()).get(getTempCell().getY()).getPiece() instanceof Pawn) {
+                        //    System.out.println("----pawn----");
+                            piecePl = "pawn";
+                        }else if(board.get(getTempCell().getX()).get(getTempCell().getY()).getPiece() instanceof Bishop){
+                        //    System.out.println("----bishop----");
+                            piecePl = "bishop";
+                        }else if(board.get(getTempCell().getX()).get(getTempCell().getY()).getPiece() instanceof Knight){
+                        //    System.out.println("----knight---");
+                            piecePl = "knight";
+                        }else if(board.get(getTempCell().getX()).get(getTempCell().getY()).getPiece() instanceof King){
+                         //   System.out.println("----king----");
+                            piecePl = "king";
+                        }else if(board.get(getTempCell().getX()).get(getTempCell().getY()).getPiece() instanceof Queen){
+                        //    System.out.println("----queen----");
+                            piecePl = "queen";
+                        }else if(board.get(getTempCell().getX()).get(getTempCell().getY()).getPiece() instanceof Rook){
+                        //    System.out.println("----rook----");
+                            piecePl = "rook";
+                        }
                         makeMove(getTempCell(), currentCell);
                         source_x1 = 8-getTempCell().getCell().getX();
                         source_y1 = 8-getTempCell().getCell().getY();
@@ -223,30 +243,31 @@ public class Game implements Serializable {
         if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King || board.get(source.getX()).get(source.getY()).getPiece() instanceof Rook){
             board.get(source.getX()).get(source.getY()).getPiece().setIsMoved(true);
         }
-        //System.out.print("Movemakera girdi\n");
+
         board.get(target.getX()).get(target.getY()).setPiece(source.getPiece());
 
-        Pieces piece = new NoPiece();
         if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Pawn) {
-            //  System.out.println("----pawn----");
-            _piece = "pawn";
+            //    System.out.println("----pawn----");
+            pieceComp = "pawn";
         }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Bishop){
-           // System.out.println("----bishop----");
-            _piece = "bishop";
+            // System.out.println("----bishop----");
+            pieceComp = "bishop";
         }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Knight){
-           // System.out.println("----knight---");
-            _piece = "knight";
+            //   System.out.println("----knight---");
+            pieceComp = "knight";
         }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof King){
-        //    System.out.println("----king----");
-            _piece = "king";
+            //   System.out.println("----king----");
+            pieceComp = "king";
         }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Queen){
-         //   System.out.println("----queen----");
-            _piece = "queen";
+            //   System.out.println("----queen----");
+            pieceComp = "queen";
         }else if(board.get(source.getX()).get(source.getY()).getPiece() instanceof Rook){
-          //  System.out.println("----rook----");
-            _piece = "rook";
+            //  System.out.println("----rook----");
+            pieceComp = "rook";
         }
+        Pieces piece = new NoPiece();
         board.get(source.getX()).get(source.getY()).setPiece(piece);
+
         source_x = 8-source.getCell().getX();
         source_y = 8-source.getCell().getY();
         target_x = 8-target.getCell().getX();

@@ -25,7 +25,11 @@ public class Record {
     public String piece;
     @Override
     public String toString(){
-        return color + "" + piece + (char)getSource_x() + getSource_y() + " -> " + (char)getTarget_x() + getTarget_y()+ "\n";
+        if(color.charAt(0) == 'B'){
+            return color + "  " + piece +"\t"+ (char)getSource_x() + getSource_y() + " -> " + (char)getTarget_x() + getTarget_y()+ "\n";
+        }
+        else
+            return color + "" + piece +"\t"+ (char)getSource_x() + getSource_y() + " -> " + (char)getTarget_x() + getTarget_y()+ "\n";
     }
 
 }
