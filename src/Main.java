@@ -42,9 +42,11 @@ public class Main extends Application  {
     int b;
     private Group myGroup;
     private Text textMoves;
-    private String moves = "";
     private BorderPane pane;
     private int userColor;
+    private Stack whiteRecord = new Stack<Record>();
+    private Stack blackRecord = new Stack<Record>();
+    private Stack allRecord = new Stack<Record>();
     int counter = 0;
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -156,28 +158,39 @@ public class Main extends Application  {
                         }
                         tempMovesList.clear();
 
-                        int k = game.source_x + '@' ;
-                        int l = game.target_x + '@' ;
-                        if(userColor==1)
-                            moves += "W: ";
-                        else
-                            moves += "B: \n";
-                        if(game._piece.equals("bishop"))
-                            moves += "♗ " + " ";
-                        else if(game._piece.equals("pawn"))
-                            moves += "♙ " + " ";
-                        else if(game._piece.equals("king"))
-                            moves += "♔ " + " ";
-                        else if(game._piece.equals("queen"))
-                            moves += "♕ " + " ";
-                        else if(game._piece.equals("rook"))
-                            moves += "♖ " + " ";
-                        else if(game._piece.equals("knight"))
-                            moves += "♘ " + " ";
+                        Record record = new Record();
+                        record.setSource_x(Character.toUpperCase((char)game.source_x + '@'));
+                        record.setSource_y(game.source_y);
+                        record.setTarget_x(Character.toUpperCase((char)game.target_x + '@'));
+                        record.setTarget_y(game.target_y);
 
-                        moves += Character.toUpperCase((char)k);
-                        moves += game.source_y + " -> " + Character.toUpperCase((char)l) +  game.target_y + "\n";
-                        System.out.printf("x1: %c, x2: %d, y1: %c, y2: %d\n", k, game.source_y, l, game.target_y);
+                        if(game._piece.equals("bishop"))
+                            record.piece = record.bishop;
+                        else if(game._piece.equals("pawn"))
+                            record.piece = record.pawn;
+                        else if(game._piece.equals("king"))
+                            record.piece = record.king;
+                        else if(game._piece.equals("queen"))
+                            record.piece = record.queen;
+                        else if(game._piece.equals("rook"))
+                            record.piece = record.rook;
+                        else if(game._piece.equals("knight"))
+                            record.piece = record.knight;
+
+                        System.out.printf("----userColor: %d\n", userColor);
+                        if(userColor==1) {
+                            System.out.println("white");
+                            record.color = "W: ";
+                            whiteRecord.push(record);
+                            allRecord.push(whiteRecord);
+                        }
+                        else if(userColor==0){
+                            System.out.println("black");
+                            record.color = "B: ";
+                            blackRecord.push(record);
+                            allRecord.push(blackRecord);
+                        }
+
                     }
                     startingStatusHandler = true;
                     if(currentStatus==1)
@@ -244,7 +257,6 @@ public class Main extends Application  {
                     }
 
                     refreshTable();
-                    textMoves.setText(moves);
 
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
@@ -275,20 +287,45 @@ public class Main extends Application  {
                                 break;
                         }
                         tempMovesList.clear();
+                        Record record = new Record();
+                        record.setSource_x(Character.toUpperCase((char)game.source_x + '@'));
+                        record.setSource_y(game.source_y);
+                        record.setTarget_x(Character.toUpperCase((char)game.target_x + '@'));
+                        record.setTarget_y(game.target_y);
+
+                        if(game._piece.equals("bishop"))
+                            record.piece = record.bishop;
+                        else if(game._piece.equals("pawn"))
+                            record.piece = record.pawn;
+                        else if(game._piece.equals("king"))
+                            record.piece = record.king;
+                        else if(game._piece.equals("queen"))
+                            record.piece = record.queen;
+                        else if(game._piece.equals("rook"))
+                            record.piece = record.rook;
+                        else if(game._piece.equals("knight"))
+                            record.piece = record.knight;
+
+                        if(userColor==1) {
+                            System.out.println("white");
+                            record.color = "W: ";
+                            whiteRecord.push(record);
+                            allRecord.push(whiteRecord);
+                        }
+                        else if(userColor==0){
+                            System.out.println("black");
+                            record.color = "B: ";
+                            blackRecord.push(record);
+                            allRecord.push(blackRecord);
+                        }
                     }
-                   /* ++counter;
-                    System.out.printf("x: %d, y: %d, button: %s\n", CurrentButton.getCoorX(),  CurrentButton.getCoorY(), getPieces(CurrentButton).toString());
+                    if(!allRecord.isEmpty())
+                        textMoves.setText(allRecord.peek().toString().replace("[", "").replace("]", "").replace(",", ""));
+
+                  /*  System.out.printf("x: %d, y: %d, button: %s\n", CurrentButton.getCoorX(),  CurrentButton.getCoorY(), getPieces(CurrentButton).toString());
                     if(!getPieces(CurrentButton).equals("null")){
-                        System.out.printf("MOVE3 - > counter: %d, x1: %d, x2: %d, y1: %d, y2: %d\n", counter, game.source_x1, game.source_y1, game.target_x1, game.target_y1);
-                        int k = game.source_x1 + '@' ;
-                        int l = game.target_x1 + '@' ;
-                        if(userColor==0)
-                            moves += "W: ";
-                        else
-                            moves += "B: ";
-                        moves += Character.toUpperCase((char)k);
-                        moves += game.source_y1 + " -> " + Character.toUpperCase((char)l) +  game.target_y1 + "\n";
-                        counter = 0;
+                        System.out.printf("user - > counter: %d, x1: %d, x2: %d, y1: %d, y2: %d\n", counter, game.source_x1, game.source_y1, game.target_x1, game.target_y1);
+
                     }*/
                     startingStatusHandler = true;
                     if(currentStatus==1)
@@ -430,7 +467,6 @@ public class Main extends Application  {
         });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
-            moves = "";
             Open.OpenMenu(Start,button);
             if(Open.Color==1)
             {
@@ -600,7 +636,6 @@ public class Main extends Application  {
             System.out.println(Open.LevelOfGame);
             Game.setIsComputerOn(Open.LevelOfGame);
             userColor = Open.Color;
-            System.out.printf("userColor: %d\n", userColor);
             if(Open.Color==1)
             {
                 startingStatusHandler=false;
@@ -772,7 +807,6 @@ public class Main extends Application  {
             }
         }
         textMoves = TextBuilder.create()
-                .text(moves)
                 .textAlignment(TextAlignment.LEFT)
                 .build();
         textMoves.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
