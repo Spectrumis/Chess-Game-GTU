@@ -20,6 +20,7 @@ public class Game implements Serializable {
     private ArrayList<ArrayList<Cell>> board;
 
     private Stack<Cell> removesss; //Geri alma islemleri icin tutulacak Cell arrayi, her yerden ulasilabilsin diye Game classinin bir attribute'u
+    private int removesssSize;
     private static int counterRemovess = 0; //Geri alma islemi icin sayac
     /**
      * bu degerler minimax algoritmasi icin kullanilacak
@@ -52,9 +53,10 @@ public class Game implements Serializable {
     public Game(){
         kingDangerStatus = 0;
         removesss = new Stack<Cell>();
-        for(int i =0; i < 64*2; ++i) {
+        removesssSize = 0;
+       /* for(int i =0; i < 64*2; ++i) {
             removesss.add(new Cell());
-        }
+        }*/
 
         board = new ArrayList<ArrayList<Cell>>(8);
         for(int i =0; i < 8; ++i){
@@ -84,17 +86,18 @@ public class Game implements Serializable {
             }
         }
         removesss = new Stack<Cell>();
-        for(int i =0; i < 64*2; ++i) {
+       /* for(int i =0; i < 64*2; ++i) {
             removesss.add(new Cell());
         }
-
+*/
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 board.get(i).get(j).setCell(game.board.get(i).get(j));
             }
         }
 
-        for(int i=0; i<game.removesss.size()*2; i++){
+        removesssSize = game.removesssSize;
+        for(int i=0; i<game.removesss.size(); i++){
             removesss.get(i).setCell(game.removesss.get(i));
         }
     }
@@ -276,6 +279,7 @@ public class Game implements Serializable {
         //yapilan hamle arraye kaydedildi, kaynak cell ve source cell olarak!
         removesss.push(new Cell(source));
         removesss.push(new Cell(target));
+        setRemovesssSize(removesssSize+2);
 
     }
 
@@ -893,20 +897,39 @@ public class Game implements Serializable {
     public void recallMove(){
         //removesss.size 0 dan buyuk olmalı cunku en az bir hamle yapılmadan geri alma işemi gerçekleştirilemez
         //yani oyunun başında bu buton calismaz!!!
-        if(counterRemovess < 5 && removesss.size() > 0){
+        if(counterRemovess < 5 && getRemovesssSize() > 0){
             Cell sourceCell = new Cell();
             Cell targetCell = new Cell();
 
+            Stack<Cell> temp = new Stack<Cell>();
+            for(int i=0; i<getRemovesssSize()-2; i++) {
+                temp.add(removesss.pop());
+            }
             //stackten son hamle silindi!
             sourceCell.setCell(removesss.pop());
             targetCell.setCell(removesss.pop());
+            setRemovesssSize(removesssSize - 2);
 
+            System.out.println("sourceCell:" + sourceCell.toString());
+            System.out.println("targetCell:" + targetCell.toString());
+
+            for(int i=0; i<temp.size(); i++){
+                removesss.add(temp.pop());
+            }
             //index son eleman, index-1 bir önceki; son eleman target(new source), önceki eleman source(new target)!
-            //geri almak icin target source'a tasinir
-            //board.get(targetCell.getX()).get(targetCell.getY()).setCell(board.get(sourceCell.getX()).get(sourceCell.getY()));
-            board.get(targetCell.getX()).get(targetCell.getY()).setPiece(board.get(sourceCell.getX()).get(sourceCell.getY()).getPiece());
+            //geri almak icin target source'a tasinir, target boşaltilir!
+            Cell tempCell = new Cell(board.get(sourceCell.getX()).get(sourceCell.getY()));
+            board.get(sourceCell.getX()).get(sourceCell.getY()).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
+            board.get(targetCell.getX()).get(targetCell.getY()).setCell(tempCell);
+
+            /*ilk geri alma islemini gerceklestirdi ama arayuzde gorulmedi,
+            * ikinci defa geri almaya basinca hata verdi, removesss i okuyamadi
+            * arayuzde degisiklik olmamasindan kaynaklanmis olabilir mi? */
+            printBoard();
 
             counterRemovess++;
+
+            setCurrentPlayer(!getCurrentPlayer());
         }
         else
             System.out.println("INVALID!! You can not go back anymore!!");
@@ -1134,6 +1157,8 @@ public class Game implements Serializable {
     }
 
     public int getCounterRemovess(){return counterRemovess;}
+    public int getRemovesssSize(){return removesssSize;}
+    public void setRemovesssSize(int size){removesssSize=size;}
 
     public static void setCurrentPlayer( boolean cPlayer ) { currentPlayer = cPlayer; }
     public static boolean getCurrentPlayer() { return currentPlayer; }
