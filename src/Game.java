@@ -906,9 +906,9 @@ public class Game implements Serializable {
                 temp.add(removesss.pop());
             }
             //stackten son hamle silindi!
-            sourceCell.setCell(removesss.pop());
-            targetCell.setCell(removesss.pop());
-            setRemovesssSize(removesssSize - 2);
+            sourceCell.setCell(removesss.pop()); //source(eski target) alindi
+            targetCell.setCell(removesss.pop()); //target(eski source) alindi
+            setRemovesssSize(removesssSize - 2); //removessSize da iki eleman alindigi icin iki azaltildi!
 
             System.out.println("sourceCell:" + sourceCell.toString());
             System.out.println("targetCell:" + targetCell.toString());
@@ -916,8 +916,8 @@ public class Game implements Serializable {
             for(int i=0; i<temp.size(); i++){
                 removesss.add(temp.pop());
             }
-            //index son eleman, index-1 bir önceki; son eleman target(new source), önceki eleman source(new target)!
-            //geri almak icin target source'a tasinir, target boşaltilir!
+
+
             Cell tempCell = new Cell(board.get(sourceCell.getX()).get(sourceCell.getY()));
             board.get(sourceCell.getX()).get(sourceCell.getY()).setPiece(board.get(targetCell.getX()).get(targetCell.getY()).getPiece());
             board.get(targetCell.getX()).get(targetCell.getY()).setCell(tempCell);
