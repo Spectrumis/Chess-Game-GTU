@@ -70,7 +70,7 @@ public class Cell implements Serializable{
      * @return koordinatlar(x ve y), piece(color), class(piece turu)
      */
     public String toString(){
-        return (x + " " + y + " "  + " " + getClass().toString() + piece.toString() );
+        return (x + " " + y + " "  + " " + getClass().toString() + "    " + piece.toString() );
     }
 
     public boolean equals(Cell obj) {

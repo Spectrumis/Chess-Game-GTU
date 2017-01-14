@@ -8,7 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.scene.shape.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -35,17 +38,23 @@ public class Main extends Application  {
     ExtendedButton[][] button=new ExtendedButton[8][];//boarddaki satranç tahtasını represent eder.
     Stack<Table> ListGame=new Stack<Table>();//oyunu geri alabilmek için stack oluşturuldu.
     List<Cell> tempMovesList = new ArrayList<Cell>();//Algoritma tarafından gelen geçerli hareketlerin olduğu arraydir.
-    int x=0, y=0, currentStatus = 0, a;
+    int currentStatus = 0, a;
     boolean startingStatusHandler = false;
     int markButton=0;
     Game game = new Game();
     int b;
     private Group myGroup;
     private Text textMoves;
-    private String moves = "";
     private BorderPane pane;
     private int userColor;
-    int counter = 0;
+    private Stack whiteRecord = new Stack<Record>();
+    private Stack blackRecord = new Stack<Record>();
+    private Stack allRecord = new Stack<Record>();
+    private String lastMove;
+    private int w, x;
+    private String moves = "";
+    private String movestemp = "";
+    private int counter = 0;
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -129,6 +138,9 @@ public class Main extends Application  {
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                         currentStatus = game.playGame(CurrentButton.getCoorX(), CurrentButton.getCoorY(), tempMovesList);
+                        if(currentStatus == 2){
+                            game.past.add(new Game(game));
+                        }
                     //    System.out.printf("4 - > x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
 
                     //    System.out.print("Status:" + currentStatus + "\n");
@@ -154,30 +166,45 @@ public class Main extends Application  {
                                 System.out.println("ComputerOn degeri yanlis\n");
                                 break;
                         }
+                        game.past.add(new Game(game));
                         tempMovesList.clear();
 
-                        int k = game.source_x + '@' ;
-                        int l = game.target_x + '@' ;
-                        if(userColor==1)
-                            moves += "W: ";
-                        else
-                            moves += "B: \n";
-                        if(game._piece.equals("bishop"))
-                            moves += "♗ " + " ";
-                        else if(game._piece.equals("pawn"))
-                            moves += "♙ " + " ";
-                        else if(game._piece.equals("king"))
-                            moves += "♔ " + " ";
-                        else if(game._piece.equals("queen"))
-                            moves += "♕ " + " ";
-                        else if(game._piece.equals("rook"))
-                            moves += "♖ " + " ";
-                        else if(game._piece.equals("knight"))
-                            moves += "♘ " + " ";
+                        Record record = new Record();
+                        record.setSource_x(Character.toUpperCase((char)game.source_x + '@'));
+                        record.setSource_y(game.source_y);
+                        record.setTarget_x(Character.toUpperCase((char)game.target_x + '@'));
+                        record.setTarget_y(game.target_y);
 
-                        moves += Character.toUpperCase((char)k);
-                        moves += game.source_y + " -> " + Character.toUpperCase((char)l) +  game.target_y + "\n";
-                        System.out.printf("x1: %c, x2: %d, y1: %c, y2: %d\n", k, game.source_y, l, game.target_y);
+                        if(game.pieceComp.equals("bishop"))
+                            record.piece = record.bishop;
+                        else if(game.pieceComp.equals("pawn"))
+                            record.piece = record.pawn;
+                        else if(game.pieceComp.equals("king"))
+                            record.piece = record.king;
+                        else if(game.pieceComp.equals("queen"))
+                            record.piece = record.queen;
+                        else if(game.pieceComp.equals("rook"))
+                            record.piece = record.rook;
+                        else if(game.pieceComp.equals("knight"))
+                            record.piece = record.knight;
+
+                        if(userColor==1) {
+                           // System.out.println("white1");
+                            record.color = "W: ";
+                        //    System.out.printf("w: %d: %s", w, record.toString().replace("[", "").replace("]", "").replace(",", ""));
+                            movestemp = record.toString().replace("[", "").replace("]", "").replace(",", "");
+                            whiteRecord.add(w, record);
+                            ++w;
+                            allRecord.push(whiteRecord);
+                        }
+                        else if(userColor==0){
+                            record.color = "B: ";
+                            blackRecord.add(x, record);
+                            ++x;
+                            movestemp = record.toString().replace("[", "").replace("]", "").replace(",", "");
+                            allRecord.push(blackRecord);
+                        }
+
                     }
                     startingStatusHandler = true;
                     if(currentStatus==1)
@@ -186,11 +213,9 @@ public class Main extends Application  {
                             markButton(tempMovesList.get(a).getX(), tempMovesList.get(a).getY());
                         }
                         markButton(CurrentButton.getCoorX(), CurrentButton.getCoorY());
-                        //System.out.printf("1player -> x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
                     }
                     if(currentStatus==2)
                     {
-                     //   System.out.printf("2player -> x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
                         button[CurrentButton.getCoorX()][CurrentButton.getCoorY()].setStyle(button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].getStyle());
                         button[currentPoint.get(currentPoint.size()-1).getX()][currentPoint.get(currentPoint.size()-1).getY()].setStyle("-fx-border-color: gray; )");
                     }
@@ -199,10 +224,6 @@ public class Main extends Application  {
                     }
 
                     //Bilgisayarın oynama kısımı
-
-                //    System.out.println("computerrrrrrrrrrr");
-
-
                     for(a=0;a<board.size();++a)
                     {
                         for(b=0;b<board.get(a).size();++b)
@@ -244,7 +265,6 @@ public class Main extends Application  {
                     }
 
                     refreshTable();
-                    textMoves.setText(moves);
 
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
@@ -275,21 +295,110 @@ public class Main extends Application  {
                                 break;
                         }
                         tempMovesList.clear();
+                        Record record = new Record();
+                        record.setSource_x(Character.toUpperCase((char)game.source_x + '@'));
+                        record.setSource_y(game.source_y);
+                        record.setTarget_x(Character.toUpperCase((char)game.target_x + '@'));
+                        record.setTarget_y(game.target_y);
+
+                        if(game.pieceComp.equals("bishop"))
+                            record.piece = record.bishop;
+                        else if(game.pieceComp.equals("pawn"))
+                            record.piece = record.pawn;
+                        else if(game.pieceComp.equals("king"))
+                            record.piece = record.king;
+                        else if(game.pieceComp.equals("queen"))
+                            record.piece = record.queen;
+                        else if(game.pieceComp.equals("rook"))
+                            record.piece = record.rook;
+                        else if(game.pieceComp.equals("knight"))
+                            record.piece = record.knight;
+
+                        if(userColor==1) {
+                           // System.out.println("white2");
+                            record.color = "W: ";
+                            whiteRecord.add(w, record);
+                            ++w;
+                            moves += record.toString().replace("[", "").replace("]", "").replace(",", "");
+                            moves += movestemp;
+                            allRecord.push(whiteRecord);
+                        }
+                        else if(userColor==0){
+                          //  System.out.println("black");
+                            record.color = "B: ";
+                            blackRecord.add(x, record);
+                            ++x;
+                            moves += record.toString().replace("[", "").replace("]", "").replace(",", "");
+                            moves += movestemp;
+                            allRecord.push(blackRecord);
+                        }
                     }
-                   /* ++counter;
-                    System.out.printf("x: %d, y: %d, button: %s\n", CurrentButton.getCoorX(),  CurrentButton.getCoorY(), getPieces(CurrentButton).toString());
-                    if(!getPieces(CurrentButton).equals("null")){
-                        System.out.printf("MOVE3 - > counter: %d, x1: %d, x2: %d, y1: %d, y2: %d\n", counter, game.source_x1, game.source_y1, game.target_x1, game.target_y1);
-                        int k = game.source_x1 + '@' ;
-                        int l = game.target_x1 + '@' ;
-                        if(userColor==0)
-                            moves += "W: ";
-                        else
-                            moves += "B: ";
-                        moves += Character.toUpperCase((char)k);
-                        moves += game.source_y1 + " -> " + Character.toUpperCase((char)l) +  game.target_y1 + "\n";
-                        counter = 0;
-                    }*/
+
+                    if(/*!getPieces(CurrentButton).equals("null") && */game.source_x1!=0){
+                        String curMove = "" + game.source_x1+  game.source_y1 +  game.target_x1+ game.target_y1;
+                        if(!curMove.equals(lastMove)){
+                         //   System.out.println("HAMLE YAPILDI..........");
+                            Record record = new Record();
+                            record.setSource_x(Character.toUpperCase((char)game.source_x1 + '@'));
+                            record.setSource_y(game.source_y1);
+                            record.setTarget_x(Character.toUpperCase((char)game.target_x1 + '@'));
+                            record.setTarget_y(game.target_y1);
+
+                            if(game.piecePl.equals("bishop"))
+                                record.piece = record.bishop;
+                            else if(game.piecePl.equals("pawn"))
+                                record.piece = record.pawn;
+                            else if(game.piecePl.equals("king"))
+                                record.piece = record.king;
+                            else if(game.piecePl.equals("queen"))
+                                record.piece = record.queen;
+                            else if(game.piecePl.equals("rook"))
+                                record.piece = record.rook;
+                            else if(game.piecePl.equals("knight"))
+                                record.piece = record.knight;
+
+                            if(userColor==0) {
+                              //  System.out.println("white3");
+                                record.color = "W: ";
+                                whiteRecord.add(w, record);
+                                ++w;
+                                moves += record.toString().replace("[", "").replace("]", "").replace(",", "");
+                                moves += movestemp;
+                                allRecord.push(whiteRecord);
+                            }
+                            else if(userColor==1){
+                                record.color = "B: ";
+                                blackRecord.add(x, record);
+                                ++x;
+                               // System.out.printf("x: %d: %s", x, record.toString().replace("[", "").replace("]", "").replace(",", ""));
+                                moves += record.toString().replace("[", "").replace("]", "").replace(",", "");
+                                moves += movestemp;
+                                allRecord.push(blackRecord);
+                            }
+                            else if(userColor==-1){
+                                if(counter % 2 == 0) {
+                                    record.color = "W: ";
+                                    whiteRecord.add(w, record);
+                                    ++w;
+                                //    System.out.printf("w: %d: %s", w, record.toString().replace("[", "").replace("]", "").replace(",", ""));
+                                    moves += record.toString().replace("[", "").replace("]", "").replace(",", "");
+                                    allRecord.push(whiteRecord);
+                                }else{
+                                    record.color = "B: ";
+                                    blackRecord.add(x, record);
+                                    ++x;
+
+                               //     System.out.printf("x: %d: %s", x, record.toString().replace("[", "").replace("]", "").replace(",", ""));
+                                    moves += record.toString().replace("[", "").replace("]", "").replace(",", "");
+                                    allRecord.push(blackRecord);
+                                }
+                                ++counter;
+                            }
+                            lastMove = "" + game.source_x1+  game.source_y1+  game.target_x1+ game.target_y1;
+                        }
+                    }
+
+                    textMoves.setText(moves);
                     startingStatusHandler = true;
                     if(currentStatus==1)
                     {
@@ -430,7 +539,6 @@ public class Main extends Application  {
         });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
-            moves = "";
             Open.OpenMenu(Start,button);
             if(Open.Color==1)
             {
@@ -516,8 +624,8 @@ public class Main extends Application  {
             */
             Table temp=  ListGame.peek();
             int m,n;
-
-            if(temp!=null) {
+            game.recallMove();
+            /*if(temp!=null) {
                 game.recallMove();
                 ListGame.pop();
                 for (m = 0; m < 8; ++m) {
@@ -544,7 +652,7 @@ public class Main extends Application  {
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
                         grid.getChildren().addAll(button[m][n]);
-            }
+            }*/
                 });
         Project.setOnAction(e->{ //About için event handler.
             //System.out.println("asdsad");
@@ -600,7 +708,7 @@ public class Main extends Application  {
             System.out.println(Open.LevelOfGame);
             Game.setIsComputerOn(Open.LevelOfGame);
             userColor = Open.Color;
-            System.out.printf("userColor: %d\n", userColor);
+            System.out.printf("****userColor: %d\n", userColor);
             if(Open.Color==1)
             {
                 startingStatusHandler=false;
@@ -771,11 +879,11 @@ public class Main extends Application  {
                         button[a][b].setStyle("-fx-border-color: gray;");
             }
         }
+
         textMoves = TextBuilder.create()
-                .text(moves)
                 .textAlignment(TextAlignment.LEFT)
                 .build();
-        textMoves.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC,15));
+        textMoves.setFont(Font.font("Times New Roman", FontWeight.BOLD,15));
         myGroup = GroupBuilder.create()
                 .children(
                         ScrollPaneBuilder.create().layoutX(525).layoutY(140)
