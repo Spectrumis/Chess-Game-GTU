@@ -502,61 +502,46 @@ public class Main extends Application  {
             grid.getChildren().addAll(row[i]);
 
         Save.setOnAction(e->{//eğer Save'e tıklanılırsa
-            //game.saveGame();
-            /*FileChooser fileChooser = new FileChooser();
-
-            //Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-            fileChooser.getExtensionFilters().add(extFilter);
-
-            //Show save file dialog
-            File file = fileChooser.showSaveDialog(primaryStage);
 
             try {
-
-                FileOutputStream fileOut = new FileOutputStream(file.toString());
+                FileOutputStream fileOut = new FileOutputStream("saveGame.ser");
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(game);
+                out.writeObject(this.game);
                 out.close();
                 fileOut.close();
-                System.out.println("Serialized data is saved in " + file.toString());
-
+                System.out.printf("Serialized data is saved in saveGame.ser");
             }catch(IOException s) {
-
                 s.printStackTrace();
-            }*/
+            }
         });
 
         Load.setOnAction(e->{//eğer Load'a tıklanılırsa
-            //game.loadGame();
-            /*FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Load File");
-                FileChooser.ExtensionFilter extFilter =new FileChooser.ExtensionFilter("*", "*");
-                fileChooser.getExtensionFilters().add(extFilter);
-                File file = fileChooser.showOpenDialog(null);
 
-            if(file!=null){
-                Game load = null;
+            Game load = null;
 
-                try {
-                    FileInputStream fileIn = new FileInputStream(file);
-                    ObjectInputStream in = new ObjectInputStream(fileIn);
-                    load = (Game) in.readObject();
-                    in.close();
-                    fileIn.close();
-                }catch(IOException i) {
-                    i.printStackTrace();
+            try {
+                FileInputStream fileIn = new FileInputStream("saveGame.ser");
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                load = (Game) in.readObject();
+                in.close();
+                fileIn.close();
+            }catch(IOException s) {
+                s.printStackTrace();
+                return;
+            }catch(ClassNotFoundException c) {
+                System.out.println("Game class not found");
+                c.printStackTrace();
+                return;
+            }
 
-                }catch(ClassNotFoundException c) {
-                    System.out.println("Game class not found");
-                    c.printStackTrace();
-                }
+            game.copyGame(load);
+            drawcurrentTable();
 
-                this.game = new Game(load);
-            }*/
         });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
+
+            moves = "";
             Open.OpenMenu(Start,button);
             if(Open.Color==1)
             {
@@ -626,51 +611,34 @@ public class Main extends Application  {
 
 
         Restart.setOnAction(e->{//geçerli olan oyunun yeniden başlaması yani sağdaki button olan restart.
+            moves = "";
+            Open.OpenMenu(Start,button);
+            if(Open.Color==1)
+            {
+                startingStatusHandler=false;
+            }
+            else
+            if(Open.Color==0)
+            {
+                startingStatusHandler=true;
+            }
+            for(a=0;a<8;++a)
+            {
+                for(b=0;b<8;++b)
+                {
+                    button[a][b].setDisable(false);
+                }
+            }
             setButtons(button);
             currentStatus = 0;
             game.restartGame();
         });
         Previous.setOnAction(e->{//undo yani geri alma buttonunun event handleri
 
-            /*
-            if(game.getCounterRemoves() < 5)
-                game.recallMove();
-            else
-                Previous.setDisable(true);
 
-            setButtons(botton);
-            */
-            Table temp=  ListGame.peek();
-            int m,n;
+            moves = "";
             game.recallMove();
-            /*if(temp!=null) {
-                game.recallMove();
-                ListGame.pop();
-                for (m = 0; m < 8; ++m) {
-                    for (n = 0; n < 8; ++n) {
-                        button[m][n].setStyle(temp.Table[m][n].getStyle());
-                    }
-                }
-                for (m = 0; m < 8; ++m)
-                    for (n = 0; n < 8; ++n)
-                        GridPane.setConstraints(button[m][n],7- m, 7-n+1);
-                for (m = 0; m < 8; ++m)
-                    for (n = 0; n < 8; ++n)
-                        grid.getChildren().addAll(button[m][n]);
-            }
-            else{
-                for (m = 0; m < 8; ++m)
-                    for (n = 0; n < 8; ++n)
-                        button[m][n].setStyle(" -fx-border-color: gray;  -fx-background-radius:0");
-                setButtons(button);
-
-                for (m = 0; m < 8; ++m)
-                    for (n = 0; n < 8; ++n)
-                        GridPane.setConstraints(button[m][n], m, 7-n + 1);
-                for (m = 0; m < 8; ++m)
-                    for (n = 0; n < 8; ++n)
-                        grid.getChildren().addAll(button[m][n]);
-            }*/
+            drawcurrentTable();
                 });
         Project.setOnAction(e->{ //About için event handler.
             //System.out.println("asdsad");
@@ -745,6 +713,7 @@ public class Main extends Application  {
             }
             Restart.setDisable(false);
             game.restartGame();
+            moves = "";
             Previous.setDisable(false);
         });
         Exit.setOnAction(e->{
@@ -832,6 +801,48 @@ public class Main extends Application  {
             }
         }
 
+    }
+    private void drawcurrentTable()
+    {
+        for(int a=0;a<game.getBoard().size();++a) {
+            for (int b = 0; b < game.getBoard().get(a).size(); ++b) {
+                if (!game.getBoard().get(a).get(b).piece.getColor()) {
+                    //System.out.println("PrintBoard, false, siyah!!");
+                    if (game.getBoard().get(a).get(b).getPiece() instanceof Pawn) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/pawn.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Rook) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/rook.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Knight) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/knight.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Bishop) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/bishop.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof King) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/king.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Queen) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/queen.png')");
+                    } else
+                        button[a][b].setStyle("-fx-border-color: gray;");
+                } else if (game.getBoard().get(a).get(b).piece.getColor()) {
+                    //System.out.println("PrintBoard, true, beyaz!!");
+                    if (game.getBoard().get(a).get(b).getPiece() instanceof Pawn) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wpawn.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Rook) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wrook.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Knight) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wknight.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Bishop) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wbishop.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof King) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wking.png')");
+                    } else if (game.getBoard().get(a).get(b).getPiece() instanceof Queen) {
+                        button[a][b].setStyle("-fx-border-color: gray; -fx-background-image: url('img/wqueen.png')");
+                    } else
+                        button[a][b].setStyle("-fx-border-color: gray;");
+                }
+
+            }
+
+        }
     }
     private void markButton(int x, int y) {
 

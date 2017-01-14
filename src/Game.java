@@ -77,7 +77,7 @@ public class Game implements Serializable {
      * @param game
      */
     public Game(Game game){
-        setKingDangerStatus(game.getKingDangerStatus());
+        //setKingDangerStatus(game.getKingDangerStatus());
         setIsComputerOn(game.getIsComputerOn());
         setCurrentPlayer(game.getCurrentPlayer());
         past = new ArrayList<Game>(100);
@@ -133,14 +133,14 @@ public class Game implements Serializable {
                 return 3;
             }
             //burada sah tehlikedemi diye bakar
-            if((board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)) && getKingDangerStatus() == 0){
+            /*if((board.get(king/10).get(king-(king/10)*10).getPiece().inDanger(board)) && getKingDangerStatus() == 0){
                 if(x != king/10 || y != king-(king/10)*10){
                     return 0;
                 }
                 else{
                     setKingDangerStatus(1);
                 }
-            }
+            }*/
 
         /* Verilen cell bos ise veya kendi tasimiz yoksa ... */
             if (currentCell.getPiece() instanceof NoPiece || currentCell.getPiece().getColor() != getCurrentPlayer()) {
@@ -1204,7 +1204,7 @@ public class Game implements Serializable {
     public int getKingDangerStatus(){ return kingDangerStatus; }
 
     public void copyGame(Game obj){
-        setKingDangerStatus(obj.getKingDangerStatus());
+        //setKingDangerStatus(obj.getKingDangerStatus());
         setIsComputerOn(obj.getIsComputerOn());
         setCurrentPlayer(obj.getCurrentPlayer());
 
