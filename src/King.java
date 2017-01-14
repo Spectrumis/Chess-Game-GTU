@@ -44,7 +44,7 @@ public class King extends Pieces {
         if(x+1 <= 7 && y+1 <= 7 && (board.get(x+1).get(y+1).getPiece() instanceof NoPiece || board.get(x+1).get(y+1).getPiece().getColor() != curColor))
             moves.add(new Cell(board.get(x+1).get(y+1)));
 
-        /* Rook hamlesi için olan bolum
+        /* Rook hamlesi için olan bolum */
         if(!this.getIsMoved()){
             if(board.get(x-1).get(y).getPiece() instanceof NoPiece){
                 if(board.get(x-2).get(y).getPiece() instanceof NoPiece){
@@ -62,7 +62,7 @@ public class King extends Pieces {
                     }
                 }
             }
-        }*/
+        }
 /*
         //Sol tarafina dogru hareket edebilirligine bakarak gidiyorum. Ilk bakacagim
         //yer olarak i ye x-1 atadim. Yani tasin hemen soluna bakicam ilk
