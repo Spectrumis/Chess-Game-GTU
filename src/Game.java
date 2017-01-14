@@ -34,6 +34,7 @@ public class Game implements Serializable {
     private static final double KING = 1000.0;
     private static int movementCounter = 0;
     private static final int BIGDEPTH = 4;
+    private static boolean MIDDEPTH = false ;
     public int source_x, source_y, target_x, target_y;
     public int source_x1, source_y1, target_x1, target_y1;
     public String pieceComp = "";
@@ -378,54 +379,10 @@ public class Game implements Serializable {
      * @return source ve targetin sirali olarak bulundugu bir cell listesi
      */
     public void playComputerMedium(){
-        //System.out.println(getCurrentPlayer());
-        List<Cell> canMove = new ArrayList<>();
-        List<Cell> trgtMove = new ArrayList<>();
-        List<Cell> srcMove = new ArrayList<>();
-        boolean flag = true;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if(!(board.get(i).get(j).getPiece() instanceof NoPiece) &&
-                        board.get(i).get(j).getPiece().getColor() == this.getCurrentPlayer()){
-                    //System.out.println("im in"+i + " "+ j);
-                    canMove.addAll(board.get(i).get(j).getPiece().checkMove(board, i, j));
-                    //System.out.println("CAN MOVE:\n"+canMove.toString());
-                    //System.out.println("player" + this.getCurrentPlayer());
-                    for (int k = 0; k < canMove.size(); k++) {
-                        srcMove.add(new Cell(board.get(i).get(j)));
-                    }
-                    trgtMove.addAll(canMove);
-                    //System.out.println("SRC MOVE: \n"+srcMove.toString());
-
-                    //System.out.println("TARGET MOVE:\n"+trgtMove.toString());
-
-                    canMove.clear();
-                }
-            }
-        }
-        for(int i=0 ; i<trgtMove.size() ; ++i) {
-            int x = trgtMove.get(i).getX(), y = trgtMove.get(i).getY();
-            if (board.get(x).get(y).getPiece().getColor() == !this.getCurrentPlayer() &&
-                    !(board.get(x).get(y).getPiece() instanceof NoPiece)) {
-                //System.out.println("-------->" + board.get(x).get(y).getPiece().getColor());
-                //System.out.println("-------->" + !this.getCurrentPlayer());
-
-                makeMove(srcMove.get(i), trgtMove.get(i));
-                this.setCurrentPlayer(!this.getCurrentPlayer());
-
-                //System.out.println("-------->" + x + " " + y);
-
-                flag = false;
-                break;
-            }
-        }
-        if(flag) {
-            Random randomGenerator = new Random();
-            int randomInt = randomGenerator.nextInt(trgtMove.size());
-            //System.out.println("random: " + randomInt);
-            makeMove(srcMove.get(randomInt), trgtMove.get(randomInt));
-            this.setCurrentPlayer(!this.getCurrentPlayer());
-        }
+        int depth = 2;
+        MIDDEPTH = true;
+        maxofHard(depth);
+        MIDDEPTH = false;
     }
 
     /**
@@ -513,7 +470,7 @@ public class Game implements Serializable {
                             }
                             if(curVal>v){
                                 v=curVal;
-                                if(depth>= BIGDEPTH){
+                                if((depth>= BIGDEPTH) || MIDDEPTH){
                                     src = new Cell(memCell);
                                     trgt = new Cell(targetCell);
                                 }
@@ -528,7 +485,7 @@ public class Game implements Serializable {
          *  bu method recursive oldugu icin eger ilk girdigimizin icindeysek hamle yapmamız gerekiyor
          *  bitirmeden once.burada o hamleyi yapilir
          */
-        if(depth>=BIGDEPTH) {
+        if((depth>=BIGDEPTH) || MIDDEPTH) {
 
             //printBoard();
             makeMove(src, trgt);
