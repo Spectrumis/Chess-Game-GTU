@@ -502,8 +502,8 @@ public class Main extends Application  {
             grid.getChildren().addAll(row[i]);
 
         Save.setOnAction(e->{//eğer Save'e tıklanılırsa
-            game.saveGame();
-          /*  FileChooser fileChooser = new FileChooser();
+            //game.saveGame();
+            /*FileChooser fileChooser = new FileChooser();
 
             //Set extension filter
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -528,14 +528,32 @@ public class Main extends Application  {
         });
 
         Load.setOnAction(e->{//eğer Load'a tıklanılırsa
-            game.loadGame();
+            //game.loadGame();
             /*FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Load File");
                 FileChooser.ExtensionFilter extFilter =new FileChooser.ExtensionFilter("*", "*");
                 fileChooser.getExtensionFilters().add(extFilter);
                 File file = fileChooser.showOpenDialog(null);
 
-            if(file!=null){ }*/
+            if(file!=null){
+                Game load = null;
+
+                try {
+                    FileInputStream fileIn = new FileInputStream(file);
+                    ObjectInputStream in = new ObjectInputStream(fileIn);
+                    load = (Game) in.readObject();
+                    in.close();
+                    fileIn.close();
+                }catch(IOException i) {
+                    i.printStackTrace();
+
+                }catch(ClassNotFoundException c) {
+                    System.out.println("Game class not found");
+                    c.printStackTrace();
+                }
+
+                this.game = new Game(load);
+            }*/
         });
 
         restart.setOnAction(e->{//new game menu kısmındaki.
