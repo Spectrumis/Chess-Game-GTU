@@ -138,6 +138,9 @@ public class Main extends Application  {
                     if (startingStatusHandler || game.getIsComputerOn() == 0) {
 
                         currentStatus = game.playGame(CurrentButton.getCoorX(), CurrentButton.getCoorY(), tempMovesList);
+                        if(currentStatus == 2){
+                            game.past.add(new Game(game));
+                        }
                     //    System.out.printf("4 - > x: %d, y: %d\n", 8-CurrentButton.getCoorX(), 8-CurrentButton.getCoorY());
 
                     //    System.out.print("Status:" + currentStatus + "\n");
@@ -163,6 +166,7 @@ public class Main extends Application  {
                                 System.out.println("ComputerOn degeri yanlis\n");
                                 break;
                         }
+                        game.past.add(new Game(game));
                         tempMovesList.clear();
 
                         Record record = new Record();
@@ -620,8 +624,8 @@ public class Main extends Application  {
             */
             Table temp=  ListGame.peek();
             int m,n;
-
-            if(temp!=null) {
+            game.recallMove();
+            /*if(temp!=null) {
                 game.recallMove();
                 ListGame.pop();
                 for (m = 0; m < 8; ++m) {
@@ -648,7 +652,7 @@ public class Main extends Application  {
                 for (m = 0; m < 8; ++m)
                     for (n = 0; n < 8; ++n)
                         grid.getChildren().addAll(button[m][n]);
-            }
+            }*/
                 });
         Project.setOnAction(e->{ //About için event handler.
             //System.out.println("asdsad");
